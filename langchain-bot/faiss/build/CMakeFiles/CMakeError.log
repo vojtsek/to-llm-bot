@@ -1,0 +1,108 @@
+Performing C++ SOURCE FILE Test CMAKE_HAVE_LIBC_PTHREAD failed with the following output:
+Change Dir: /home/vojta/Work/llmbot/faiss/build/CMakeFiles/CMakeScratch/TryCompile-v9os5b
+
+Run Build Command(s):/usr/bin/make -f Makefile cmTC_dfd90/fast && /usr/bin/make  -f CMakeFiles/cmTC_dfd90.dir/build.make CMakeFiles/cmTC_dfd90.dir/build
+make[1]: Entering directory '/home/vojta/Work/llmbot/faiss/build/CMakeFiles/CMakeScratch/TryCompile-v9os5b'
+Building CXX object CMakeFiles/cmTC_dfd90.dir/src.cxx.o
+/usr/bin/c++ -DCMAKE_HAVE_LIBC_PTHREAD  -std=gnu++11 -o CMakeFiles/cmTC_dfd90.dir/src.cxx.o -c /home/vojta/Work/llmbot/faiss/build/CMakeFiles/CMakeScratch/TryCompile-v9os5b/src.cxx
+Linking CXX executable cmTC_dfd90
+/usr/share/cmake-3.25.2-linux-x86_64/bin/cmake -E cmake_link_script CMakeFiles/cmTC_dfd90.dir/link.txt --verbose=1
+/usr/bin/c++ CMakeFiles/cmTC_dfd90.dir/src.cxx.o -o cmTC_dfd90 
+CMakeFiles/cmTC_dfd90.dir/src.cxx.o: In function `main':
+src.cxx:(.text+0x3e): undefined reference to `pthread_create'
+src.cxx:(.text+0x4a): undefined reference to `pthread_detach'
+src.cxx:(.text+0x56): undefined reference to `pthread_cancel'
+src.cxx:(.text+0x67): undefined reference to `pthread_join'
+src.cxx:(.text+0x7b): undefined reference to `pthread_atfork'
+collect2: error: ld returned 1 exit status
+CMakeFiles/cmTC_dfd90.dir/build.make:98: recipe for target 'cmTC_dfd90' failed
+make[1]: *** [cmTC_dfd90] Error 1
+make[1]: Leaving directory '/home/vojta/Work/llmbot/faiss/build/CMakeFiles/CMakeScratch/TryCompile-v9os5b'
+Makefile:127: recipe for target 'cmTC_dfd90/fast' failed
+make: *** [cmTC_dfd90/fast] Error 2
+
+
+Source file was:
+#include <pthread.h>
+
+static void* test_func(void* data)
+{
+  return data;
+}
+
+int main(void)
+{
+  pthread_t thread;
+  pthread_create(&thread, NULL, test_func, NULL);
+  pthread_detach(thread);
+  pthread_cancel(thread);
+  pthread_join(thread, NULL);
+  pthread_atfork(NULL, NULL, NULL);
+  pthread_exit(NULL);
+
+  return 0;
+}
+
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /home/vojta/Work/llmbot/faiss/build/CMakeFiles/CMakeScratch/TryCompile-Z0IeML
+
+Run Build Command(s):/usr/bin/make -f Makefile cmTC_18b48/fast && /usr/bin/make  -f CMakeFiles/cmTC_18b48.dir/build.make CMakeFiles/cmTC_18b48.dir/build
+make[1]: Entering directory '/home/vojta/Work/llmbot/faiss/build/CMakeFiles/CMakeScratch/TryCompile-Z0IeML'
+Building CXX object CMakeFiles/cmTC_18b48.dir/CheckFunctionExists.cxx.o
+/usr/bin/c++   -DCHECK_FUNCTION_EXISTS=pthread_create -std=gnu++11 -o CMakeFiles/cmTC_18b48.dir/CheckFunctionExists.cxx.o -c /home/vojta/Work/llmbot/faiss/build/CMakeFiles/CMakeScratch/TryCompile-Z0IeML/CheckFunctionExists.cxx
+Linking CXX executable cmTC_18b48
+/usr/share/cmake-3.25.2-linux-x86_64/bin/cmake -E cmake_link_script CMakeFiles/cmTC_18b48.dir/link.txt --verbose=1
+/usr/bin/c++  -DCHECK_FUNCTION_EXISTS=pthread_create CMakeFiles/cmTC_18b48.dir/CheckFunctionExists.cxx.o -o cmTC_18b48  -lpthreads 
+/usr/bin/ld: cannot find -lpthreads
+collect2: error: ld returned 1 exit status
+CMakeFiles/cmTC_18b48.dir/build.make:98: recipe for target 'cmTC_18b48' failed
+make[1]: *** [cmTC_18b48] Error 1
+make[1]: Leaving directory '/home/vojta/Work/llmbot/faiss/build/CMakeFiles/CMakeScratch/TryCompile-Z0IeML'
+Makefile:127: recipe for target 'cmTC_18b48/fast' failed
+make: *** [cmTC_18b48/fast] Error 2
+
+
+
+Determining if the function sgemm_ exists failed with the following output:
+Change Dir: /home/vojta/Work/llmbot/faiss/build/CMakeFiles/CMakeScratch/TryCompile-0PcbAV
+
+Run Build Command(s):/usr/bin/make -f Makefile cmTC_a589f/fast && /usr/bin/make  -f CMakeFiles/cmTC_a589f.dir/build.make CMakeFiles/cmTC_a589f.dir/build
+make[1]: Entering directory '/home/vojta/Work/llmbot/faiss/build/CMakeFiles/CMakeScratch/TryCompile-0PcbAV'
+Building CXX object CMakeFiles/cmTC_a589f.dir/CheckFunctionExists.cxx.o
+/usr/bin/c++   -DCHECK_FUNCTION_EXISTS=sgemm_ -std=gnu++11 -o CMakeFiles/cmTC_a589f.dir/CheckFunctionExists.cxx.o -c /home/vojta/Work/llmbot/faiss/build/CMakeFiles/CMakeScratch/TryCompile-0PcbAV/CheckFunctionExists.cxx
+Linking CXX executable cmTC_a589f
+/usr/share/cmake-3.25.2-linux-x86_64/bin/cmake -E cmake_link_script CMakeFiles/cmTC_a589f.dir/link.txt --verbose=1
+/usr/bin/c++  -DCHECK_FUNCTION_EXISTS=sgemm_ CMakeFiles/cmTC_a589f.dir/CheckFunctionExists.cxx.o -o cmTC_a589f 
+CMakeFiles/cmTC_a589f.dir/CheckFunctionExists.cxx.o: In function `main':
+CheckFunctionExists.cxx:(.text+0x10): undefined reference to `sgemm_'
+collect2: error: ld returned 1 exit status
+CMakeFiles/cmTC_a589f.dir/build.make:98: recipe for target 'cmTC_a589f' failed
+make[1]: *** [cmTC_a589f] Error 1
+make[1]: Leaving directory '/home/vojta/Work/llmbot/faiss/build/CMakeFiles/CMakeScratch/TryCompile-0PcbAV'
+Makefile:127: recipe for target 'cmTC_a589f/fast' failed
+make: *** [cmTC_a589f/fast] Error 2
+
+
+
+Determining if the function cheev_ exists failed with the following output:
+Change Dir: /home/vojta/Work/llmbot/faiss/build/CMakeFiles/CMakeScratch/TryCompile-yYQ8d6
+
+Run Build Command(s):/usr/bin/make -f Makefile cmTC_8cc27/fast && /usr/bin/make  -f CMakeFiles/cmTC_8cc27.dir/build.make CMakeFiles/cmTC_8cc27.dir/build
+make[1]: Entering directory '/home/vojta/Work/llmbot/faiss/build/CMakeFiles/CMakeScratch/TryCompile-yYQ8d6'
+Building CXX object CMakeFiles/cmTC_8cc27.dir/CheckFunctionExists.cxx.o
+/usr/bin/c++   -DCHECK_FUNCTION_EXISTS=cheev_ -std=gnu++11 -o CMakeFiles/cmTC_8cc27.dir/CheckFunctionExists.cxx.o -c /home/vojta/Work/llmbot/faiss/build/CMakeFiles/CMakeScratch/TryCompile-yYQ8d6/CheckFunctionExists.cxx
+Linking CXX executable cmTC_8cc27
+/usr/share/cmake-3.25.2-linux-x86_64/bin/cmake -E cmake_link_script CMakeFiles/cmTC_8cc27.dir/link.txt --verbose=1
+/usr/bin/c++  -DCHECK_FUNCTION_EXISTS=cheev_ CMakeFiles/cmTC_8cc27.dir/CheckFunctionExists.cxx.o -o cmTC_8cc27  /usr/lib/x86_64-linux-gnu/libblas.so -lpthread -lm -ldl 
+CMakeFiles/cmTC_8cc27.dir/CheckFunctionExists.cxx.o: In function `main':
+CheckFunctionExists.cxx:(.text+0x10): undefined reference to `cheev_'
+collect2: error: ld returned 1 exit status
+CMakeFiles/cmTC_8cc27.dir/build.make:99: recipe for target 'cmTC_8cc27' failed
+make[1]: *** [cmTC_8cc27] Error 1
+make[1]: Leaving directory '/home/vojta/Work/llmbot/faiss/build/CMakeFiles/CMakeScratch/TryCompile-yYQ8d6'
+Makefile:127: recipe for target 'cmTC_8cc27/fast' failed
+make: *** [cmTC_8cc27/fast] Error 2
+
+
+

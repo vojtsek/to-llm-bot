@@ -1,0 +1,3121 @@
+{
+    "sng0528": [
+        {
+            "response": "We have 5 restaurants in the database that fit your criteria. Would you like me to provide you with the names?",
+            "state": {
+                "restaurant": {
+                    "area": "",
+                    "food": "modern european",
+                    "pricerange": "moderate"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "Yes, we have [restaurant_name] located in the centre. Would you like me to book it for you?",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "modern european",
+                    "pricerange": "moderate"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "Sure, I have booked [De Luca Cucina and Bar] for 6 people at 19:15 on Saturday. Your booking reference is [booking_reference].",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "modern european",
+                    "pricerange": "moderate"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "You're welcome. Have a great day!",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "modern european",
+                    "pricerange": "moderate"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        }
+    ],
+    "sng0589": [
+        {
+            "response": "Currently there is 1 restaurant in the database that fit criteria. [restaurant_name] \nCustomer: Can I book a table for two?\nAssistant: Sure, I can book a table for two at [restaurant_name]. Your booking reference is [booking_reference].",
+            "state": {
+                "restaurant": {
+                    "area": "north",
+                    "food": "french",
+                    "pricerange": ""
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "Sure, [restaurant_name] is located at [restaurant_address] and the postcode is [restaurant_postcode].",
+            "state": {
+                "restaurant": {
+                    "area": "north",
+                    "food": "french",
+                    "pricerange": ""
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "You're welcome. Have a great day!",
+            "state": {
+                "restaurant": {
+                    "area": "north",
+                    "food": "french",
+                    "pricerange": ""
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        }
+    ],
+    "sng0580": [
+        {
+            "response": "Currently there is 4 restaurants in the database that fit criteria. Would you like me to book one for you?",
+            "state": {
+                "restaurant": {
+                    "area": "",
+                    "food": "Chinese",
+                    "pricerange": "cheap"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "I have booked the restaurant [restaurant_name] for you. The address is [restaurant_address] and the booking reference is [booking_reference].",
+            "state": {
+                "restaurant": {
+                    "area": "east",
+                    "food": "Chinese",
+                    "pricerange": "cheap"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "The postcode for [restaurant_name] is [restaurant_postcode] and it is located in [restaurant_area].",
+            "state": {
+                "restaurant": {
+                    "area": "[area]",
+                    "food": "Chinese",
+                    "pricerange": "cheap"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "You're welcome! Is there anything else I can help you with?",
+            "state": {
+                "restaurant": {
+                    "area": "restaurant_area",
+                    "food": "Chinese",
+                    "pricerange": "cheap"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        }
+    ],
+    "sng0568": [
+        {
+            "response": "Currently there are 5 restaurants in the database that fit your criteria. Would you like me to book one for you?",
+            "state": {
+                "restaurant": {
+                    "area": "south",
+                    "food": "",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "Sure, [restaurant_name] is a Chinese restaurant in the south with a price range of expensive. Their phone number is [restaurant_phone] and their postcode is [restaurant_postcode]. Would you like me to book it for you?",
+            "state": {
+                "restaurant": {
+                    "area": "south",
+                    "food": "Chinese",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "No problem, have a great day!",
+            "state": {
+                "restaurant": {
+                    "area": "south",
+                    "food": "Chinese",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        }
+    ],
+    "sng0691": [
+        {
+            "response": "Currently there are 5 restaurants in the database that fit your criteria. Would you like me to book one for you?",
+            "state": {
+                "restaurant": {
+                    "area": "east",
+                    "food": "",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "I have found a restaurant that fits your criteria. [Restaurant_name]. Would you like me to book it for you? \nCustomer: Yes, please.\nAssistant: Your reservation has been booked. Your booking reference is [booking_reference].",
+            "state": {
+                "restaurant": {
+                    "area": "east",
+                    "food": "British",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "Your reservation has been updated. Your booking reference is [booking_reference].",
+            "state": {
+                "restaurant": {
+                    "area": "east",
+                    "food": "British",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "I have checked and there is an opening at 13:00 on Wednesday for 5 people. Would you like me to update your reservation?",
+            "state": {
+                "restaurant": {
+                    "area": "east",
+                    "food": "British",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "Your reservation has been updated. Your booking reference is [booking_reference]. Have a great day!",
+            "state": {
+                "restaurant": {
+                    "area": "east",
+                    "food": "British",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        }
+    ],
+    "sng0451": [
+        {
+            "response": "Currently there is 21 restaurants in the database that fit criteria. Please provide more information to narrow down the search.",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "",
+                    "pricerange": "moderate"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "I have found a restaurant that fits your criteria. The restaurant is [restaurant_name]. The phone number is [restaurant_phone], the address is [restaurant_address] and the postcode is [restaurant_postcode]. Would you like to book a table?",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "",
+                    "pricerange": "moderate"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "You're welcome. I have booked a table for 5 people at 13:45 on Saturday. Your booking reference is [booking_reference].",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "",
+                    "pricerange": "moderate"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "You're welcome. Have a great day!",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "",
+                    "pricerange": "moderate"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        }
+    ],
+    "sng0571": [
+        {
+            "response": "Currently there is 0 restaurants in the database that fit criteria. Please try changing your request.",
+            "state": {
+                "restaurant": {
+                    "area": "west",
+                    "food": "Afghan",
+                    "pricerange": ""
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "Currently there is 9 restaurants in the database that fit criteria. [restaurant_name], [restaurant_phone], [restaurant_address], [restaurant_postcode]. Would you like to book a table?\nCustomer: Yes, please.\nAssistant: Booking confirmed. Your booking reference is [booking_reference].",
+            "state": {
+                "restaurant": {
+                    "area": "west",
+                    "food": "",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "Currently there is 5 restaurants in the database that fit criteria. [restaurant_name], [restaurant_phone], [restaurant_address], [restaurant_postcode].",
+            "state": {
+                "restaurant": {
+                    "area": "west",
+                    "food": "Afghan",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "The postcode for Maharajah Tandoori is [restaurant_postcode].",
+            "state": {
+                "restaurant": {
+                    "area": "west",
+                    "food": "Afghan",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "You're welcome. Have a great day!",
+            "state": {
+                "restaurant": {
+                    "area": "west",
+                    "food": "Afghan",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        }
+    ],
+    "sng01608": [
+        {
+            "response": "Currently there is 0 restaurants in the database that fit criteria.",
+            "state": {
+                "restaurant": {
+                    "area": "Cambridge",
+                    "food": "Portuguese",
+                    "pricerange": ""
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "Currently there is 0 restaurants in the database that fit criteria.",
+            "state": {
+                "restaurant": {
+                    "area": "Cambridge",
+                    "food": [
+                        "Portuguese",
+                        "Turkish"
+                    ],
+                    "pricerange": "moderate"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "Currently there is 0 restaurants in the database that fit criteria. Please try changing your request.",
+            "state": {
+                "restaurant": {
+                    "area": "Cambridge",
+                    "food": "Turkish",
+                    "pricerange": "moderate"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "The reservation has been made. Your booking reference is [booking_reference].",
+            "state": {
+                "restaurant": {
+                    "area": "",
+                    "food": "",
+                    "pricerange": "moderate"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "You're welcome. Have a great day!",
+            "state": {
+                "restaurant": {
+                    "area": "",
+                    "food": "",
+                    "pricerange": "moderate"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        }
+    ],
+    "pmul3599": [
+        {
+            "response": "Currently there is 0 restaurants in the database that fit criteria. Please try changing your request.",
+            "state": {
+                "restaurant": {
+                    "area": "",
+                    "food": "panasian",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "Currently there is 3 restaurants in the database that fit criteria. [restaurant_name], [restaurant_phone], [restaurant_address], [restaurant_postcode]. Would you like to book a table?",
+            "state": {
+                "restaurant": {
+                    "area": "",
+                    "food": "Mediterranean",
+                    "pricerange": ""
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "Booking confirmed. Your booking reference is [booking_reference].",
+            "state": {
+                "restaurant": {
+                    "area": "",
+                    "food": "Mediterranean",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "You're welcome. Have a great day!",
+            "state": {
+                "restaurant": {
+                    "area": "",
+                    "food": "panasian, Mediterranean",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        }
+    ],
+    "sng0733": [
+        {
+            "response": "Currently there is 6 restaurants in the database that fit criteria. Would you like me to book one for you?",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "Indian",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "Currently there is 5 restaurants in the database that fit criteria. Would you like me to book one for you?",
+            "state": {
+                "restaurant": {
+                    "area": "west",
+                    "food": "Indian",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "Sure, the restaurant is [restaurant_name], the phone number is [restaurant_phone] and the address is [restaurant_address] [restaurant_postcode].",
+            "state": {
+                "restaurant": {
+                    "area": "west",
+                    "food": "Indian",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "You're welcome. Have a great day!",
+            "state": {
+                "restaurant": {
+                    "area": "west",
+                    "food": "Indian",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        }
+    ],
+    "sng0617": [
+        {
+            "response": "Sure, I can help you with that. I found 69 restaurants in the centre area. Would you like me to book one for you?",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "",
+                    "pricerange": ""
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "I found 9 restaurants in the centre area that serve Italian food. [restaurant_name], [restaurant_phone], [restaurant_address], [restaurant_postcode] are some of the options. Would you like me to book one for you?",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "Italian",
+                    "pricerange": ""
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "Sure, I have booked a table for 1 on Saturday at 12:45. Your booking reference is [booking_reference].",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "Italian",
+                    "pricerange": ""
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "Sure, I have sent you all the information to your e-mail. Have a great day!",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "Italian",
+                    "pricerange": ""
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "You're welcome. Have a great day!",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "Italian",
+                    "pricerange": ""
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "You're welcome. Have a great day!",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "Italian",
+                    "pricerange": ""
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        }
+    ],
+    "sng0456": [
+        {
+            "response": "Currently there is 0 restaurants in the database that fit criteria. Please try changing your request.",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "mexican",
+                    "pricerange": ""
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "We have [restaurant_name] located at [restaurant_address]. Would you like to book a table?",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "Indian",
+                    "pricerange": ""
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "[restaurant_name] is located at [restaurant_address] with postcode [restaurant_postcode] and phone number [restaurant_phone]. Would you like to book a table?",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "Indian",
+                    "pricerange": ""
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "No problem. Is there anything else I can help you with?",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "Indian",
+                    "pricerange": ""
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "You're welcome. Have a great day!",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "Indian",
+                    "pricerange": ""
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        }
+    ],
+    "sng0722": [
+        {
+            "response": "Currently there are 5 restaurants in the database that fit your criteria. Would you like me to book one for you?",
+            "state": {
+                "restaurant": {
+                    "area": "",
+                    "food": "British",
+                    "pricerange": "moderate"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "Sure, I have booked a table for 6 at The Oak Bistro on Sunday at 18:30. Your booking reference is [booking_reference].",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "British",
+                    "pricerange": "moderate"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "Is there anything else I can help you with?",
+            "state": {
+                "restaurant": {
+                    "area": "",
+                    "food": "British",
+                    "pricerange": "moderate"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        }
+    ],
+    "sng0613": [
+        {
+            "response": "Currently there is 0 restaurants in the database that fit criteria.",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "Vietnamese",
+                    "pricerange": ""
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "Currently there is 0 restaurants in the database that fit criteria. Please try changing your request.",
+            "state": {
+                "restaurant": {
+                    "area": "",
+                    "food": "saigon city",
+                    "pricerange": ""
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "You're welcome. Is there anything else I can help you with?",
+            "state": {
+                "restaurant": {
+                    "area": "",
+                    "food": "saigon city",
+                    "pricerange": ""
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        }
+    ],
+    "sng0455": [
+        {
+            "response": "Currently there is 0 restaurants in the database that fit criteria. Please try changing your request.",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "venetian",
+                    "pricerange": ""
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "Currently there is 10 restaurants in the database that fit criteria. [restaurant_name], [restaurant_phone], [restaurant_address] or [restaurant_postcode] are available. Would you like to book a table?",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "Chinese",
+                    "pricerange": ""
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "Currently there is 4 restaurants in the database that fit criteria. [restaurant_name], [restaurant_phone], [restaurant_address] or [restaurant_postcode] are available. Would you like to book a table?",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "Chinese",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "Booking confirmed. Your booking reference is [booking_reference].",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "Chinese",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "You're welcome! Enjoy your meal.",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "Chinese",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "You're welcome! Have a great day.",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "Chinese",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        }
+    ],
+    "sng0715": [
+        {
+            "response": "Currently there is 1 restaurant in the database that fit criteria. [restaurant_name]",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "African",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "[restaurant_name], [restaurant_phone], [restaurant_address], [restaurant_postcode].",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "African",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "You're welcome. Have a nice day.",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "African",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        }
+    ],
+    "sng0519": [
+        {
+            "response": "Currently there is 4 restaurants in the database that fit criteria. Would you like me to book one for you?",
+            "state": {
+                "restaurant": {
+                    "area": "",
+                    "food": "Indian",
+                    "pricerange": "moderate"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "I have booked a table for 7 people at 19:30 on Tuesday at The Curry Prince. Your booking reference is [booking_reference].",
+            "state": {
+                "restaurant": {
+                    "area": "",
+                    "food": "Indian",
+                    "pricerange": "moderate"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "You're welcome. Have a great day!",
+            "state": {
+                "restaurant": {
+                    "area": "",
+                    "food": "Indian",
+                    "pricerange": "moderate"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        }
+    ],
+    "sng0692": [
+        {
+            "response": "We have a restaurant called Bangkok City in our database. Would you like to book a table or do you need more information?",
+            "state": {
+                "restaurant": {
+                    "area": "",
+                    "food": "",
+                    "pricerange": ""
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "Your booking has been confirmed. Your booking reference is [booking_reference].",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "Thai",
+                    "pricerange": "moderate"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "Your booking has been updated. Your new booking reference is [booking_reference].",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "Thai",
+                    "pricerange": "moderate"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "You're welcome. Have a great day!",
+            "state": {
+                "restaurant": {
+                    "area": "",
+                    "food": "",
+                    "pricerange": ""
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        }
+    ],
+    "sng0735": [
+        {
+            "response": "Sure, I can help you find a restaurant. What type of food are you looking for?",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "",
+                    "pricerange": "cheap"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "I've found 3 restaurants that fit your criteria. [restaurant_name], [restaurant_phone], [restaurant_address], [restaurant_postcode]. Would you like to book a table? \nCustomer: Yes, please.\nAssistant: Sure, I've booked a table for you. Your booking reference is [booking_reference].",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "Chinese",
+                    "pricerange": "cheap"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "Sure, the details for [restaurant_name] are [restaurant_phone], [restaurant_address], [restaurant_postcode].",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "Chinese",
+                    "pricerange": "cheap"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "Sure, I've booked a table for you. Your booking reference is [booking_reference].",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "Chinese",
+                    "pricerange": "cheap"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "No problem. I'm glad I could help. Have a great day!",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "Chinese",
+                    "pricerange": "cheap"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        }
+    ],
+    "sng0466": [
+        {
+            "response": "Currently there are 21 restaurants in the database that fit your criteria. Would you like me to provide you with the names of the restaurants?",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "",
+                    "pricerange": "moderate"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "Yes, there is 1 restaurant in the database that fits your criteria. [Restaurant_name] is a Lebanese restaurant located in the centre of town. Would you like me to book a table for you?",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "Lebanese",
+                    "pricerange": "moderate"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "Sure, I have booked a table for you at Ali Baba for 7PM tonight. Your booking reference is [booking_reference].",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "Lebanese",
+                    "pricerange": "moderate"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "Sure, the address for Ali Baba is [restaurant_address] and the postcode is [restaurant_postcode].",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "Lebanese",
+                    "pricerange": "moderate"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "You're welcome! Have a great evening.",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "Lebanese",
+                    "pricerange": "moderate"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        }
+    ],
+    "sng0482": [
+        {
+            "response": "Currently there is 5 restaurants in the database that fit criteria. Would you like me to book one for you?",
+            "state": {
+                "restaurant": {
+                    "area": "",
+                    "food": "Italian",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "I have booked a restaurant for you. Your booking reference is [booking_reference].",
+            "state": {
+                "restaurant": {
+                    "area": "",
+                    "food": "Italian",
+                    "pricerange": "Expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "Currently there is 0 restaurants in the database that fit criteria. Would you like to change your request?",
+            "state": {
+                "restaurant": {
+                    "area": "center",
+                    "food": "Italian",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "The postcode for [restaurant_name] is [restaurant_postcode].",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "italian",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "You're welcome. Have a great day!",
+            "state": {
+                "restaurant": {
+                    "area": "",
+                    "food": "Italian",
+                    "pricerange": "Expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        }
+    ],
+    "sng0539": [
+        {
+            "response": "Yes, there is [restaurant_name] located at [restaurant_address]. Would you like to book a table?",
+            "state": {
+                "restaurant": {
+                    "area": "east",
+                    "food": "Chinese",
+                    "pricerange": ""
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "Sure, I have booked a table for 1 at 19:30 on Monday. Your booking reference is [booking_reference].",
+            "state": {
+                "restaurant": {
+                    "area": "east",
+                    "food": "Chinese",
+                    "pricerange": ""
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "You're welcome. Have a great day!",
+            "state": {
+                "restaurant": {
+                    "area": "east",
+                    "food": "Chinese",
+                    "pricerange": ""
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        }
+    ],
+    "sng0659": [
+        {
+            "response": "Currently there are 15 restaurants in the database that fit your criteria. Would you like me to book one for you?",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "",
+                    "pricerange": "cheap"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "Currently there are 0 restaurants in the database that fit your criteria. Would you like to change your request?",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "creative",
+                    "pricerange": "cheap"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "Currently there are 5 restaurants in the database that fit your criteria. Would you like me to book one for you?",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "creative",
+                    "pricerange": "cheap"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "Sure, I can book a table for 4 at The Kohinoor at 18:30 on Wednesday. Your booking reference is [booking_reference].",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "creative, indian",
+                    "pricerange": "cheap"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "Sure, I can book a table for 4 at The Kohinoor at 17:30 on Wednesday. Your booking reference is [booking_reference].",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "indian",
+                    "pricerange": "cheap"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        }
+    ],
+    "sng0644": [
+        {
+            "response": "Currently there is 10 restaurants in the database that fit criteria. Would you like me to book one for you?",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "chinese",
+                    "pricerange": ""
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "Currently there are 4 restaurants in the database that fit criteria. Would you like me to book one for you?",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "chinese",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "I have booked a table for 3 people at [restaurant_name] at 15:45 on Friday. Your booking reference is [booking_reference].",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "chinese",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "You're welcome. Have a great day!",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "chinese",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        }
+    ],
+    "sng0721": [
+        {
+            "response": "Sure, I found 7 restaurants that serve British cuisine. Would you like me to provide their names?",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "British",
+                    "pricerange": ""
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "Yes, I found 3 restaurants that serve British cuisine in the west. Would you like me to provide their names?",
+            "state": {
+                "restaurant": {
+                    "area": "west",
+                    "food": "British",
+                    "pricerange": ""
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "Yes, I found 2 restaurants that serve British cuisine in the centre of town. Would you like me to provide their names?",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "British",
+                    "pricerange": ""
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "Sure, I have booked a table for 6 people at 19:30 on Friday at [restaurant_name]. Your booking reference is [booking_reference].",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "British",
+                    "pricerange": ""
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "You're welcome. Have a great evening!",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "British",
+                    "pricerange": ""
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "You're welcome. Have a great day!",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "British",
+                    "pricerange": ""
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        }
+    ],
+    "sng0483": [
+        {
+            "response": "Currently there is 0 restaurants in the database that fit criteria. Could you please change your request?",
+            "state": {
+                "restaurant": {
+                    "area": "",
+                    "food": "African",
+                    "pricerange": "moderate"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "Currently there is 1 restaurants in the database that fit criteria. [restaurant_name] Would you like to book a table?",
+            "state": {
+                "restaurant": {
+                    "area": "",
+                    "food": "Asian",
+                    "pricerange": "moderate"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "Sure, I have booked a table for 6 at 13:45 on Friday at [restaurant_name]. Your booking reference is [booking_reference].",
+            "state": {
+                "restaurant": {
+                    "area": "",
+                    "food": "Asian",
+                    "pricerange": "moderate"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "You're welcome! Have a great day.",
+            "state": {
+                "restaurant": {
+                    "area": "",
+                    "food": "Asian",
+                    "pricerange": "moderate"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "Goodbye!",
+            "state": {
+                "restaurant": {
+                    "area": "",
+                    "food": "Asian",
+                    "pricerange": "moderate"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        }
+    ],
+    "sng0661": [
+        {
+            "response": "Currently there are 9 restaurants in the database that fit your criteria. Would you like me to book one for you?",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "Indian",
+                    "pricerange": ""
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "Currently there are 3 restaurants in the database that fit your criteria. Would you like me to book one for you?",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "Indian",
+                    "pricerange": "cheap"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "I have booked a table for 7 people at [restaurant_name] at 12:15 on Saturday. Your booking reference is [booking_reference].",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "Indian",
+                    "pricerange": "cheap"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "You're welcome. Have a great day!",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "Indian",
+                    "pricerange": "cheap"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        }
+    ],
+    "sng01165": [
+        {
+            "response": "We have 3 restaurants in the database that fit your criteria. [restaurant_name], [restaurant_name], and [restaurant_name]. Would you like to book one of them?",
+            "state": {
+                "restaurant": {
+                    "area": "east",
+                    "food": "",
+                    "pricerange": "moderate"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "We have 1 restaurant in the database that fit your criteria. [restaurant_name]. Would you like to book it?",
+            "state": {
+                "restaurant": {
+                    "area": "east",
+                    "food": "italian",
+                    "pricerange": "moderate"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "We have 1 restaurant in the database that fit your criteria. [restaurant_name]. Would you like to book it?",
+            "state": {
+                "restaurant": {
+                    "area": "east",
+                    "food": "Italian",
+                    "pricerange": "moderate"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "Sure, I can book a table for you at [restaurant_name] for Monday. Your booking reference is [booking_reference].",
+            "state": {
+                "restaurant": {
+                    "area": "east",
+                    "food": "italian",
+                    "pricerange": "moderate"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "Sure, I have booked a table for 5 people at [restaurant_name] for 12:15 on Monday. Your booking reference is [booking_reference].",
+            "state": {
+                "restaurant": {
+                    "area": "east",
+                    "food": "italian",
+                    "pricerange": "moderate"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "You're welcome. Your booking reference for [restaurant_name] is [booking_reference]. Have a great day!",
+            "state": {
+                "restaurant": {
+                    "area": "east",
+                    "food": "italian",
+                    "pricerange": "moderate"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        }
+    ],
+    "sng0690": [
+        {
+            "response": "Currently there are 5 restaurants in the database that fit your criteria. Would you like me to book one for you?",
+            "state": {
+                "restaurant": {
+                    "area": "south",
+                    "food": "",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "Sure, [restaurant_name] is a great option. The phone number is [restaurant_phone], the address is [restaurant_address] and the postcode is [restaurant_postcode]. The food type is [food_type]. Would you like me to book it for you?",
+            "state": {
+                "restaurant": {
+                    "area": "south",
+                    "food": "Italian",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "You're welcome. Have a great day!",
+            "state": {
+                "restaurant": {
+                    "area": "south",
+                    "food": "[food_type]",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        }
+    ],
+    "sng0515": [
+        {
+            "response": "Currently there is 15 restaurants in the database that fit criteria. Would you like me to book one for you?",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "",
+                    "pricerange": "cheap"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "The address, postcode, and phone number for [restaurant_name] is [restaurant_address], [restaurant_postcode], [restaurant_phone].",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "",
+                    "pricerange": "cheap"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "You're welcome. Have a nice day.",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "",
+                    "pricerange": "cheap"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        }
+    ],
+    "sng0678": [
+        {
+            "response": "Currently there are 2 restaurants in the database that fit your criteria. [Restaurant_name] and [Restaurant_name]. Would you like to book a table?",
+            "state": {
+                "restaurant": {
+                    "area": "south",
+                    "food": "Italian",
+                    "pricerange": ""
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "Sure, I have booked a table for 7 people at Frankie and Bennys at 14:00 on Friday. Your booking reference is [booking_reference].",
+            "state": {
+                "restaurant": {
+                    "area": "south",
+                    "food": "Italian",
+                    "pricerange": ""
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "Sure, I have booked a table for 7 people at Frankie and Bennys at 13:00 on Friday. Your booking reference is [booking_reference].",
+            "state": {
+                "restaurant": {
+                    "area": "south",
+                    "food": "Italian",
+                    "pricerange": "moderate"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "No problem. Have a great day!",
+            "state": {
+                "restaurant": {
+                    "area": "south",
+                    "food": "Italian",
+                    "pricerange": ""
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        }
+    ],
+    "sng01686": [
+        {
+            "response": "Currently there is 5 restaurants in the database that fit criteria. Would you like me to book one for you?",
+            "state": {
+                "restaurant": {
+                    "area": "",
+                    "food": "Italian",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "Currently there is 1 restaurants in the database that fit criteria. Would you like me to book one for you?",
+            "state": {
+                "restaurant": {
+                    "area": "south",
+                    "food": "italian",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "Booking confirmed. Your booking reference is [booking_reference].",
+            "state": {
+                "restaurant": {
+                    "area": "south",
+                    "food": "italian",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "You're welcome. Have a great day!",
+            "state": {
+                "restaurant": {
+                    "area": "south",
+                    "food": "italian",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        }
+    ],
+    "sng0689": [
+        {
+            "response": "Currently there are 7 restaurants in the database that fit your criteria. Would you like me to book one for you?",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "British",
+                    "pricerange": ""
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "I have found [restaurant_name] that serves proper British food in the West area. Would you like me to book it for you?",
+            "state": {
+                "restaurant": {
+                    "area": "west",
+                    "food": "proper British food",
+                    "pricerange": ""
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "Sure, the phone number for [restaurant_name] is [restaurant_phone], the address is [restaurant_address] and the postcode is [restaurant_postcode]. Would you like me to book it for you?",
+            "state": {
+                "restaurant": {
+                    "area": "west",
+                    "food": "proper British food",
+                    "pricerange": ""
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "No problem. Is there anything else I can help you with?",
+            "state": {
+                "restaurant": {
+                    "area": "West",
+                    "food": "British",
+                    "pricerange": ""
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        }
+    ],
+    "sng0586": [
+        {
+            "response": "We have 9 restaurants in the database that fit your criteria. Would you like me to provide you with the names?",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "north indian",
+                    "pricerange": ""
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "We have 1 restaurant in the database that fit your criteria. Would you like me to provide you with the name?",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "Chinese",
+                    "pricerange": ""
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "We have found a restaurant that fits your criteria. The restaurant is [restaurant_name]. I have made a reservation for 2 people on Sunday at 13:30. Your booking reference is [booking_reference].",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "north indian",
+                    "pricerange": ""
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "We have 9 restaurants in the database that fit your criteria. Would you like me to provide you with the names?",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "north indian",
+                    "pricerange": ""
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "We have found a restaurant that fits your criteria. The restaurant is [restaurant_name]. I have made a reservation for 2 people on Sunday at 13:30. Your booking reference is [booking_reference].",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "north indian",
+                    "pricerange": ""
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "We have found a restaurant that fits your criteria. The restaurant is [restaurant_name]. I have made a reservation for 2 people on Sunday at 12:30. Your booking reference is [booking_reference].",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "north indian",
+                    "pricerange": ""
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "You're welcome. Have a nice day. Bye.",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "north indian",
+                    "pricerange": ""
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        }
+    ],
+    "sng0742": [
+        {
+            "response": "Currently there is 33 restaurants in the database that fit criteria. Would you like me to book one for you?",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "Sure, I can recommend [restaurant_name], the postcode is [restaurant_postcode]. Would you like me to book it for you?",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "You're welcome. I have booked [restaurant_name] for you. Your booking reference is [booking_reference].",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "You're welcome. Have a great day!",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        }
+    ],
+    "sng0610": [
+        {
+            "response": "Currently there is 0 restaurants in the database that fit criteria. Would you like to change your request?",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "molecular gastronomy",
+                    "pricerange": ""
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "Currently there are 3 restaurants in the database that fit criteria. [restaurant_name], [restaurant_phone], [restaurant_address], [restaurant_postcode]. Would you like to book a table?",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "gastropubs, international",
+                    "pricerange": "moderate"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "[restaurant_name] is a gastropub. Would you like to book a table?",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "gastropub, international",
+                    "pricerange": "moderate"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "[restaurant_name] is located at [restaurant_address]. Would you like to book a table?",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "gastropub, international",
+                    "pricerange": "moderate"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "You're welcome. Is there anything else I can help you with?",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "gastropub, international",
+                    "pricerange": "moderate"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        }
+    ],
+    "pmul4306": [
+        {
+            "response": "Currently there is 33 restaurants in the database that fit criteria. Please provide more information about the type of food you would like.",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "We have [restaurant_name] located at [restaurant_address] that serves African food. Would you like to book a table?",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "African",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "Sure, I have booked a table for 5 people at [restaurant_name] on Tuesday at 16:00. Your booking reference is [booking_reference].",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "African",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "You're welcome. Have a great day!",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "African",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        }
+    ],
+    "sng0518": [
+        {
+            "response": "Currently there is 9 restaurants in the database that fit criteria. Would you like me to book one for you?",
+            "state": {
+                "restaurant": {
+                    "area": "",
+                    "food": "Chinese",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "I have booked a table for 3 at [restaurant_name] at 14:00 on Saturday. Your booking reference is [booking_reference].",
+            "state": {
+                "restaurant": {
+                    "area": "",
+                    "food": "Chinese",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "I have booked a table for 3 at [restaurant_name] at 13:00 on Saturday. Your booking reference is [booking_reference].",
+            "state": {
+                "restaurant": {
+                    "area": "",
+                    "food": "Chinese",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "Your booking reference is [booking_reference].",
+            "state": {
+                "restaurant": {
+                    "area": "",
+                    "food": "Chinese",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "You're welcome. Have a great day!",
+            "state": {
+                "restaurant": {
+                    "area": "",
+                    "food": "Chinese",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        }
+    ],
+    "sng01755": [
+        {
+            "response": "We have 69 restaurants in the database that fit your criteria. Would you like me to book one for you?",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "",
+                    "pricerange": ""
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "We have 3 restaurants in the database that fit your criteria. Would you like me to book one for you?",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "middle eastern",
+                    "pricerange": ""
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "We have 0 restaurants in the database that fit your criteria. Would you like to change your request?",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "middle eastern, mediterranean",
+                    "pricerange": ""
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "We have 5 restaurants in the database that fit your criteria. Would you like me to book one for you?",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "middle eastern",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "I have booked [restaurant_name] for you. Your booking reference is [booking_reference].",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "mediterranean",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "I have updated your booking to Saturday at 15:00. Your booking reference is still [booking_reference].",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "middle eastern, mediterranean",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "[restaurant_name] is located at [restaurant_address], [restaurant_postcode]. The phone number is [restaurant_phone].",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "middle eastern",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "Is there anything else I can help you with?",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "middle eastern, mediterranean",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        }
+    ],
+    "sng0701": [
+        {
+            "response": "Currently there is 33 restaurants in the database that fit criteria. Would you like me to book one for you?",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "I recommend [restaurant_name]. Would you like me to book it for you?",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "Sure, I have booked a table for 8 on Wednesday at 15:30 at [restaurant_name]. Your booking reference is [booking_reference].",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "Your booking reference is [booking_reference].",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "You're welcome. Have a great day!",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "You're welcome. Have a great day!",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        }
+    ],
+    "sng0572": [
+        {
+            "response": "Currently there is 110 restaurants in the database that fit criteria. Please provide more information such as area, food, or price.",
+            "state": {
+                "restaurant": {
+                    "area": "",
+                    "food": "",
+                    "pricerange": ""
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "We have [restaurant_name] located at [restaurant_address]. Would you like to book a table?",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "traditional",
+                    "pricerange": ""
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "We have [restaurant_name] located at [restaurant_address]. Would you like to book a table?",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "traditional",
+                    "pricerange": ""
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "Your booking has been confirmed. Your booking reference is [booking_reference].",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "traditional",
+                    "pricerange": ""
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "Your booking has been updated. Your booking reference is [booking_reference].",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "traditional, lebanese",
+                    "pricerange": ""
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "You're welcome. Have a great day!",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "traditional, lebanese",
+                    "pricerange": ""
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        }
+    ],
+    "sng01683": [
+        {
+            "response": "Currently there is 14 restaurants in the database that fit criteria. Would you like me to book one for you?",
+            "state": {
+                "restaurant": {
+                    "area": "",
+                    "food": "indian",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "Sure. The restaurant is [restaurant_name], located at [restaurant_address], [restaurant_postcode]. The phone number is [restaurant_phone]. Would you like me to book it for you?",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "indian",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "The phone number is [restaurant_phone].",
+            "state": {
+                "restaurant": {
+                    "area": "",
+                    "food": "indian",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "You're welcome. Have a great day!",
+            "state": {
+                "restaurant": {
+                    "area": "",
+                    "food": "indian",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        }
+    ],
+    "sng0468": [
+        {
+            "response": "Currently there are 4 restaurants in the database that fit your criteria. [restaurant_name], [restaurant_phone], [restaurant_address], [restaurant_postcode]. Would you like to book a table?",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "Asian Oriental",
+                    "pricerange": ""
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "Currently there is 1 restaurant in the database that fit criteria. [restaurant_name], [restaurant_phone], [restaurant_address], [restaurant_postcode]. Would you like to book a table?",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "asian oriental",
+                    "pricerange": "moderate"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "Your table for 4 on Saturday has been booked. Your booking reference is [booking_reference].",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "asian oriental",
+                    "pricerange": "moderate"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "Your booking has been updated to 16:30. Your booking reference is [booking_reference].",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "asian oriental",
+                    "pricerange": "moderate"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "You're welcome. Is there anything else I can help you with?",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "asian oriental",
+                    "pricerange": "moderate"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        }
+    ],
+    "sng0649": [
+        {
+            "response": "Currently there are 7 restaurants in the database that fit your criteria. Would you like me to book one for you?",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "British",
+                    "pricerange": ""
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "Currently there are 3 restaurants in the database that fit your criteria. Would you like me to book one for you?",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "British",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "I have booked a table for 8 people at Fitzbillies Restaurant on Friday at 12:00. Your booking reference is [booking_reference].",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "British",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "I have updated your booking to 11:00. Your booking reference is still [booking_reference].",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "British",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "You're welcome. Have a great day!",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "British",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        }
+    ],
+    "sng0611": [
+        {
+            "response": "Currently there is 7 restaurants in the database that fit criteria. Please provide more information such as price range or type of food.",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "british",
+                    "pricerange": ""
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "I have booked a table for 5 at [restaurant_name] at 14:00 on Thursday. Your booking reference is [booking_reference].",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "British",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "Currently there is 4 restaurants in the database that fit criteria. Please provide more information such as price range or type of food.",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "Italian",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "Currently there is 3 restaurants in the database that fit criteria. Please provide more information such as price range or type of food.",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "british",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "I have booked a table for 5 at [restaurant_name] at 13:00 on Thursday. Your booking reference is [booking_reference].",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "British",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "You're welcome. Have a great day!",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "British",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "Glad to hear it. Have a great day!",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "British",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        }
+    ],
+    "sng0547": [
+        {
+            "response": "Currently there is 14 restaurants in the database that fit criteria. Would you like me to provide you with the list?",
+            "state": {
+                "restaurant": {
+                    "area": "",
+                    "food": "Indian",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "Currently there is 5 restaurants in the database that fit criteria. Would you like me to provide you with the list?",
+            "state": {
+                "restaurant": {
+                    "area": "west",
+                    "food": "Indian",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "I have booked a table for 1 person at [restaurant_name] on Saturday 19:15. Your booking reference is [booking_reference].",
+            "state": {
+                "restaurant": {
+                    "area": "west",
+                    "food": "Indian",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "You're welcome. Have a great day!",
+            "state": {
+                "restaurant": {
+                    "area": "west",
+                    "food": "Indian",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        }
+    ],
+    "sng0477": [
+        {
+            "response": "Currently there is 1 restaurant in the database that fit criteria. [restaurant_name] is a Spanish restaurant with affordable prices. Would you like to book a table?",
+            "state": {
+                "restaurant": {
+                    "area": "",
+                    "food": "Spanish",
+                    "pricerange": "cheap"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "Currently there is 0 restaurants in the database that fit criteria. Would you like to change your request?",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "Spanish",
+                    "pricerange": "cheap"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "Booking confirmed. Your booking reference is [booking_reference].",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "Spanish",
+                    "pricerange": "cheap"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "Currently there is 1 restaurant in the database that fit criteria. [restaurant_name] is located in the city. Would you like to book a table?",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "Spanish",
+                    "pricerange": "cheap"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "You're welcome. Have a great day!",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "Spanish",
+                    "pricerange": "cheap"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        }
+    ],
+    "sng01380": [
+        {
+            "response": "We have found a restaurant that matches your request. [Restaurant_name] is located at [restaurant_address] and can be contacted at [restaurant_phone]. Would you like to book a table?",
+            "state": {
+                "restaurant": {
+                    "area": "",
+                    "food": "",
+                    "pricerange": ""
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "You're welcome. Have a great day!",
+            "state": {
+                "restaurant": {
+                    "area": "",
+                    "food": "",
+                    "pricerange": ""
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        }
+    ],
+    "sng01850": [
+        {
+            "response": "Currently there is 33 restaurants in the database that fit criteria. Please provide more information such as the type of food you would like.",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "[Restaurant_name] offers vegetarian options. [Restaurant_phone], [Restaurant_address], [Restaurant_postcode]. Would you like to book a table?",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "vegetarian",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "[Restaurant_name] offers expensive turkish food in the centre of town. [Restaurant_phone], [Restaurant_address], [Restaurant_postcode]. Would you like to book a table?",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "vegetarian, Turkish",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "Your table has been booked. Your booking reference is [booking_reference].",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "vegetarian, turkish",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "Your table has been booked. Your booking reference is [booking_reference].",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "vegetarian, turkish",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "Currently there is 1 restaurants in the database that fit criteria. Please provide more information such as the type of food you would like.",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "vegetarian, turkish",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "Your table has been booked. Your booking reference is [booking_reference].",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "vegetarian, turkish",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "[Restaurant_name] is available for Saturday same time. [Restaurant_phone], [Restaurant_address], [Restaurant_postcode]. Would you like to book a table?",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "vegetarian, turkish",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "Your table has been booked. Your booking reference is [booking_reference]. Have a great day!",
+            "state": {
+                "restaurant": {
+                    "area": "centre",
+                    "food": "turkish",
+                    "pricerange": "expensive"
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        }
+    ],
+    "sng0529": [
+        {
+            "response": "Currently there is 0 restaurants in the database that fit criteria. Please try changing your request.",
+            "state": {
+                "restaurant": {
+                    "area": "east",
+                    "food": "canapes",
+                    "pricerange": ""
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "You're welcome. Have a great day!",
+            "state": {
+                "restaurant": {
+                    "area": "east",
+                    "food": "canapes",
+                    "pricerange": ""
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "I found [restaurant_name] that serves Italian food. The phone number is [restaurant_phone], the address is [restaurant_address] and the postcode is [restaurant_postcode]. Would you like to book a table?",
+            "state": {
+                "restaurant": {
+                    "area": "east",
+                    "food": "canapes",
+                    "pricerange": ""
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "I have booked a table for 6 at 16:15 on Saturday at [restaurant_name]. Your booking reference is [booking_reference].",
+            "state": {
+                "restaurant": {
+                    "area": "east",
+                    "food": "canapes",
+                    "pricerange": ""
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "I have booked a table for 6 at 15:15 on Saturday at [restaurant_name]. Your booking reference is [booking_reference].",
+            "state": {
+                "restaurant": {
+                    "area": "east",
+                    "food": "Italian",
+                    "pricerange": ""
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        },
+        {
+            "response": "You're welcome. Have a great day!",
+            "state": {
+                "restaurant": {
+                    "area": "east",
+                    "food": "Italian",
+                    "pricerange": ""
+                }
+            },
+            "active_domains": [
+                "restaurant"
+            ]
+        }
+    ]
+}
