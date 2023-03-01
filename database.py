@@ -180,7 +180,7 @@ class MultiWOZDatabase:
 
                 return results
 
-        else:
+        elif domain in self.DOMAINS:
             # Hotel database keys:      address, area, name, phone, postcode, pricerange, type, internet, parking, stars, takesbookings (other are ignored)
             # Attraction database keys: address, area, name, phone, postcode, pricerange, type, entrance fee (other are ignored)
             # Restaurant database keys: address, area, name, phone, postcode, pricerange, type, food
@@ -263,3 +263,5 @@ class MultiWOZDatabase:
                    result['entrancefee'] = result.pop('entrance fee')
 
             return results
+        else:
+            return []
