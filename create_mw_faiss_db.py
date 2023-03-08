@@ -22,7 +22,7 @@ def delexicalize(utterance: str, span_info: Dict[str, List[str]]):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--output_faiss_db')
-    parser.add_argument('--model', default='text-embedding-ada-002', help='Embedding model name; text-embedding-ada-002 for OpenAI, sentence-tranformers/all-mpnet-base-v2 for HuggingFace')
+    parser.add_argument('--model', default='sentence-transformers/all-mpnet-base-v2', help='Embedding model name; text-embedding-ada-002 for OpenAI, sentence-transformers/all-mpnet-base-v2 for HuggingFace')
     parser.add_argument('--database_path', default='multiwoz_database')
     parser.add_argument('--context_size', type=int, default=3)
     parser.add_argument('--embeddings', default='huggingface', help='huggingface or openai')
@@ -30,7 +30,7 @@ if __name__ == '__main__':
 
     docs = []
     if args.embeddings == 'huggingface':
-        embeddings = HuggingFaceEmbeddings(repo_id=args.model)
+        embeddings = HuggingFaceEmbeddings(model_name=args.model)
     else:
         embeddings = OpenAIEmbeddings(document_model_name=args.model,
                                       query_model_name=args.model,
@@ -45,7 +45,8 @@ if __name__ == '__main__':
         if len(dialog['services']) != 1:
             continue
         n += 1
-        domain = dialog['services'][0]
+        domain_gt = dialog['services'][0]
+        last_state = {}
         for tn in range(0, len(dialog['turns']['utterance']), 2):
             context = [f"Customer: {t}" if n % 2 == 0 else f"Assistant: {t}"
              for n, t in enumerate(dialog['turns']['utterance'][:tn+1])]
@@ -62,12 +63,18 @@ if __name__ == '__main__':
                     new_state[domain] = {name: val}
                 else:
                     new_state[domain][name] = val
+            state_update = {domain_gt: {}}
+            for domain, domain_state in new_state.items():
+                for slot, value in domain_state.items():
+                    if slot not in last_state.get(domain, {}) or last_state[domain][slot] != value:
+                        state_update[domain_gt][slot] = value
+            last_state = new_state
             database_results = {domain: len(database.query(domain, domain_state))
                                 for domain, domain_state in new_state.items()}
 
             doc = Document(page_content='\n'.join(context[-args.context_size:]),
                            metadata={'domain': f'{domain}',
-                                     'state': new_state,
+                                     'state': state_update,
                                      'context': '\n'.join(context),
                                      'response': delexicalize(dialog['turns']['utterance'][tn+1],
                                                               dialog['turns']['dialogue_acts'][tn+1]['span_info']),

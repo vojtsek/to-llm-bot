@@ -145,9 +145,12 @@ class MultiWOZDatabase:
         if domain == 'taxi':
             c, t, p = None, None, None
 
-            c = constraints.get('color', [random.choice(self.data[domain]['taxi_colors'])])[0]
-            t = constraints.get('type', [random.choice(self.data[domain]['taxi_types'])])[0]
-            p = constraints.get('phone', [''.join([str(random.randint(1, 9)) for _ in range(11)])])[0]
+            c = str(constraints.get('color', []))
+            c = c[0] if len(c) > 0 else random.choice(self.data[domain]['taxi_colors'])
+            t = str(constraints.get('type', []))
+            t = t[0] if len(t) > 0 else random.choice(self.data[domain]['taxi_types'])
+            p = str(constraints.get('phone', []))
+            p = p[0] if len(p) > 0 else ''.join([str(random.randint(1, 9)) for _ in range(11)])
 
             return [{'color': c, 'type' : t, 'phone' : p}]
 
@@ -192,7 +195,7 @@ class MultiWOZDatabase:
             query = {}
 
             if domain == 'attraction' and 'entrancefee' in constraints:
-                constraints['entrance fee'] = constraints.pop(['entrancefee'])
+                constraints['entrance fee'] = constraints.pop('entrancefee')
 
             for key in self.data_keys[domain]:
                 query[key] = constraints.get(key, [])
@@ -204,6 +207,8 @@ class MultiWOZDatabase:
 
             for i, item in enumerate(self.data[domain]):
                 for k, v in query.items():
+                    if k not in item:
+                        continue
                     if len(v) == 0 or item[k] == '?':
                         continue
 
