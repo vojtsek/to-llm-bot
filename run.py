@@ -10,10 +10,16 @@ import wandb
 import logging
 
 from model import FewShotPromptedLLM, OpenAILLM, OpenAIChatLLM
-from prompts import DOMAIN_DEFINITIONS
+from definitions import FEW_SHOT_DOMAIN_DEFINITIONS
 from database import MultiWOZDatabase
 from utils import parse_state, ExampleRetriever, ExampleFormatter, print_gpu_utilization
 from mwzeval.metrics import Evaluator
+
+# TODO:
+#  - logging bleu
+#  - postprocess delex
+#  - zero shot
+
 
 DOMAINS = [
     	'restaurant',
@@ -35,6 +41,7 @@ if __name__ == "__main__":
     parser.add_argument("--model_name", type=str, default="allenai/tk-instruct-3b-def-pos-neg-expl")
     parser.add_argument("--faiss_db", type=str, default="multiwoz-context-db.vec")
     parser.add_argument("--num_examples", type=int, default=2)
+    parser.add_argument("--use_gt_state", action='store_true')
     parser.add_argument("--database_path", type=str, default="multiwoz_database")
     parser.add_argument("--hf_dataset", type=str, default="multi_woz_v22")
     parser.add_argument("--context_size", type=int, default=3)
@@ -106,6 +113,7 @@ if __name__ == "__main__":
         total_state = {}
         print('=' * 100)
 
+        previous_domain = None
         for tn in range(0, len(dialog['turns']['utterance']), 2):
             question = dialog['turns']['utterance'][tn]
             gold_response = dialog['turns']['utterance'][tn+1]
@@ -126,6 +134,9 @@ if __name__ == "__main__":
             retrieved_examples = example_retriever.retrieve("\n".join(retrieve_history[-args.context_size:]), k=5)
             retrieved_domains = [example['domain'] for example in retrieved_examples]
             selected_domain = Counter(retrieved_domains).most_common(1)[0][0]
+            if previous_domain != selected_domain:
+               #  total_state = {}
+                previous_domain = selected_domain
             retrieved_examples = [example for example in retrieved_examples if example['domain'] == selected_domain]
             num_examples = min(len(retrieved_examples), args.num_examples)
             positive_examples = example_formatter.format(retrieved_examples[:num_examples],
@@ -139,48 +150,53 @@ if __name__ == "__main__":
                                                         input_keys=["context", "state", "database"],
                                                         output_keys=["response"])
             
-            domain_definition = DOMAIN_DEFINITIONS[selected_domain]
+            domain_definition = FEW_SHOT_DOMAIN_DEFINITIONS[selected_domain]
             state_prompt = domain_definition.state_prompt
             response_prompt = domain_definition.response_prompt
             
-            try:
-                state = model(state_prompt,
-                                positive_examples=positive_examples,
-                                negative_examples=negative_examples,
-                                history="\n".join(history),
-                                utterance=question.strip())
-            except:
-                state = {}
+            if args.use_gt_state:
+                state = str(new_gt_state)
+                parsed_state = total_state = final_state = new_gt_state
+            else:
+                try:
+                    state = model(state_prompt,
+                                    positive_examples=positive_examples,
+                                    negative_examples=negative_examples,
+                                    history="\n".join(history),
+                                    utterance=question.strip())
+                except:
+                    state = "{}"
 
-            
-            parsed_state = parse_state(state, default_domain=selected_domain)
-            if selected_domain not in parsed_state:
-                parsed_state[selected_domain] = {}
-            keys_to_remove = [k for k in parsed_state[selected_domain].keys() if k not in domain_definition.expected_slots]
-            for k in keys_to_remove:
-                del parsed_state[selected_domain][k]
-            try:
+                
+                parsed_state = parse_state(state, default_domain=selected_domain)
+                if selected_domain not in parsed_state:
+                    parsed_state[selected_domain] = {}
+                if not isinstance(parsed_state[selected_domain], dict):
+                    parsed_state[selected_domain] = {}
+                keys_to_remove = [k for k in parsed_state[selected_domain].keys() if k not in domain_definition.expected_slots]
+                for k in keys_to_remove:
+                    del parsed_state[selected_domain][k]
+                try:
+                    for domain, ds in parsed_state.items():
+                        for slot, value in ds.items():
+                            pass
+                except:
+                    parsed_state = {domain: {}}
+                
+                final_state = {}
                 for domain, ds in parsed_state.items():
-                    for slot, value in ds.items():
-                        pass
-            except:
-                parsed_state = {domain: {}}
+                    if domain in DOMAINS:
+                        final_state[domain] = ds
+                
+                for domain, dbs in final_state.items():
+                    if domain not in total_state:
+                        total_state[domain] = dbs
+                    else:
+                        for slot, value in dbs.items():
+                            value = str(value)
+                            if value not in ['dontcare', 'none', '?', ''] and len(value) > 0:
+                                total_state[domain][slot] = value
             
-            final_state = {}
-            for domain, ds in parsed_state.items():
-                if domain in DOMAINS:
-                    final_state[domain] = ds
-            
-            for domain, dbs in final_state.items():
-                if domain not in total_state:
-                    total_state[domain] = dbs
-                else:
-                    for slot, value in dbs.items():
-                        value = str(value)
-                        if value not in ['dontcare', 'none', '?', ''] and len(value) > 0:
-                            total_state[domain][slot] = value
-            
-            # final_state = new_gt_state
             print('-' * 100)
             print(f"Question: {question}", flush=True)
             print(f"Selected domain: {selected_domain}", flush=True)
