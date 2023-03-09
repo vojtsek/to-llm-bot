@@ -42,7 +42,7 @@ class FewShotPromptedLLM(SimplePromptedLLM):
         return self._predict(filled_prompt, **kwargs)
     
 
-class OpenAILLM(FewShotPromptedLLM):
+class FewShotOpenAILLM(FewShotPromptedLLM):
     def __init__(self, model_name):
         super().__init__(None, None)
         self.model_name = model_name
@@ -56,7 +56,7 @@ class OpenAILLM(FewShotPromptedLLM):
         return completion.choices[0].text
 
 
-class OpenAIChatLLM(OpenAILLM):
+class FewShotOpenAIChatLLM(FewShotOpenAILLM):
     def _predict(self, text, **kwargs):
         completion = openai.ChatCompletion.create(
             model=self.model_name,
@@ -66,3 +66,30 @@ class OpenAIChatLLM(OpenAILLM):
             temperature=0,
             )
         return completion.choices[0].message["content"]
+
+
+class ZeroShotOpenAILLM(SimplePromptedLLM):
+    def __init__(self, model_name):
+        super().__init__(None, None)
+        self.model_name = model_name
+
+    def _predict(self, text, **kwargs):
+        completion = openai.Completion.create(
+            model=self.model_name,
+            prompt=text,
+            temperature=0,
+        )
+        return completion.choices[0].text
+
+
+class ZeroShotOpenAIChatLLM(ZeroShotOpenAILLM):
+    def _predict(self, text, **kwargs):
+        completion = openai.ChatCompletion.create(
+            model=self.model_name,
+            messages=[
+                {"role": "user", "content": text}
+            ],
+            temperature=0,
+            )
+        return completion.choices[0].message["content"]
+

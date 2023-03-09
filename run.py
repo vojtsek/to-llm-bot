@@ -9,8 +9,16 @@ from datasets import load_dataset
 import wandb
 import logging
 
-from model import FewShotPromptedLLM, OpenAILLM, OpenAIChatLLM
-from definitions import FEW_SHOT_DOMAIN_DEFINITIONS
+from model import (
+    FewShotPromptedLLM,
+    SimplePromptedLLM,
+    FewShotOpenAILLM,
+    ZeroShotOpenAILLM,
+    FewShotOpenAIChatLLM,
+    ZeroShotOpenAIChatLLM
+    )
+
+from definitions import FEW_SHOT_DOMAIN_DEFINITIONS, ZERO_SHOT_DOMAIN_DEFINITIONS
 from database import MultiWOZDatabase
 from utils import parse_state, ExampleRetriever, ExampleFormatter, print_gpu_utilization
 from mwzeval.metrics import Evaluator
@@ -22,14 +30,15 @@ from mwzeval.metrics import Evaluator
 
 
 DOMAINS = [
-    	'restaurant',
-    	'hotel',
-    	'attraction',
-    	'train',
-    	'taxi',
-    	'police',
-    	'hospital'
+    'restaurant',
+    'hotel',
+    'attraction',
+    'train',
+    'taxi',
+    'police',
+    'hospital'
 ]
+
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -41,13 +50,14 @@ if __name__ == "__main__":
     parser.add_argument("--model_name", type=str, default="allenai/tk-instruct-3b-def-pos-neg-expl")
     parser.add_argument("--faiss_db", type=str, default="multiwoz-context-db.vec")
     parser.add_argument("--num_examples", type=int, default=2)
-    parser.add_argument("--use_gt_state", action='store_true')
     parser.add_argument("--database_path", type=str, default="multiwoz_database")
     parser.add_argument("--hf_dataset", type=str, default="multi_woz_v22")
     parser.add_argument("--context_size", type=int, default=3)
     parser.add_argument("--ontology", type=str, default="ontology.json")
     parser.add_argument("--output", type=str, default="results")
     parser.add_argument("--run_name", type=str, default="")
+    parser.add_argument("--use_gt_state", action='store_true')
+    parser.add_argument("--use_zero_shot", action='store_true')
     args = parser.parse_args()
     wandb.init(project='llmbot')
     if 'tk-instruct-3b' in args.model_name:
@@ -65,9 +75,11 @@ if __name__ == "__main__":
     wandb.run.name = f'{args.run_name}-{model_name}-examples-{args.num_examples}-ctx-{args.context_size}'
     report_table = wandb.Table(columns=['id', 'context', 'raw_state', 'parsed_state', 'response'])
     if args.model_name.startswith("text-"):
-        model = OpenAILLM(args.model_name)
+        model_factory = ZeroShotOpenAILLM if args.use_zero_shot else FewShotOpenAILLM
+        model = model_factory(args.model_name)
     elif args.model_name.startswith("gpt-"):
-        model = OpenAIChatLLM(args.model_name)
+        model_factory = ZeroShotOpenAIChatLLM if args.use_zero_shot else FewShotOpenAIChatLLM
+        model = model_factory(args.model_name)
     elif 'opt' in args.model_name:
         tokenizer = AutoTokenizer.from_pretrained(args.model_name, cache_dir=args.cache_dir)
         model = AutoModelForCausalLM.from_pretrained(args.model_name,
@@ -75,7 +87,8 @@ if __name__ == "__main__":
                                                     cache_dir=args.cache_dir,
                                                     device_map="auto",
                                                     load_in_8bit=True)
-        model = FewShotPromptedLLM(model, tokenizer, type="causal")
+        model_factory = SimplePromptedLLM if args.use_zero_shot else FewShotPromptedLLM
+        model = model_factory(model, tokenizer, type="causal")
     else:
         tokenizer = AutoTokenizer.from_pretrained(args.model_name, cache_dir=args.cache_dir)
         model = AutoModelForSeq2SeqLM.from_pretrained(args.model_name,
@@ -83,7 +96,8 @@ if __name__ == "__main__":
                                                     cache_dir=args.cache_dir,
                                                     device_map="auto",
                                                     load_in_8bit=True)
-        model = FewShotPromptedLLM(model, tokenizer, type="seq2seq")
+        model_factory = SimplePromptedLLM if args.use_zero_shot else FewShotPromptedLLM
+        model = model_factory(model, tokenizer, type="seq2seq")
 
     database = MultiWOZDatabase(args.database_path)
     with open(args.faiss_db, 'rb') as f:
@@ -150,7 +164,7 @@ if __name__ == "__main__":
                                                         input_keys=["context", "state", "database"],
                                                         output_keys=["response"])
             
-            domain_definition = FEW_SHOT_DOMAIN_DEFINITIONS[selected_domain]
+            domain_definition = ZERO_SHOT_DOMAIN_DEFINITIONS[selected_domain] if args.use_zero_shot else FEW_SHOT_DOMAIN_DEFINITIONS[selected_domain]
             state_prompt = domain_definition.state_prompt
             response_prompt = domain_definition.response_prompt
             
@@ -159,11 +173,14 @@ if __name__ == "__main__":
                 parsed_state = total_state = final_state = new_gt_state
             else:
                 try:
-                    state = model(state_prompt,
-                                    positive_examples=positive_examples,
-                                    negative_examples=negative_examples,
-                                    history="\n".join(history),
-                                    utterance=question.strip())
+                    kwargs = {
+                        "history": "\n".join(history),
+                        "utterance": question.strip()
+                    }
+                    if not args.use_zero_shot:
+                        kwargs["positive_examples"] = positive_examples
+                        kwargs["negative_examples"] = negative_examples
+                    state = model(state_prompt, **kwargs)
                 except:
                     state = "{}"
 
@@ -213,13 +230,17 @@ if __name__ == "__main__":
             print(f"Database Results: {database_results}", flush=True)
             
             try:
-                response = model(response_prompt,
-                                 positive_examples=response_examples,
-                                 negative_examples=[],
-                                 history="\n".join(history),
-                                 utterance=question.strip(),
-                                 state=json.dumps(total_state).replace("{", '<').replace("}", '>'),
-                                 database=str(database_results))
+                kwargs = {
+                    "history": "\n".join(history),
+                    "utterance": question.strip(),
+                    "state": json.dumps(total_state).replace("{", '<').replace("}", '>'),
+                    "database": str(database_results)
+                }
+                if not args.use_zero_shot:
+                    kwargs["positive_examples"] = response_examples
+                    kwargs["negative_examples"] = []
+
+                response = model(response_prompt, **kwargs)
             except:
                 response = ''
             logger.info(f"Response: {response}")
