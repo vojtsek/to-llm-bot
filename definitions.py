@@ -16,6 +16,7 @@ Values that should be captured are:
  - "pricerange" that specifies the price range of the restaurant (cheap/moderate/expensive)
  - "area" that specifies the area where the restaurant is located (north/east/west/south/centre)
  - "food" that specifies the type of food the restaurant serves
+ - "name" that specifies the name of the restaurant
 Do not capture ay other values!
 If not specified, leave the value empty.
 {}{}Now complete the following example:
@@ -36,7 +37,7 @@ state: {}
 database: {}
 output:response:""",
                                 args_order=["history", "utterance", "state", "database"])
-    expected_slots = ["pricerange", "area", "food"]
+    expected_slots = ["pricerange", "area", "food", "name"]
 
 
 @dataclass
@@ -116,6 +117,7 @@ Values that should be captured are:
  - "leaveAt" that specifies what time the train should leave
  - "departure" that specifies the departure station
  - "destination" that specifies the destination station
+ - "day" that specifies what day the train should leave (monday/tuesday/wednesday/thursday/friday/saturday/sunday)
 {}{}Now complete the following example:
 input: {}
 Customer: {}
@@ -321,6 +323,7 @@ Values that should be captured are:
  - "leaveAt" that specifies what time the train should leave
  - "departure" that specifies the departure station
  - "destination" that specifies the destination station
+ - "day" that specifies what day the train should leave (monday/tuesday/wednesday/thursday/friday/saturday/sunday)
 input: {}
 Customer: {}
 output:""",
@@ -334,7 +337,7 @@ state: {}
 database: {}
 output:""",
                                 args_order=["history", "utterance", "state", "database"])
-    expected_slots = ['departure', 'destination', 'leaveAt', 'arriveBy']
+    expected_slots = ['departure', 'destination', 'leaveAt', 'arriveBy', 'date']
 
 
 

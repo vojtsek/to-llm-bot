@@ -153,13 +153,13 @@ if __name__ == "__main__":
                 previous_domain = selected_domain
             retrieved_examples = [example for example in retrieved_examples if example['domain'] == selected_domain]
             num_examples = min(len(retrieved_examples), args.num_examples)
-            positive_examples = example_formatter.format(retrieved_examples[:num_examples],
-                                                        input_keys=["context"],
-                                                        output_keys=["state"])
-            negative_examples = example_formatter.format(retrieved_examples[:num_examples],
-                                                        input_keys=["context"],
-                                                        output_keys=["state"],
-                                                        corrupt_state=True)
+            positive_state_examples = example_formatter.format(retrieved_examples[:num_examples],
+                                                               input_keys=["context"],
+                                                               output_keys=["state"])
+            negative_state_examples = example_formatter.format(retrieved_examples[:num_examples],
+                                                               input_keys=["context"],
+                                                               output_keys=["state"],
+                                                               corrupt_state=True)
             response_examples = example_formatter.format(retrieved_examples[:num_examples],
                                                         input_keys=["context", "state", "database"],
                                                         output_keys=["response"])
@@ -178,8 +178,8 @@ if __name__ == "__main__":
                         "utterance": question.strip()
                     }
                     if not args.use_zero_shot:
-                        kwargs["positive_examples"] = positive_examples
-                        kwargs["negative_examples"] = negative_examples
+                        kwargs["positive_examples"] = positive_state_examples
+                        kwargs["negative_examples"] = negative_state_examples
                     state = model(state_prompt, **kwargs)
                 except:
                     state = "{}"
