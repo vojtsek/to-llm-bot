@@ -35,4 +35,3 @@ class FewShotPrompt(SimpleTemplatePrompt):
                       f"input: {example['input']}\n" + \
                       f"output: {example['output']}\n"
         return output
-

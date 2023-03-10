@@ -145,7 +145,7 @@ if __name__ == "__main__":
                 else:
                     new_gt_state[domain][name] = val
             retrieve_history = history + ["Customer: " + question]
-            retrieved_examples = example_retriever.retrieve("\n".join(retrieve_history[-args.context_size:]), k=5)
+            retrieved_examples = example_retriever.retrieve("\n".join(retrieve_history[-args.context_size:]), k=7)
             retrieved_domains = [example['domain'] for example in retrieved_examples]
             selected_domain = Counter(retrieved_domains).most_common(1)[0][0]
             if previous_domain != selected_domain:
@@ -170,7 +170,7 @@ if __name__ == "__main__":
             
             if args.use_gt_state:
                 state = str(new_gt_state)
-                parsed_state = total_state = final_state = new_gt_state
+                parsed_state = total_state = new_gt_state
             else:
                 try:
                     kwargs = {
@@ -186,8 +186,6 @@ if __name__ == "__main__":
 
                 
                 parsed_state = parse_state(state, default_domain=selected_domain)
-                if selected_domain not in parsed_state:
-                    parsed_state[selected_domain] = {}
                 if not isinstance(parsed_state[selected_domain], dict):
                     parsed_state[selected_domain] = {}
                 keys_to_remove = [k for k in parsed_state[selected_domain].keys() if k not in domain_definition.expected_slots]
@@ -198,14 +196,9 @@ if __name__ == "__main__":
                         for slot, value in ds.items():
                             pass
                 except:
-                    parsed_state = {domain: {}}
+                    parsed_state = {selected_domain: {}}
                 
-                final_state = {}
-                for domain, ds in parsed_state.items():
-                    if domain in DOMAINS:
-                        final_state[domain] = ds
-                
-                for domain, dbs in final_state.items():
+                for domain, dbs in parsed_state.items():
                     if domain not in total_state:
                         total_state[domain] = dbs
                     else:
@@ -219,8 +212,8 @@ if __name__ == "__main__":
             print(f"Selected domain: {selected_domain}", flush=True)
             logger.info(f"Raw State: {state}")
             print(f"Raw State: {state}", flush=True)
-            logger.info(f"Parsed State: {final_state}")
-            print(f"Parsed State: {final_state}", flush=True)
+            logger.info(f"Parsed State: {parsed_state}")
+            print(f"Parsed State: {parsed_state}", flush=True)
             logger.info(f"Total State: {total_state}")
             print(f"Total State: {total_state}", flush=True)
 
@@ -248,12 +241,12 @@ if __name__ == "__main__":
             print(f"Gold Response: {gold_response}", flush=True)
 
             history.append("Customer: " + question)
-            report_table.add_data(f"{dialogue_id}-{tn}", " ".join(history), state, json.dumps(final_state), response)
+            report_table.add_data(f"{dialogue_id}-{tn}", " ".join(history), state, json.dumps(parsed_state), response)
             history.append("Assistant: " + gold_response)
             
             results[dialogue_id].append({
                 "response": response,
-                "state": final_state,
+                "state": parsed_state,
             })
             results_wo_state[dialogue_id].append({
                 "response": response,

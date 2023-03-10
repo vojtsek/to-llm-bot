@@ -16,7 +16,7 @@ class SimplePromptedLLM:
         return self._predict(filled_prompt)
 
     def _predict(self, text, **kwargs):
-        input_ids = self.tokenizer.encode(text,return_tensors="pt").to(self.model.device)
+        input_ids = self.tokenizer.encode(text, return_tensors="pt").to(self.model.device)
         max_length = max_new_tokens = 50
         if self.type == 'causal':
             max_length = input_ids.shape[1] + max_length
