@@ -209,7 +209,7 @@ class MultiWOZDatabase:
                 for k, v in query.items():
                     if k not in item:
                         continue
-                    if len(v) == 0 or item[k] == '?':
+                    if len(v) == 0 or item[k] in ['?', '-']:
                         continue
 
                     if k == 'arriveby':
