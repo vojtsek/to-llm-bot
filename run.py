@@ -18,6 +18,7 @@ from model import (
     ZeroShotOpenAIChatLLM
     )
 
+from delex import prepareSlotValuesIndependent, delexicalise, delexicaliseReferenceNumber
 from definitions import FEW_SHOT_DOMAIN_DEFINITIONS, ZERO_SHOT_DOMAIN_DEFINITIONS
 from database import MultiWOZDatabase
 from utils import parse_state, ExampleRetriever, ExampleFormatter, print_gpu_utilization
@@ -102,10 +103,14 @@ if __name__ == "__main__":
     database = MultiWOZDatabase(args.database_path)
     with open(args.faiss_db, 'rb') as f:
         faiss_vs = pickle.load(f)
+    with open('multiwoz-state-update-1turn-only-ctx2.vec', 'rb') as f:
+        state_vs = pickle.load(f)
     example_retriever = ExampleRetriever(faiss_vs)
+    state_retriever = ExampleRetriever(state_vs)
     with open(args.ontology, 'r') as f:
         ontology = json.load(f)
     example_formatter = ExampleFormatter(ontology=ontology)
+    delex_dic = prepareSlotValuesIndependent(args.database_path)
 
     history = []
     n = 1
@@ -152,11 +157,12 @@ if __name__ == "__main__":
                #  total_state = {}
                 previous_domain = selected_domain
             retrieved_examples = [example for example in retrieved_examples if example['domain'] == selected_domain]
+            state_examples = [example for example in state_retriever.retrieve("\n".join(retrieve_history[-args.context_size:]), k=7) if example['domain'] == selected_domain]
             num_examples = min(len(retrieved_examples), args.num_examples)
-            positive_state_examples = example_formatter.format(retrieved_examples[:num_examples],
+            positive_state_examples = example_formatter.format(state_examples[:num_examples],
                                                                input_keys=["context"],
                                                                output_keys=["state"])
-            negative_state_examples = example_formatter.format(retrieved_examples[:num_examples],
+            negative_state_examples = example_formatter.format(state_examples[:num_examples],
                                                                input_keys=["context"],
                                                                output_keys=["state"],
                                                                corrupt_state=True)
@@ -243,6 +249,10 @@ if __name__ == "__main__":
                 response = model(response_prompt, **kwargs)
             except:
                 response = ''
+
+            response = delexicalise(response, delex_dic)
+            response = delexicaliseReferenceNumber(response)
+            
             logger.info(f"Response: {response}")
             print(f"Response: {response}", flush=True)
             print(f"Gold Response: {gold_response}", flush=True)
