@@ -11,7 +11,7 @@ printf "Activating conda environment $conda_env\n\n"
 conda activate $conda_env
 
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/cuda/11.7/lib64/;
-export OPENAI_API_KEY=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
+export OPENAI_API_KEY=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
 export HUGGINGFACEHUB_API_TOKEN=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
 
 if [ -d "$CUDA_DIR_OPT" ] ; then

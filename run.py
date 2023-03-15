@@ -270,12 +270,13 @@ if __name__ == "__main__":
             })
     wandb.log({"examples": report_table})
 
-    evaluator = Evaluator(bleu=True, success=True, richness=True)
+    evaluator = Evaluator(bleu=True, success=True, richness=True, jga=True, dst=True)
     eval_results = evaluator.evaluate(results)
     for metric, values in eval_results.items():
+        metric_name = metric if metric != 'success' else 'task'
         if values is not None:
             for k, v in values.items():
-                wandb.log({f"{k.ljust(15)}": v})
+                wandb.log({f"{metric_name}-{k.ljust(15)}": v})
 
     evaluator = Evaluator(bleu=True, success=True, richness=True)
     eval_results = evaluator.evaluate(results_wo_state)
