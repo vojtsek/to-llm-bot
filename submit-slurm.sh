@@ -6,7 +6,8 @@ printf "\nSourcing base conda environment $base_conda_env \n"
 source "$base_conda_env"
 
 
-conda_env="llm-env"
+conda_env="${1}"
+shift
 printf "Activating conda environment $conda_env\n\n"
 conda activate $conda_env
 

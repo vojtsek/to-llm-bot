@@ -15,7 +15,9 @@ from model import (
     FewShotOpenAILLM,
     ZeroShotOpenAILLM,
     FewShotOpenAIChatLLM,
-    ZeroShotOpenAIChatLLM
+    ZeroShotOpenAIChatLLM,
+    FewShotAlpaca,
+    ZeroShotAlpaca
     )
 
 from delex import prepareSlotValuesIndependent, delexicalise, delexicaliseReferenceNumber
@@ -58,9 +60,11 @@ if __name__ == "__main__":
     parser.add_argument("--output", type=str, default="results")
     parser.add_argument("--run_name", type=str, default="")
     parser.add_argument("--use_gt_state", action='store_true')
+    parser.add_argument("--dump_file", type=str, default=None)
     parser.add_argument("--use_zero_shot", action='store_true')
     args = parser.parse_args()
-    wandb.init(project='llmbot')
+    wandb.init(project='llmbot', entity='hlava')
+    dump_only = args.dump_file is not None
     if 'tk-instruct-3b' in args.model_name:
         model_name = 'tk-3B'
     elif 'tk-instruct-11b' in args.model_name:
@@ -71,6 +75,8 @@ if __name__ == "__main__":
         model_name = 'opt-iml-30b'
     elif 'gpt' in args.model_name:
         model_name = 'ChatGPT'
+    elif args.model_name == 'alpaca':
+        model_name = 'Alpaca-LoRA'
     else:
         model_name = 'GPT3.5'
     wandb.run.name = f'{args.run_name}-{model_name}-examples-{args.num_examples}-ctx-{args.context_size}'
@@ -90,6 +96,9 @@ if __name__ == "__main__":
                                                     load_in_8bit=True)
         model_factory = SimplePromptedLLM if args.use_zero_shot else FewShotPromptedLLM
         model = model_factory(model, tokenizer, type="causal")
+    elif 'alpaca' in args.model_name:
+        model_factory = ZeroShotAlpaca if args.use_zero_shot else FewShotAlpaca
+        model = model_factory(model_name="Alpaca-LoRA")
     else:
         tokenizer = AutoTokenizer.from_pretrained(args.model_name, cache_dir=args.cache_dir)
         model = AutoModelForSeq2SeqLM.from_pretrained(args.model_name,
@@ -117,6 +126,7 @@ if __name__ == "__main__":
     results = {}
     results_wo_state = {}
     dataset = load_dataset(args.hf_dataset)
+    dump_dict = {}
     for n, dialog in enumerate(tqdm.tqdm(dataset['test'])):
         # if len(dialog['services']) != 1:
         #     continue
@@ -127,6 +137,7 @@ if __name__ == "__main__":
             break
         history = []
         dialogue_id = dialog['dialogue_id'].split('.')[0].lower()
+        dump_dict[dialogue_id] = []
         results[dialogue_id] = []
         results_wo_state[dialogue_id] = []
         total_state = {}
@@ -186,11 +197,10 @@ if __name__ == "__main__":
                     if not args.use_zero_shot:
                         kwargs["positive_examples"] = positive_state_examples
                         kwargs["negative_examples"] = negative_state_examples
-                    state = model(state_prompt, **kwargs)
+                    state, filled_state_prompt = model(state_prompt, predict=not dump_only, **kwargs)
                 except:
                     state = "{}"
 
-                
                 parsed_state = parse_state(state, default_domain=selected_domain)
                 if selected_domain not in parsed_state:
                     parsed_state[selected_domain] = {}
@@ -246,9 +256,12 @@ if __name__ == "__main__":
                     kwargs["positive_examples"] = response_examples
                     kwargs["negative_examples"] = []
 
-                response = model(response_prompt, **kwargs)
+                response, filled_prompt = model(response_prompt, predict=not dump_only, **kwargs)
+                dump_dict[dialogue_id].append(filled_prompt)
             except:
                 response = ''
+            if dump_only:
+                continue
 
             response = delexicalise(response, delex_dic)
             response = delexicaliseReferenceNumber(response)
@@ -269,6 +282,10 @@ if __name__ == "__main__":
                 "response": response,
             })
     wandb.log({"examples": report_table})
+    if dump_only:
+        with open(args.dump_file, "wt") as fd:
+            json.dump(dump_dict, fd)
+        sys.exit(0)
 
     evaluator = Evaluator(bleu=True, success=True, richness=True, jga=True, dst=True)
     eval_results = evaluator.evaluate(results)

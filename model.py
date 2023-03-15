@@ -1,6 +1,7 @@
 from typing import Any, Dict
 import os
 import openai
+from alpaca import predict as predict_alpaca
 openai.api_key = os.environ.get('OPENAI_API_KEY', None)
 
 from prompts import FewShotPrompt, SimpleTemplatePrompt
@@ -11,9 +12,10 @@ class SimplePromptedLLM:
         self.tokenizer = tokenizer
         self.type = type
 
-    def __call__(self, prompt: SimpleTemplatePrompt, **kwargs: Any):
+    def __call__(self, prompt: SimpleTemplatePrompt, predict=True, **kwargs: Any):
         filled_prompt = prompt(**kwargs)
-        return self._predict(filled_prompt)
+        prediction = self._predict(filled_prompt, **kwargs) if predict else None
+        return prediction, filled_prompt
 
     def _predict(self, text, **kwargs):
         input_ids = self.tokenizer.encode(text,return_tensors="pt").to(self.model.device)
@@ -37,10 +39,11 @@ class FewShotPromptedLLM(SimplePromptedLLM):
     def __init__(self, model, tokenizer, type='seq2seq'):
         super().__init__(model, tokenizer, type)
 
-    def __call__(self, prompt: FewShotPrompt, positive_examples: list[Dict], negative_examples: list[Dict], **kwargs: Any):
+    def __call__(self, prompt: FewShotPrompt, positive_examples: list[Dict], negative_examples: list[Dict], predict=True, **kwargs: Any):
         filled_prompt = prompt(positive_examples, negative_examples, **kwargs)
-        return self._predict(filled_prompt, **kwargs)
-    
+        prediction = self._predict(filled_prompt, **kwargs) if predict else None
+        return prediction, filled_prompt
+
 
 class FewShotOpenAILLM(FewShotPromptedLLM):
     def __init__(self, model_name):
@@ -92,4 +95,23 @@ class ZeroShotOpenAIChatLLM(ZeroShotOpenAILLM):
             temperature=0,
             )
         return completion.choices[0].message["content"]
+
+
+class FewShotAlpaca(FewShotPromptedLLM):
+    def __init__(self, model_name):
+        super().__init__(None, None)
+        self.model_name = model_name
+
+    def _predict(self, text, **kwargs):
+        return predict_alpaca(text)
+
+
+class ZeroShotAlpaca(SimplePromptedLLM):
+    def __init__(self, model_name):
+        super().__init__(None, None)
+        self.model_name = model_name
+
+    def _predict(self, text, **kwargs):
+        return predict_alpaca(text)
+
 

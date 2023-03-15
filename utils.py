@@ -1,4 +1,5 @@
 import json
+import dirtyjson
 import random
 from copy import deepcopy
 from typing import Dict, Any
@@ -11,7 +12,7 @@ def parse_state(state: str, default_domain: str) -> Dict[str, str]:
     state = str(state)
     state = state.replace('<', '{').replace('>', '}')
     try:
-        state = json.loads(state)
+        state = dirtyjson.loads(state)
         try:
             for domain, domain_state in state.items():
                 for slot, value in domain_state.items():
@@ -21,7 +22,7 @@ def parse_state(state: str, default_domain: str) -> Dict[str, str]:
         except:
             return {default_domain: state}
 
-    except json.JSONDecodeError:
+    except:
         if state.count('{') == 1:
             state = '{ ' + default_domain + ' ' + state
         state_tk = word_tokenize(state)
