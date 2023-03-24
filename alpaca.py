@@ -94,7 +94,7 @@ def predict(
     input=None,
     temperature=0.0,
     top_p=0.7,
-    max_new_tokens=128,
+    max_new_tokens=50,
     **kwargs,
 ):
     prompt = generate_prompt(instruction, input)
@@ -103,8 +103,6 @@ def predict(
     generation_config = GenerationConfig(
         temperature=temperature,
         top_p=top_p,
-        top_k=top_k,
-        num_beams=num_beams,
         **kwargs,
     )
     with torch.no_grad():

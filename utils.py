@@ -9,6 +9,15 @@ from langchain.vectorstores import VectorStore
 
 
 def parse_state(state: str, default_domain: str) -> Dict[str, str]:
+    def sanitize(dct):
+        for key in dct:
+            if isinstance(dct[key], dict):
+                dct[key] = sanitize(dct[key])
+            elif not isinstance(dct[key], str):
+                dct[key] = str(dct[key])
+        return dct
+
+
     state = str(state)
     state = state.replace('<', '{').replace('>', '}')
     try:
@@ -18,9 +27,9 @@ def parse_state(state: str, default_domain: str) -> Dict[str, str]:
                 for slot, value in domain_state.items():
                     pass
 
-            return state
+            return sanitize(state)
         except:
-            return {default_domain: state}
+            return {default_domain: sanitize(state)}
 
     except:
         if state.count('{') == 1:
@@ -58,7 +67,7 @@ def parse_state(state: str, default_domain: str) -> Dict[str, str]:
             idx += 1
             if idx >= len(state_tk):
                 break
-        return parsed_state
+        return sanitize(parsed_state)
 
 
 class ExampleRetriever:

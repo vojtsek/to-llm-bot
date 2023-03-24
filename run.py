@@ -26,11 +26,6 @@ from database import MultiWOZDatabase
 from utils import parse_state, ExampleRetriever, ExampleFormatter, print_gpu_utilization
 from mwzeval.metrics import Evaluator
 
-# TODO:
-#  - logging bleu
-#  - postprocess delex
-#  - zero shot
-
 
 DOMAINS = [
     'restaurant',
