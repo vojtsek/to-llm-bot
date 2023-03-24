@@ -3,11 +3,15 @@ from typing import Dict, List
 from database import MultiWOZDatabase
 
 
-def load_mwoz(database_path, context_size, split='train', total=500):
+def load_mwoz(database_path, context_size, split='train', total=500, shuffle=True):
     database = MultiWOZDatabase(database_path)
     dataset = load_dataset('multi_woz_v22')
     n = 1
-    for dialog in dataset[split]:
+    if shuffle:
+        data = dataset[split].shuffle()
+    else:
+        data = dataset[split]
+    for dialog in data:
         if n > 500:
             break
         if len(dialog['services']) != 1:
@@ -42,8 +46,10 @@ def load_mwoz(database_path, context_size, split='train', total=500):
                                 for domain, domain_state in new_state.items()}
 
             turn = {'page_content': '\n'.join(context[-context_size:]),
+                    'question': dialog['turns']['utterance'][tn],
+                    'gt_state': last_state,
+                    'dialogue_id': dialogue_id,
                     'metadata': {'domain': f'{domain}',
-                                 'dialogue_id': dialogue_id,
                                  'state': state_update,
                                  'context': '\n'.join(context),
                                  'response': delexicalize_mwoz(dialog['turns']['utterance'][tn+1],
@@ -52,10 +58,14 @@ def load_mwoz(database_path, context_size, split='train', total=500):
             yield turn
 
 
-def load_sgd(context_size, split='train', total=500):
+def load_sgd(context_size, split='train', total=500, shuffle=True):
     dataset = load_dataset('schema_guided_dstc8')
     n = 1
-    for dialog in dataset[split]:
+    if shuffle:
+        data = dataset[split].shuffle()
+    else:
+        data = dataset[split]
+    for dialog in data:
         if n > 500:
             break
         if len(dialog['services']) != 1:
@@ -84,8 +94,10 @@ def load_sgd(context_size, split='train', total=500):
 
             database_results = dialog['turns']['frames'][tn+1]['service_results'][0]
             turn= {'page_content': '\n'.join(context[-context_size:]),
+                   'question': dialog['turns']['utterance'][tn],
+                   'gt_state': last_state,
+                   'dialogue_id': dialog['dialogue_id'],
                    'metadata': {'domain': domain_gt,
-                                'dialogue_id': dialog['dialogue_id'],
                                 'state': state_update,
                                 'context': '\n'.join(context),
                                 'response': delexicalize_sgd(dialog['turns']['utterance'][tn+1], dialog['turns']['frames'][tn+1]),

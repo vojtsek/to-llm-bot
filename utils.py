@@ -7,6 +7,8 @@ from nltk.tokenize import word_tokenize
 
 from langchain.vectorstores import VectorStore
 
+from loaders import load_sgd
+
 
 def parse_state(state: str, default_domain: str) -> Dict[str, str]:
     def sanitize(dct):
@@ -121,6 +123,9 @@ class ExampleFormatter:
                 slot_otgy_name = f"{domain}-{slot}"
                 if slot_otgy_name in self.ontology:
                     example['state'][domain][slot] = random.choice(self.ontology[slot_otgy_name])
+                else:
+                    otgy_key = random.choice(list(self.ontology.keys()))
+                    example['state'][domain][slot] = random.choice(self.ontology[otgy_key])
         return example
     
     def _example_to_str(self, example: Dict) -> Dict:
@@ -137,3 +142,12 @@ def print_gpu_utilization():
     handle = nvmlDeviceGetHandleByIndex(1)
     info = nvmlDeviceGetMemoryInfo(handle)
     print(f"GPU memory occupied: {info.used//1024**2} MB.")
+
+
+class SGDEvaluator:
+    def __init__(self, split):
+        self.data = list(load_sgd())
+
+    def get_bleu(self, predictions):
+        return 0
+

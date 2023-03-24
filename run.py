@@ -19,12 +19,12 @@ from model import (
     FewShotAlpaca,
     ZeroShotAlpaca
     )
-
+from loaders import load_mwoz, load_sgd
 from delex import prepareSlotValuesIndependent, delexicalise, delexicaliseReferenceNumber
 from definitions import FEW_SHOT_DOMAIN_DEFINITIONS, ZERO_SHOT_DOMAIN_DEFINITIONS
 from database import MultiWOZDatabase
 from utils import parse_state, ExampleRetriever, ExampleFormatter, print_gpu_utilization
-from mwzeval.metrics import Evaluator
+from mwzeval.metrics import Evaluator as MWEvaluator
 
 
 DOMAINS = [
@@ -49,7 +49,7 @@ if __name__ == "__main__":
     parser.add_argument("--faiss_db", type=str, default="multiwoz-context-db.vec")
     parser.add_argument("--num_examples", type=int, default=2)
     parser.add_argument("--database_path", type=str, default="multiwoz_database")
-    parser.add_argument("--hf_dataset", type=str, default="multi_woz_v22")
+    parser.add_argument("--dataset", type=str, default="multiwoz")
     parser.add_argument("--context_size", type=int, default=3)
     parser.add_argument("--ontology", type=str, default="ontology.json")
     parser.add_argument("--output", type=str, default="results")
@@ -62,7 +62,7 @@ if __name__ == "__main__":
         "model_name": args.model_name,
         "faiss_db": args.faiss_db,
         "num_examples": args.num_examples,
-        "dataset": args.hf_dataset,
+        "dataset": args.dataset,
         "context_size": args.context_size,
         "use_gt_state": args.use_gt_state,
         "use_zero_shot": args.use_zero_shot,
@@ -113,195 +113,198 @@ if __name__ == "__main__":
         model_factory = SimplePromptedLLM if args.use_zero_shot else FewShotPromptedLLM
         model = model_factory(model, tokenizer, type="seq2seq")
 
-    database = MultiWOZDatabase(args.database_path)
     with open(args.faiss_db, 'rb') as f:
         faiss_vs = pickle.load(f)
-    with open('multiwoz-state-update-1turn-only-ctx2.vec', 'rb') as f:
-        state_vs = pickle.load(f)
-    example_retriever = ExampleRetriever(faiss_vs)
-    state_retriever = ExampleRetriever(state_vs)
     with open(args.ontology, 'r') as f:
         ontology = json.load(f)
+    if args.dataset == 'multiwoz':
+        database = MultiWOZDatabase(args.database_path)
+        with open('multiwoz-state-update-1turn-only-ctx2.vec', 'rb') as f:
+            state_vs = pickle.load(f)
+        delex_dic = prepareSlotValuesIndependent(args.database_path)
+    else:
+        state_vs = faiss_vs
+        delex_dic = None
+    example_retriever = ExampleRetriever(faiss_vs)
+    state_retriever = ExampleRetriever(state_vs)
     example_formatter = ExampleFormatter(ontology=ontology)
-    delex_dic = prepareSlotValuesIndependent(args.database_path)
 
     history = []
     n = 1
     results = {}
     results_wo_state = {}
-    dataset = load_dataset(args.hf_dataset)
     dump_dict = {}
-    for n, dialog in enumerate(tqdm.tqdm(dataset['test'])):
-        # if len(dialog['services']) != 1:
-        #     continue
-        # if dialog['services'][0] not in ['restaurant']:
-        #     continue
-        n += 1
-        if n > 100:
-            break
-        history = []
-        dialogue_id = dialog['dialogue_id'].split('.')[0].lower()
-        dump_dict[dialogue_id] = []
-        results[dialogue_id] = []
-        results_wo_state[dialogue_id] = []
-        total_state = {}
-        print('=' * 100)
-
-        previous_domain = None
-        for tn in range(0, len(dialog['turns']['utterance']), 2):
-            question = dialog['turns']['utterance'][tn]
-            gold_response = dialog['turns']['utterance'][tn+1]
-            gt_state = dialog['turns']['frames'][tn]['state']
-            if len(gt_state) == 0:
-                gt_state = {}
-            else:
-                gt_state = gt_state[0]['slots_values']
-                gt_state = {k: v[0] for k, v in zip(gt_state['slots_values_name'], gt_state['slots_values_list']) }
-            new_gt_state = {}
-            for sl, val in gt_state.items():
-                domain, name = sl.split('-')
+    last_dial_id = None
+    total = 100
+    if args.dataset == 'multiwoz':
+        data_gen = load_mwoz(args.database_path, args.context_size, split='test', total=total, shuffle=False)
+    else:
+        data_gen = load_sgd(args.context_size, split='test', total=total, shuffle=False)
+    tn = 0
+    for it, turn in enumerate(tqdm.tqdm(data_gen)):
+        if last_dial_id != turn['dialogue_id']:
+            last_dial_id = turn['dialogue_id']
+            n += 1
+            tn = 0
+            if n > total:
+                break
+            history = []
+            dialogue_id = turn['dialogue_id']
+            results[dialogue_id] = []
+            results_wo_state[dialogue_id] = []
+            total_state = {}
+            print('=' * 100)
+            previous_domain = None
+        tn += 1
+        question = turn['question']
+        gold_response = turn['metadata']['response']
+        gt_state = turn['gt_state']
+        if len(gt_state) == 0:
+            gt_state = {}
+        new_gt_state = {}
+        for domain, ds in gt_state.items():
+            for sl, val in ds.items():
                 if domain not in new_gt_state:
-                    new_gt_state[domain] = {name: val}
+                    new_gt_state[domain] = {sl: val}
                 else:
-                    new_gt_state[domain][name] = val
-            retrieve_history = history + ["Customer: " + question]
-            retrieved_examples = example_retriever.retrieve("\n".join(retrieve_history[-args.context_size:]), k=5)
-            retrieved_domains = [example['domain'] for example in retrieved_examples]
-            selected_domain = Counter(retrieved_domains).most_common(1)[0][0]
-            if previous_domain != selected_domain:
-               #  total_state = {}
-                previous_domain = selected_domain
-            retrieved_examples = [example for example in retrieved_examples if example['domain'] == selected_domain]
-            state_examples = [example for example in state_retriever.retrieve("\n".join(retrieve_history[-args.context_size:]), k=7) if example['domain'] == selected_domain]
-            num_examples = min(len(retrieved_examples), args.num_examples)
-            positive_state_examples = example_formatter.format(state_examples[:num_examples],
-                                                               input_keys=["context"],
-                                                               output_keys=["state"])
-            negative_state_examples = example_formatter.format(state_examples[:num_examples],
-                                                               input_keys=["context"],
-                                                               output_keys=["state"],
-                                                               corrupt_state=True)
-            response_examples = example_formatter.format(retrieved_examples[:num_examples],
-                                                        input_keys=["context", "state", "database"],
-                                                        output_keys=["response"])
-            
-            domain_definition = ZERO_SHOT_DOMAIN_DEFINITIONS[selected_domain] if args.use_zero_shot else FEW_SHOT_DOMAIN_DEFINITIONS[selected_domain]
-            state_prompt = domain_definition.state_prompt
-            response_prompt = domain_definition.response_prompt
-            
-            if args.use_gt_state:
-                state = str(new_gt_state)
-                parsed_state = total_state = final_state = new_gt_state
-            else:
-                try:
-                    kwargs = {
-                        "history": "\n".join(history),
-                        "utterance": question.strip()
-                    }
-                    if not args.use_zero_shot:
-                        kwargs["positive_examples"] = positive_state_examples
-                        kwargs["negative_examples"] = negative_state_examples
-                    state, filled_state_prompt = model(state_prompt, predict=not dump_only, **kwargs)
-                except:
-                    state = "{}"
-
-                parsed_state = parse_state(state, default_domain=selected_domain)
-                if selected_domain not in parsed_state:
-                    parsed_state[selected_domain] = {}
-                if not isinstance(parsed_state[selected_domain], dict):
-                    parsed_state[selected_domain] = {}
-                keys_to_remove = [k for k in parsed_state[selected_domain].keys() if k not in domain_definition.expected_slots]
-                for k in keys_to_remove:
-                    del parsed_state[selected_domain][k]
-                try:
-                    for domain, ds in parsed_state.items():
-                        for slot, value in ds.items():
-                            pass
-                except:
-                    parsed_state = {domain: {}}
-                
-                final_state = {}
-                for domain, ds in parsed_state.items():
-                    if domain in DOMAINS:
-                        final_state[domain] = ds
-                
-                for domain, dbs in final_state.items():
-                    if domain not in total_state:
-                        total_state[domain] = dbs
-                    else:
-                        for slot, value in dbs.items():
-                            value = str(value)
-                            if value not in ['dontcare', 'none', '?', ''] and len(value) > 0:
-                                total_state[domain][slot] = value
-            
-            print('-' * 100)
-            print(f"Question: {question}", flush=True)
-            print(f"Selected domain: {selected_domain}", flush=True)
-            logger.info(f"Raw State: {state}")
-            print(f"Raw State: {state}", flush=True)
-            logger.info(f"Parsed State: {final_state}")
-            print(f"Parsed State: {final_state}", flush=True)
-            logger.info(f"Total State: {total_state}")
-            print(f"Total State: {total_state}", flush=True)
-
-            database_results = {domain: len(database.query(domain=domain, constraints=ds))
-                                for domain, ds in total_state.items() if len(ds) > 0}
-            logger.info(f"Database Results: {database_results}")
-            print(f"Database Results: {database_results}", flush=True)
-            
+                    new_gt_state[domain][sl] = val
+        retrieve_history = history + ["Customer: " + question]
+        retrieved_examples = example_retriever.retrieve("\n".join(retrieve_history[-args.context_size:]), k=5)
+        retrieved_domains = [example['domain'] for example in retrieved_examples]
+        selected_domain = Counter(retrieved_domains).most_common(1)[0][0]
+        if previous_domain != selected_domain:
+           #  total_state = {}
+            previous_domain = selected_domain
+        retrieved_examples = [example for example in retrieved_examples if example['domain'] == selected_domain]
+        state_examples = [example for example in state_retriever.retrieve("\n".join(retrieve_history[-args.context_size:]), k=7) if example['domain'] == selected_domain]
+        num_examples = min(len(retrieved_examples), args.num_examples)
+        positive_state_examples = example_formatter.format(state_examples[:num_examples],
+                                                           input_keys=["context"],
+                                                           output_keys=["state"])
+        negative_state_examples = example_formatter.format(state_examples[:num_examples],
+                                                           input_keys=["context"],
+                                                           output_keys=["state"],
+                                                           corrupt_state=True)
+        response_examples = example_formatter.format(retrieved_examples[:num_examples],
+                                                    input_keys=["context", "state", "database"],
+                                                    output_keys=["response"])
+        
+        domain_definition = ZERO_SHOT_DOMAIN_DEFINITIONS[selected_domain] if args.use_zero_shot else FEW_SHOT_DOMAIN_DEFINITIONS[selected_domain]
+        state_prompt = domain_definition.state_prompt
+        response_prompt = domain_definition.response_prompt
+        
+        if args.use_gt_state:
+            state = str(new_gt_state)
+            parsed_state = total_state = final_state = new_gt_state
+        else:
             try:
                 kwargs = {
                     "history": "\n".join(history),
-                    "utterance": question.strip(),
-                    "state": json.dumps(total_state).replace("{", '<').replace("}", '>'),
-                    "database": str(database_results)
+                    "utterance": question.strip()
                 }
                 if not args.use_zero_shot:
-                    kwargs["positive_examples"] = response_examples
-                    kwargs["negative_examples"] = []
-
-                response, filled_prompt = model(response_prompt, predict=not dump_only, **kwargs)
-                dump_dict[dialogue_id].append(filled_prompt)
+                    kwargs["positive_examples"] = positive_state_examples
+                    kwargs["negative_examples"] = negative_state_examples
+                state, filled_state_prompt = model(state_prompt, predict=not dump_only, **kwargs)
             except:
-                response = ''
-            if dump_only:
-                continue
+                state = "{}"
 
+            parsed_state = parse_state(state, default_domain=selected_domain)
+            if selected_domain not in parsed_state:
+                parsed_state[selected_domain] = {}
+            if not isinstance(parsed_state[selected_domain], dict):
+                parsed_state[selected_domain] = {}
+            keys_to_remove = [k for k in parsed_state[selected_domain].keys() if k not in domain_definition.expected_slots]
+            for k in keys_to_remove:
+                del parsed_state[selected_domain][k]
+            try:
+                for domain, ds in parsed_state.items():
+                    for slot, value in ds.items():
+                        pass
+            except:
+                parsed_state = {domain: {}}
+            
+            final_state = {}
+            for domain, ds in parsed_state.items():
+                if domain in DOMAINS:
+                    final_state[domain] = ds
+            
+            for domain, dbs in final_state.items():
+                if domain not in total_state:
+                    total_state[domain] = dbs
+                else:
+                    for slot, value in dbs.items():
+                        value = str(value)
+                        if value not in ['dontcare', 'none', '?', ''] and len(value) > 0:
+                            total_state[domain][slot] = value
+        
+        print('-' * 100)
+        print(f"Question: {question}", flush=True)
+        print(f"Selected domain: {selected_domain}", flush=True)
+        logger.info(f"Raw State: {state}")
+        print(f"Raw State: {state}", flush=True)
+        logger.info(f"Parsed State: {final_state}")
+        print(f"Parsed State: {final_state}", flush=True)
+        logger.info(f"Total State: {total_state}")
+        print(f"Total State: {total_state}", flush=True)
+
+        if args.dataset == 'multiwoz':
+            database_results = {domain: len(database.query(domain=domain, constraints=ds))
+                                for domain, ds in total_state.items() if len(ds) > 0}
+        else:
+            database_results = turn['metadata']['database']
+        logger.info(f"Database Results: {database_results}")
+        print(f"Database Results: {database_results}", flush=True)
+        
+        try:
+            kwargs = {
+                "history": "\n".join(history),
+                "utterance": question.strip(),
+                "state": json.dumps(total_state).replace("{", '<').replace("}", '>'),
+                "database": str(database_results)
+            }
+            if not args.use_zero_shot:
+                kwargs["positive_examples"] = response_examples
+                kwargs["negative_examples"] = []
+
+            response, filled_prompt = model(response_prompt, predict=not dump_only, **kwargs)
+        except:
+            response = ''
+
+        if args.dataset == 'multiwoz':
             response = delexicalise(response, delex_dic)
             response = delexicaliseReferenceNumber(response)
-            
-            logger.info(f"Response: {response}")
-            print(f"Response: {response}", flush=True)
-            print(f"Gold Response: {gold_response}", flush=True)
+        
+        logger.info(f"Response: {response}")
+        print(f"Response: {response}", flush=True)
+        print(f"Gold Response: {gold_response}", flush=True)
 
-            history.append("Customer: " + question)
-            report_table.add_data(f"{dialogue_id}-{tn}", " ".join(history), state, json.dumps(final_state), response)
-            history.append("Assistant: " + gold_response)
-            
-            results[dialogue_id].append({
-                "response": response,
-                "state": final_state,
-            })
-            results_wo_state[dialogue_id].append({
-                "response": response,
-            })
+        history.append("Customer: " + question)
+        report_table.add_data(f"{dialogue_id}-{tn}", " ".join(history), state, json.dumps(final_state), response)
+        history.append("Assistant: " + gold_response)
+        
+        results[dialogue_id].append({
+            "response": response,
+            "state": final_state,
+        })
+        results_wo_state[dialogue_id].append({
+            "response": response,
+        })
     wandb.log({"examples": report_table})
-    if dump_only:
-        with open(args.dump_file, "wt") as fd:
-            json.dump(dump_dict, fd)
-        sys.exit(0)
 
-    evaluator = Evaluator(bleu=True, success=True, richness=True, jga=True, dst=True)
-    eval_results = evaluator.evaluate(results)
-    for metric, values in eval_results.items():
-        metric_name = metric if metric != 'success' else 'task'
-        if values is not None:
-            for k, v in values.items():
-                wandb.log({f"{metric_name}-{k.ljust(15)}": v})
+    if args.dataset == 'multiwoz':
+        evaluator = MWEvaluator(bleu=True, success=True, richness=True, jga=True, dst=True)
+        eval_results = evaluator.evaluate(results)
+        for metric, values in eval_results.items():
+            metric_name = metric if metric != 'success' else 'task'
+            if values is not None:
+                for k, v in values.items():
+                    wandb.log({f"{metric_name}-{k.ljust(15)}": v})
 
-    evaluator = Evaluator(bleu=True, success=True, richness=True)
-    eval_results = evaluator.evaluate(results_wo_state)
-    for metric, values in eval_results.items():
-        if values is not None:
-            for k, v in values.items():
-                wandb.log({f"GT_{k.ljust(15)}": v})
+        evaluator = MWEvaluator(bleu=True, success=True, richness=True)
+        eval_results = evaluator.evaluate(results_wo_state)
+        for metric, values in eval_results.items():
+            if values is not None:
+                for k, v in values.items():
+                    wandb.log({f"GT_{k.ljust(15)}": v})
+
