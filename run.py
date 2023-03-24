@@ -58,7 +58,16 @@ if __name__ == "__main__":
     parser.add_argument("--dump_file", type=str, default=None)
     parser.add_argument("--use_zero_shot", action='store_true')
     args = parser.parse_args()
-    wandb.init(project='llmbot', entity='hlava')
+    config = {
+        "model_name": args.model_name,
+        "faiss_db": args.faiss_db,
+        "num_examples": args.num_examples,
+        "dataset": args.hf_dataset,
+        "context_size": args.context_size,
+        "use_gt_state": args.use_gt_state,
+        "use_zero_shot": args.use_zero_shot,
+    }
+    wandb.init(project='llmbot', entity='hlava', config=config)
     dump_only = args.dump_file is not None
     if 'tk-instruct-3b' in args.model_name:
         model_name = 'tk-3B'

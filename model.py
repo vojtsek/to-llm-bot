@@ -1,7 +1,6 @@
 from typing import Any, Dict
 import os
 import openai
-from alpaca import predict as predict_alpaca
 openai.api_key = os.environ.get('OPENAI_API_KEY', None)
 
 from prompts import FewShotPrompt, SimpleTemplatePrompt
@@ -100,18 +99,22 @@ class ZeroShotOpenAIChatLLM(ZeroShotOpenAILLM):
 class FewShotAlpaca(FewShotPromptedLLM):
     def __init__(self, model_name):
         super().__init__(None, None)
+        from alpaca import predict as predict_alpaca
+        self._predict = predict_alpaca
         self.model_name = model_name
 
     def _predict(self, text, **kwargs):
-        return predict_alpaca(text)
+        return self._predict(text)
 
 
 class ZeroShotAlpaca(SimplePromptedLLM):
     def __init__(self, model_name):
         super().__init__(None, None)
+        from alpaca import predict as predict_alpaca
+        self._predict = predict_alpaca
         self.model_name = model_name
 
     def _predict(self, text, **kwargs):
-        return predict_alpaca(text)
+        return self._predict(text)
 
 
