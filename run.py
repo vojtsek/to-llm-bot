@@ -23,7 +23,7 @@ from loaders import load_mwoz, load_sgd
 from delex import prepareSlotValuesIndependent, delexicalise, delexicaliseReferenceNumber
 from definitions import FEW_SHOT_DOMAIN_DEFINITIONS, ZERO_SHOT_DOMAIN_DEFINITIONS
 from database import MultiWOZDatabase
-from utils import parse_state, ExampleRetriever, ExampleFormatter, print_gpu_utilization
+from utils import parse_state, ExampleRetriever, ExampleFormatter, print_gpu_utilization, SGDEvaluator
 from mwzeval.metrics import Evaluator as MWEvaluator
 
 
@@ -55,7 +55,7 @@ if __name__ == "__main__":
     parser.add_argument("--output", type=str, default="results")
     parser.add_argument("--run_name", type=str, default="")
     parser.add_argument("--use_gt_state", action='store_true')
-    parser.add_argument("--dump_file", type=str, default=None)
+    parser.add_argument("--split", type=str, default='test')
     parser.add_argument("--use_zero_shot", action='store_true')
     args = parser.parse_args()
     config = {
@@ -66,9 +66,9 @@ if __name__ == "__main__":
         "context_size": args.context_size,
         "use_gt_state": args.use_gt_state,
         "use_zero_shot": args.use_zero_shot,
+        "split": args.split,
     }
     wandb.init(project='llmbot', entity='hlava', config=config)
-    dump_only = args.dump_file is not None
     if 'tk-instruct-3b' in args.model_name:
         model_name = 'tk-3B'
     elif 'tk-instruct-11b' in args.model_name:
@@ -133,13 +133,12 @@ if __name__ == "__main__":
     n = 1
     results = {}
     results_wo_state = {}
-    dump_dict = {}
     last_dial_id = None
-    total = 100
+    total = 5
     if args.dataset == 'multiwoz':
-        data_gen = load_mwoz(args.database_path, args.context_size, split='test', total=total, shuffle=False)
+        data_gen = load_mwoz(args.database_path, args.context_size, split=args.split, total=total, shuffle=False)
     else:
-        data_gen = load_sgd(args.context_size, split='test', total=total, shuffle=False)
+        data_gen = load_sgd(args.context_size, split=args.split, total=total, shuffle=False)
     tn = 0
     for it, turn in enumerate(tqdm.tqdm(data_gen)):
         if last_dial_id != turn['dialogue_id']:
@@ -205,7 +204,7 @@ if __name__ == "__main__":
                 if not args.use_zero_shot:
                     kwargs["positive_examples"] = positive_state_examples
                     kwargs["negative_examples"] = negative_state_examples
-                state, filled_state_prompt = model(state_prompt, predict=not dump_only, **kwargs)
+                state, filled_state_prompt = model(state_prompt, predict=True, **kwargs)
             except:
                 state = "{}"
 
@@ -267,7 +266,7 @@ if __name__ == "__main__":
                 kwargs["positive_examples"] = response_examples
                 kwargs["negative_examples"] = []
 
-            response, filled_prompt = model(response_prompt, predict=not dump_only, **kwargs)
+            response, filled_prompt = model(response_prompt, predict=True, **kwargs)
         except:
             response = ''
 
@@ -307,4 +306,8 @@ if __name__ == "__main__":
             if values is not None:
                 for k, v in values.items():
                     wandb.log({f"GT_{k.ljust(15)}": v})
+    else:
+        evaluator = SGDEvaluator(split=args.split)
+        print(evaluator.get_bleu(results))
+        print(evaluator.get_jga(results))
 

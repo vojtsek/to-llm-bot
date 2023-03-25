@@ -12,7 +12,7 @@ printf "Activating conda environment $conda_env\n\n"
 conda activate $conda_env
 
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/cuda/11.7/lib64/;
-export OPENAI_API_KEY=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
+export OPENAI_API_KEY=`cat ~/.openai`
 export HUGGINGFACEHUB_API_TOKEN=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
 
 if [ -d "$CUDA_DIR_OPT" ] ; then
@@ -32,4 +32,5 @@ echo "$@"
 MODEL=${1:=gpt-3.5-turbo}
 shift
 #python run.py --model_name $MODEL --faiss_db multiwoz-context-state-update.vec --num_examples 2 --database_path multiwoz_database --hf_dataset multi_woz_v22 --context_size 3 --output results.txt
-python run.py --model_name $MODEL --faiss_db multiwoz-state-update-ctx2.vec --num_examples 2 --database_path multiwoz_database --context_size 2 --output results.txt $@
+python run.py --model_name $MODEL --faiss_db sgd-context-2.vec --num_examples 2 --database_path multiwoz_database --context_size 2 --output results.txt $@
+# python run.py --model_name $MODEL --faiss_db multiwoz-state-update-ctx2.vec --num_examples 2 --database_path multiwoz_database --context_size 2 --output results.txt $@

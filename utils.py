@@ -3,8 +3,11 @@ import dirtyjson
 import random
 from copy import deepcopy
 from typing import Dict, Any
-from nltk.tokenize import word_tokenize
+from collections import defaultdict
 
+import numpy
+import evaluate
+from nltk.tokenize import word_tokenize
 from langchain.vectorstores import VectorStore
 
 from loaders import load_sgd
@@ -146,8 +149,67 @@ def print_gpu_utilization():
 
 class SGDEvaluator:
     def __init__(self, split):
-        self.data = list(load_sgd())
+        self.data = {}
+        self.sacrebleu = evaluate.load('sacrebleu')
+        for turn in load_sgd(1, split, total=100000, shuffle=False):
+            if turn['dialogue_id'] not in self.data:
+                self.data[turn['dialogue_id']] = []
+            self.data[turn['dialogue_id']].append({
+                'question': turn['question'],
+                'state': turn['gt_state'],
+                'response': turn['metadata']['response']
+            })
 
-    def get_bleu(self, predictions):
-        return 0
+    def get_bleu(self, input_data):
+        predictions = []
+        references = []
+        for dialogue_id in input_data:
+            for tn, turn in enumerate(input_data[dialogue_id]):
+                predictions.append(turn['response'])
+                references.append([self.data[dialogue_id][tn]['response']])
+        results = self.sacrebleu.compute(predictions=predictions, references=references)
+        return {'bleu': results['score']}
+
+    def get_jga(self, input_data):
+        epsilon = 0.0000000001
+        all_turns_scores = []
+        slot_results = defaultdict(lambda: {'tp': 0, 'fp': 0, 'fn': 0})
+        total_results = {'tp': 0, 'fp': 0, 'fn': 0}
+        for dialog_id in input_data:
+            for i, turn in enumerate(input_data[dialog_id]):
+                gold_state = self.data[dialog_id][i]['state']
+                turn_correct = True
+                for domain, gold_domain_state in gold_state.items():
+                    if domain not in turn["state"]:
+                        for slot in gold_domain_state:
+                            total_results['fn'] += 1
+                            slot_results[slot]['fn'] += 1
+                        turn_correct = False
+                        break
+                    for slot, value in gold_domain_state.items():
+                        print(slot, value, turn["state"][domain][slot])
+                        if slot not in turn["state"][domain]:
+                            turn_correct = False
+                            total_results['fn'] += 1
+                            slot_results[slot]['fn'] += 1
+                        value = value.lower()
+                        pred_value = turn["state"][domain][slot].lower()
+                        if value.lower() != pred_value.lower():
+                            total_results['fn'] += 1
+                            slot_results[slot]['fn'] += 1
+                            turn_correct = False
+                        else:
+                            total_results['tp'] += 1
+                            slot_results[slot]['tp'] += 1
+                    for domain, ds in turn["state"].items():
+                        for slot, val in ds.items():
+                            if domain not in gold_state or slot not in gold_state[domain]:
+                                total_results['fp'] += 1
+                                slot_results[slot]['fp'] += 1
+                all_turns_scores.append(int(turn_correct))
+        jga = numpy.mean(all_turns_scores)
+        precision = total_results['tp'] / (total_results['tp'] + total_results['fp'] + epsilon)
+        recall = total_results['tp'] / (total_results['tp'] + total_results['fn'] + epsilon)
+        micro = 2 * precision * recall / (precision + recall + epsilon)
+        return {'jga': jga, 'micro-F1': micro}
 
