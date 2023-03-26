@@ -293,16 +293,18 @@ if __name__ == "__main__":
             metric_name = metric if metric != 'success' else 'task'
             if values is not None:
                 for k, v in values.items():
-                    wandb.log({f"{metric_name}-{k.ljust(15)}": v})
+                    wandb.log({f"MW_{metric_name}-{k.ljust(15)}": v})
 
         evaluator = MWEvaluator(bleu=True, success=True, richness=True)
         eval_results = evaluator.evaluate(results_wo_state)
         for metric, values in eval_results.items():
             if values is not None:
                 for k, v in values.items():
-                    wandb.log({f"GT_{k.ljust(15)}": v})
+                    wandb.log({f"MW_GT_{k.ljust(15)}": v})
     else:
         evaluator = SGDEvaluator(split=args.split)
-        print(evaluator.get_bleu(results))
-        print(evaluator.get_jga(results))
-
+        metrics = {}
+        metrics.update(evaluator.get_bleu(results))
+        metrics.update(evaluator.get_jga(results))
+        for metric, val in metrics.items():
+            wandb.log({f"SGD_{metric}": val})
