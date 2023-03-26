@@ -21,21 +21,11 @@ from model import (
     )
 from loaders import load_mwoz, load_sgd
 from delex import prepareSlotValuesIndependent, delexicalise, delexicaliseReferenceNumber
-from definitions import FEW_SHOT_DOMAIN_DEFINITIONS, ZERO_SHOT_DOMAIN_DEFINITIONS
+from definitions import MW_FEW_SHOT_DOMAIN_DEFINITIONS, MW_ZERO_SHOT_DOMAIN_DEFINITIONS, SGD_FEW_SHOT_DOMAIN_DEFINITIONS, SGD_ZERO_SHOT_DOMAIN_DEFINITIONS
+
 from database import MultiWOZDatabase
 from utils import parse_state, ExampleRetriever, ExampleFormatter, print_gpu_utilization, SGDEvaluator
 from mwzeval.metrics import Evaluator as MWEvaluator
-
-
-DOMAINS = [
-    'restaurant',
-    'hotel',
-    'attraction',
-    'train',
-    'taxi',
-    'police',
-    'hospital'
-]
 
 
 logger = logging.getLogger(__name__)
@@ -134,7 +124,7 @@ if __name__ == "__main__":
     results = {}
     results_wo_state = {}
     last_dial_id = None
-    total = 5
+    total = 200
     if args.dataset == 'multiwoz':
         data_gen = load_mwoz(args.database_path, args.context_size, split=args.split, total=total, shuffle=False)
     else:
@@ -188,7 +178,12 @@ if __name__ == "__main__":
                                                     input_keys=["context", "state", "database"],
                                                     output_keys=["response"])
         
-        domain_definition = ZERO_SHOT_DOMAIN_DEFINITIONS[selected_domain] if args.use_zero_shot else FEW_SHOT_DOMAIN_DEFINITIONS[selected_domain]
+        if args.dataset == 'multiwoz':
+            domain_definition = MW_ZERO_SHOT_DOMAIN_DEFINITIONS[selected_domain] if args.use_zero_shot else MW_FEW_SHOT_DOMAIN_DEFINITIONS[selected_domain]
+            available_domains = list(MW_FEW_SHOT_DOMAIN_DEFINITIONS.keys())
+        else:
+            domain_definition = SGD_ZERO_SHOT_DOMAIN_DEFINITIONS[selected_domain] if args.use_zero_shot else SGD_FEW_SHOT_DOMAIN_DEFINITIONS[selected_domain]
+            available_domains = list(SGD_FEW_SHOT_DOMAIN_DEFINITIONS.keys())
         state_prompt = domain_definition.state_prompt
         response_prompt = domain_definition.response_prompt
         
@@ -225,7 +220,7 @@ if __name__ == "__main__":
             
             final_state = {}
             for domain, ds in parsed_state.items():
-                if domain in DOMAINS:
+                if domain in available_domains:
                     final_state[domain] = ds
             
             for domain, dbs in final_state.items():

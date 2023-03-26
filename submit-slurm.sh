@@ -31,6 +31,6 @@ echo "$@"
 # allenai/tk-instruct-3b-def-pos-neg-expl
 MODEL=${1:=gpt-3.5-turbo}
 shift
-#python run.py --model_name $MODEL --faiss_db multiwoz-context-state-update.vec --num_examples 2 --database_path multiwoz_database --hf_dataset multi_woz_v22 --context_size 3 --output results.txt
-python run.py --model_name $MODEL --faiss_db sgd-context-2.vec --num_examples 2 --database_path multiwoz_database --context_size 2 --output results.txt $@
+#python run.py --model_name $MODEL --faiss_db multiwoz-context-state-update.vec --num_examples 2 --database_path multiwoz_database --dataset multiwoz --context_size 3 --output results.txt
+python run.py --model_name $MODEL --faiss_db sgd-context-2.vec --num_examples 2 --database_path multiwoz_database --context_size 2 --output results.txt --dataset sgd $@
 # python run.py --model_name $MODEL --faiss_db multiwoz-state-update-ctx2.vec --num_examples 2 --database_path multiwoz_database --context_size 2 --output results.txt $@

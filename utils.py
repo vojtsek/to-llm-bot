@@ -187,13 +187,12 @@ class SGDEvaluator:
                         turn_correct = False
                         break
                     for slot, value in gold_domain_state.items():
-                        print(slot, value, turn["state"][domain][slot])
                         if slot not in turn["state"][domain]:
                             turn_correct = False
                             total_results['fn'] += 1
                             slot_results[slot]['fn'] += 1
                         value = value.lower()
-                        pred_value = turn["state"][domain][slot].lower()
+                        pred_value = turn["state"][domain][slot].lower() if slot in turn["state"][domain] else ''
                         if value.lower() != pred_value.lower():
                             total_results['fn'] += 1
                             slot_results[slot]['fn'] += 1

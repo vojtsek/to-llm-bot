@@ -65,6 +65,7 @@ def load_sgd(context_size, split='train', total=500, shuffle=True):
         data = dataset[split].shuffle()
     else:
         data = dataset[split]
+    all_domain_slots = {}
     for dialog in data:
         if n > 500:
             break
@@ -72,6 +73,8 @@ def load_sgd(context_size, split='train', total=500, shuffle=True):
             continue
         n += 1
         domain_gt = dialog['services'][0].split('_')[0].lower()
+        if domain_gt not in all_domain_slots:
+            all_domain_slots[domain_gt] = set()
         last_state = {}
         for tn in range(0, len(dialog['turns']['utterance']), 2):
             context = [f"Customer: {t}" if n % 2 == 0 else f"Assistant: {t}"
@@ -84,6 +87,7 @@ def load_sgd(context_size, split='train', total=500, shuffle=True):
                 state = {k: v[0] for k, v in zip(state['slot_name'], state['slot_value_list']) }
             new_state = {domain_gt: {}}
             for sl, val in state.items():
+                all_domain_slots[domain_gt].add(sl)
                 new_state[domain_gt][sl] = val
             state_update = {domain_gt: {}}
             for domain, domain_state in new_state.items():
@@ -103,8 +107,8 @@ def load_sgd(context_size, split='train', total=500, shuffle=True):
                                 'response': delexicalize_sgd(dialog['turns']['utterance'][tn+1], dialog['turns']['frames'][tn+1]),
                                 'database': {domain_gt: len(database_results['service_results_list'])}}}
             yield turn
-           
- 
+
+
 def delexicalize_mwoz(utterance: str, span_info: Dict[str, List[str]]):
     for s_idx in range(len(span_info['act_slot_name']) - 1, -1, -1):
         name = span_info['act_slot_name'][s_idx]

@@ -34,7 +34,6 @@ if __name__ == '__main__':
         data_gen = load_sgd(args.context_size, split=args.split, total=args.total, shuffle=True)
     docs = []
     for turn in data_gen:
-        print(turn)
         doc = Document(page_content=turn['page_content'],
                        metadata=turn['metadata'])
         docs.append(doc)
