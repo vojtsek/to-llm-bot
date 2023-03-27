@@ -29,8 +29,9 @@ echo "$@"
 # text-davinci-003
 # facebook/opt-iml-1.3b
 # allenai/tk-instruct-3b-def-pos-neg-expl
+# togethercomputer/GPT-NeoXT-Chat-Base-20B
 MODEL=${1:=gpt-3.5-turbo}
 shift
 #python run.py --model_name $MODEL --faiss_db multiwoz-context-state-update.vec --num_examples 2 --database_path multiwoz_database --dataset multiwoz --context_size 3 --output results.txt
-python run.py --model_name $MODEL --faiss_db sgd-context-2.vec --num_examples 2 --database_path multiwoz_database --context_size 2 --output results.txt --dataset sgd $@
-# python run.py --model_name $MODEL --faiss_db multiwoz-state-update-ctx2.vec --num_examples 2 --database_path multiwoz_database --context_size 2 --output results.txt $@
+# python run.py --model_name $MODEL --faiss_db sgd-context-2.vec --num_examples 2 --database_path multiwoz_database --context_size 2 --output results.txt --dataset sgd $@
+python run.py --model_name $MODEL --faiss_db multiwoz-state-update-ctx2.vec --num_examples 2 --database_path multiwoz_database --context_size 2 --output results.txt --dataset multiwoz$@

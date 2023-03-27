@@ -67,7 +67,9 @@ if __name__ == "__main__":
         model_name = 'opt-iml-1.3b'
     elif 'opt-iml-30b' in args.model_name:
         model_name = 'opt-iml-30b'
-    elif 'gpt' in args.model_name:
+    elif 'NeoXT' in args.model_name:
+        model_name = 'GPT-NeoXT-20b'
+    elif 'gpt-3.5' in args.model_name:
         model_name = 'ChatGPT'
     elif args.model_name == 'alpaca':
         model_name = 'Alpaca-LoRA'
@@ -81,7 +83,7 @@ if __name__ == "__main__":
     elif args.model_name.startswith("gpt-"):
         model_factory = ZeroShotOpenAIChatLLM if args.use_zero_shot else FewShotOpenAIChatLLM
         model = model_factory(args.model_name)
-    elif 'opt' in args.model_name:
+    elif any([n in args.model_name for n in ['opt', 'NeoXT']]):
         tokenizer = AutoTokenizer.from_pretrained(args.model_name, cache_dir=args.cache_dir)
         model = AutoModelForCausalLM.from_pretrained(args.model_name,
                                                     low_cpu_mem_usage=True,

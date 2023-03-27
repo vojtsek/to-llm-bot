@@ -23,7 +23,7 @@ def parse_state(state: str, default_domain: str) -> Dict[str, str]:
         return dct
 
 
-    state = str(state)
+    state = str(state) + '}'
     state = state.replace('<', '{').replace('>', '}')
     try:
         state = dirtyjson.loads(state)
