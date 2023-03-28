@@ -180,6 +180,7 @@ class SGDEvaluator:
 
     def get_eval(self, input_data):
         def f1(results):
+            epsilon = 0.0000000001
             precision = results['tp'] / (results['tp'] + results['fp'] + epsilon)
             recall = results['tp'] / (results['tp'] + results['fn'] + epsilon)
             f1 = 2 * precision * recall / (precision + recall + epsilon)
@@ -192,7 +193,6 @@ class SGDEvaluator:
             return placeholders
 
 
-        epsilon = 0.0000000001
         all_turns_scores = []
         successes = []
         turn_successes = []
@@ -217,7 +217,7 @@ class SGDEvaluator:
                             total_results['fn'] += 1
                             slot_results[slot]['fn'] += 1
                         turn_correct = False
-                    break
+                        break
                     for slot, value in gold_domain_state.items():
                         if slot not in turn["state"][domain]:
                             turn_correct = False
