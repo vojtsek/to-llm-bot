@@ -6,6 +6,8 @@ printf "\nSourcing base conda environment $base_conda_env \n"
 source "$base_conda_env"
 
 
+dataset="${1}"
+shift
 conda_env="${1}"
 shift
 printf "Activating conda environment $conda_env\n\n"
@@ -33,5 +35,8 @@ echo "$@"
 MODEL=${1:=gpt-3.5-turbo}
 shift
 #python run.py --model_name $MODEL --faiss_db multiwoz-context-state-update.vec --num_examples 2 --database_path multiwoz_database --dataset multiwoz --context_size 3 --output results.txt
-# python run.py --model_name $MODEL --faiss_db sgd-context-2.vec --num_examples 2 --database_path multiwoz_database --context_size 2 --output results.txt --dataset sgd $@
-python run.py --model_name $MODEL --faiss_db multiwoz-state-update-ctx2.vec --num_examples 2 --database_path multiwoz_database --context_size 2 --output results.txt --dataset multiwoz$@
+if [[ "${dataset}" == "sgd" ]]; then
+    python run.py --model_name $MODEL --faiss_db sgd-context-2.vec --num_examples 2 --database_path multiwoz_database --context_size 2 --output results.txt --dataset sgd $@
+else
+    python run.py --model_name $MODEL --faiss_db multiwoz-state-update-ctx2.vec --num_examples 2 --database_path multiwoz_database --context_size 2 --output results.txt --dataset multiwoz $@
+fi

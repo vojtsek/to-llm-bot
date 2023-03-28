@@ -6,6 +6,7 @@ from collections import Counter
 from sacrebleu import corpus_bleu
 from lexical_diversity import lex_div as ld
 from fuzzywuzzy import fuzz
+import evaluate
 
 from mwzeval.utils import load_references
 from mwzeval.database import MultiWOZVenueDatabase
@@ -40,8 +41,8 @@ class Evaluator:
         normalize_data(input_data)
         print(get_bleu(input_data, self.reference_dialogs))
         return {
-            "bleu"     : get_bleu(input_data, self.reference_dialogs)                             if self.bleu else None,
-            "success"  : get_success(input_data, self.database, self.goals, self.booked_domains)  if self.success else None,
+            "semantic"     : get_bleu(input_data, self.reference_dialogs)                             if self.bleu else None,
+            "task"  : get_success(input_data, self.database, self.goals, self.booked_domains)  if self.success else None,
             "richness" : get_richness(input_data)                                                 if self.richness else None,
             "dst"      : get_dst(input_data, self.gold_states)                                    if self.dst else None,
             "jga"      : get_jga(input_data)                                    if self.jga else None,
@@ -53,6 +54,7 @@ def get_bleu(input_data, reference_dialogs):
 
     hyps = []
     refs = {r : [] for r in reference_dialogs}
+    bertscore = evaluate.load('bertscore')
 
     for dialog_id, dialog in input_data.items():
         for turn_idx in range(len(dialog)):
@@ -60,7 +62,9 @@ def get_bleu(input_data, reference_dialogs):
             for r in refs:
                 refs[r].append(reference_dialogs[r][dialog_id][turn_idx])
 
-    return {r : corpus_bleu(hyps, [refs[r]]).score for r in refs}
+    result = {f'{r}-bleu' : corpus_bleu(hyps, [refs[r]]).score for r in refs}
+    result.update({f'{r}-bertscore': numpy.mean(bertscore.compute(predictions=hyps, references=refs[r], lang='en')['f1']) for r in refs})
+    return result
 
 
 def get_richness(input_data):

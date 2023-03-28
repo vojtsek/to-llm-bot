@@ -38,6 +38,7 @@ if __name__ == "__main__":
     parser.add_argument("--model_name", type=str, default="allenai/tk-instruct-3b-def-pos-neg-expl")
     parser.add_argument("--faiss_db", type=str, default="multiwoz-context-db.vec")
     parser.add_argument("--num_examples", type=int, default=2)
+    parser.add_argument("--dials_total", type=int, default=100)
     parser.add_argument("--database_path", type=str, default="multiwoz_database")
     parser.add_argument("--dataset", type=str, default="multiwoz")
     parser.add_argument("--context_size", type=int, default=3)
@@ -57,6 +58,7 @@ if __name__ == "__main__":
         "use_gt_state": args.use_gt_state,
         "use_zero_shot": args.use_zero_shot,
         "split": args.split,
+        "num_dialogs": args.dials_total,
     }
     wandb.init(project='llmbot', entity='hlava', config=config)
     if 'tk-instruct-3b' in args.model_name:
@@ -75,7 +77,7 @@ if __name__ == "__main__":
         model_name = 'Alpaca-LoRA'
     else:
         model_name = 'GPT3.5'
-    wandb.run.name = f'{args.run_name}-{model_name}-examples-{args.num_examples}-ctx-{args.context_size}'
+    wandb.run.name = f'{args.run_name}-{args.dataset}-{model_name}-examples-{args.num_examples}-ctx-{args.context_size}'
     report_table = wandb.Table(columns=['id', 'context', 'raw_state', 'parsed_state', 'response'])
     if args.model_name.startswith("text-"):
         model_factory = ZeroShotOpenAILLM if args.use_zero_shot else FewShotOpenAILLM
@@ -126,16 +128,18 @@ if __name__ == "__main__":
     results = {}
     results_wo_state = {}
     last_dial_id = None
-    total = 200
+    total = args.dials_total
     if args.dataset == 'multiwoz':
         data_gen = load_mwoz(args.database_path, args.context_size, split=args.split, total=total, shuffle=False)
     else:
         data_gen = load_sgd(args.context_size, split=args.split, total=total, shuffle=False)
     tn = 0
-    for it, turn in enumerate(tqdm.tqdm(data_gen)):
+    progress_bar = tqdm.tqdm(total=total)
+    for it, turn in enumerate(data_gen):
         if last_dial_id != turn['dialogue_id']:
             last_dial_id = turn['dialogue_id']
             n += 1
+            progress_bar.update(1)
             tn = 0
             if n > total:
                 break
@@ -287,15 +291,15 @@ if __name__ == "__main__":
             "response": response,
         })
     wandb.log({"examples": report_table})
+    progress_bar.close()
 
     if args.dataset == 'multiwoz':
         evaluator = MWEvaluator(bleu=True, success=True, richness=True, jga=True, dst=True)
         eval_results = evaluator.evaluate(results)
         for metric, values in eval_results.items():
-            metric_name = metric if metric != 'success' else 'task'
             if values is not None:
                 for k, v in values.items():
-                    wandb.log({f"MW_{metric_name}-{k.ljust(15)}": v})
+                    wandb.log({f"MW_{metric}-{k.ljust(15)}": v})
 
         evaluator = MWEvaluator(bleu=True, success=True, richness=True)
         eval_results = evaluator.evaluate(results_wo_state)
@@ -307,6 +311,6 @@ if __name__ == "__main__":
         evaluator = SGDEvaluator(split=args.split)
         metrics = {}
         metrics.update(evaluator.get_bleu(results))
-        metrics.update(evaluator.get_jga(results))
+        metrics.update(evaluator.get_eval(results))
         for metric, val in metrics.items():
             wandb.log({f"SGD_{metric}": val})

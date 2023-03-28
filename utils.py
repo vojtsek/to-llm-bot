@@ -1,4 +1,5 @@
 import json
+import re
 import dirtyjson
 import random
 from copy import deepcopy
@@ -151,6 +152,7 @@ class SGDEvaluator:
     def __init__(self, split):
         self.data = {}
         self.sacrebleu = evaluate.load('sacrebleu')
+        self.bertscore = evaluate.load('bertscore')
         for turn in load_sgd(1, split, total=100000, shuffle=False):
             if turn['dialogue_id'] not in self.data:
                 self.data[turn['dialogue_id']] = []
@@ -163,20 +165,50 @@ class SGDEvaluator:
     def get_bleu(self, input_data):
         predictions = []
         references = []
+        simple_references = []
         for dialogue_id in input_data:
             for tn, turn in enumerate(input_data[dialogue_id]):
                 predictions.append(turn['response'])
                 references.append([self.data[dialogue_id][tn]['response']])
+                simple_references.append(self.data[dialogue_id][tn]['response'])
         results = self.sacrebleu.compute(predictions=predictions, references=references)
-        return {'bleu': results['score']}
+        output = {'bleu': results['score']}
+        results_bertscore = self.bertscore.compute(predictions=predictions, references=simple_references, lang='en')
+        print(results_bertscore)
+        output['bertscore-f1'] = numpy.mean(results_bertscore['f1'])
+        return output
 
-    def get_jga(self, input_data):
+    def get_eval(self, input_data):
+        def f1(results):
+            precision = results['tp'] / (results['tp'] + results['fp'] + epsilon)
+            recall = results['tp'] / (results['tp'] + results['fn'] + epsilon)
+            f1 = 2 * precision * recall / (precision + recall + epsilon)
+            return precision, recall, f1
+
+        def extract_placeholders(utt):
+            placeholders = re.findall('\[[^ ]*\]', utt)
+            placeholders = [p.lower().replace('_', ' ') for p in placeholders]
+            placeholders = [p for p in placeholders if any([k in p for k in ['address', 'phone', 'number', 'postcode']])]
+            return placeholders
+
+
         epsilon = 0.0000000001
         all_turns_scores = []
+        successes = []
+        turn_successes = []
         slot_results = defaultdict(lambda: {'tp': 0, 'fp': 0, 'fn': 0})
         total_results = {'tp': 0, 'fp': 0, 'fn': 0}
         for dialog_id in input_data:
+            all_turns_correct = True
+            all_provided_gold = set()
+            all_provided = set()
             for i, turn in enumerate(input_data[dialog_id]):
+                response_hyp = turn['response']
+                gold_response = self.data[dialog_id][i]['response']
+                gold_placeholders = set(extract_placeholders(gold_response))
+                all_provided_gold.update(gold_placeholders)
+                hyp_placeholders = set(extract_placeholders(response_hyp))
+                all_provided.update(hyp_placeholders)
                 gold_state = self.data[dialog_id][i]['state']
                 turn_correct = True
                 for domain, gold_domain_state in gold_state.items():
@@ -185,7 +217,7 @@ class SGDEvaluator:
                             total_results['fn'] += 1
                             slot_results[slot]['fn'] += 1
                         turn_correct = False
-                        break
+                    break
                     for slot, value in gold_domain_state.items():
                         if slot not in turn["state"][domain]:
                             turn_correct = False
@@ -200,15 +232,22 @@ class SGDEvaluator:
                         else:
                             total_results['tp'] += 1
                             slot_results[slot]['tp'] += 1
-                    for domain, ds in turn["state"].items():
-                        for slot, val in ds.items():
-                            if domain not in gold_state or slot not in gold_state[domain]:
-                                total_results['fp'] += 1
-                                slot_results[slot]['fp'] += 1
+                for domain, ds in turn["state"].items():
+                    for slot, val in ds.items():
+                        if domain not in gold_state or slot not in gold_state[domain]:
+                            total_results['fp'] += 1
+                            slot_results[slot]['fp'] += 1
                 all_turns_scores.append(int(turn_correct))
+                placeholders_correct = gold_placeholders == hyp_placeholders
+                all_turns_correct = all_turns_correct and turn_correct
+                turn_successes.append(turn_correct and placeholders_correct)
+            if all_turns_correct and all_provided == all_provided_gold:
+                successes.append(1)
+            else:
+                successes.append(0)
         jga = numpy.mean(all_turns_scores)
-        precision = total_results['tp'] / (total_results['tp'] + total_results['fp'] + epsilon)
-        recall = total_results['tp'] / (total_results['tp'] + total_results['fn'] + epsilon)
-        micro = 2 * precision * recall / (precision + recall + epsilon)
-        return {'jga': jga, 'micro-F1': micro}
+        prec, recall, micro_f1 = f1(total_results)
+        macros = {sl: f1(sl_results)[2] for sl, sl_results in slot_results.items()}
+        macro_f1 = numpy.mean([val for val in macros.values()])
+        return {'jga': jga, 'micro-F1': micro_f1, 'macro-F1': macro_f1, 'success': numpy.mean(successes), 'turn-success': numpy.mean(turn_successes)}
 
