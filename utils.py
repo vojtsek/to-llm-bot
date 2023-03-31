@@ -7,6 +7,7 @@ from typing import Dict, Any
 from collections import defaultdict
 
 import numpy
+from fuzzywuzzy import fuzz
 import evaluate
 from nltk.tokenize import word_tokenize
 from langchain.vectorstores import VectorStore
@@ -192,7 +193,7 @@ class SGDEvaluator:
             placeholders = re.findall('\[[^ ]*\]', utt)
             placeholders = [p.lower().replace('_', ' ') for p in placeholders]
             placeholders = [p for p in placeholders if all([k not in p for k in ['address', 'phone', 'number', 'postcode']])]
-            placeholders = [p.replace('street', '') for p in placeholders]
+            placeholders = [p.replace('street', '').strip('[]') for p in placeholders]
             return placeholders
 
         domain_detections = []
@@ -210,10 +211,11 @@ class SGDEvaluator:
                 domain_detections.append(turn['domain'] == self.data[dialog_id][i]['domain'])
                 response_hyp = turn['response']
                 gold_response = self.data[dialog_id][i]['response']
-                gold_placeholders = set(extract_placeholders(gold_response))
+                # gold_requested = set(extract_placeholders(gold_response))
+                gold_provided = self.data[dialog_id][i]['requested_slots']
                 all_provided_gold.update(self.data[dialog_id][i]['requested_slots'])
-                hyp_placeholders = set(extract_placeholders(response_hyp))
-                all_provided.update(hyp_placeholders)
+                hyp_provided = set(extract_placeholders(response_hyp))
+                all_provided.update(hyp_provided)
                 gold_state = self.data[dialog_id][i]['state']
                 turn_correct = True
                 for domain, gold_domain_state in gold_state.items():
@@ -231,7 +233,7 @@ class SGDEvaluator:
                             slot_results[slot]['fn'] += 1
                         value = value.lower()
                         pred_value = turn["state"][domain][slot].lower() if slot in turn["state"][domain] else ''
-                        if value.lower() != pred_value.lower():
+                        if fuzz.partial_ratio(value.lower(), pred_value.lower()) <= 0.95:
                             total_results['fn'] += 1
                             slot_results[slot]['fn'] += 1
                             turn_correct = False
@@ -245,8 +247,8 @@ class SGDEvaluator:
                             total_results['fp'] += 1
                             slot_results[slot]['fp'] += 1
                 all_turns_scores.append(int(turn_correct))
-                placeholders_correct = gold_placeholders == hyp_placeholders
-                turn_successes.append(turn_correct and placeholders_correct)
+                provided_correct = gold_provided == hyp_provided
+                turn_successes.append(turn_correct and provided_correct)
             if all_informed_gold.issubset(all_informed) and all_provided_gold.issubset(all_provided):
                 successes.append(1)
             else:
