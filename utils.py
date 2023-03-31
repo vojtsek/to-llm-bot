@@ -156,9 +156,12 @@ class SGDEvaluator:
         for turn in load_sgd(1, split, total=100000, shuffle=False):
             if turn['dialogue_id'] not in self.data:
                 self.data[turn['dialogue_id']] = []
+                print(turn['dialogue_id'])
             self.data[turn['dialogue_id']].append({
                 'question': turn['question'],
                 'state': turn['gt_state'],
+                'domain': turn['metadata']['domain'],
+                'requested_slots': turn['requested_slots'],
                 'response': turn['metadata']['response']
             })
 
@@ -174,7 +177,6 @@ class SGDEvaluator:
         results = self.sacrebleu.compute(predictions=predictions, references=references)
         output = {'bleu': results['score']}
         results_bertscore = self.bertscore.compute(predictions=predictions, references=simple_references, lang='en')
-        print(results_bertscore)
         output['bertscore-f1'] = numpy.mean(results_bertscore['f1'])
         return output
 
@@ -189,24 +191,27 @@ class SGDEvaluator:
         def extract_placeholders(utt):
             placeholders = re.findall('\[[^ ]*\]', utt)
             placeholders = [p.lower().replace('_', ' ') for p in placeholders]
-            placeholders = [p for p in placeholders if any([k in p for k in ['address', 'phone', 'number', 'postcode']])]
+            placeholders = [p for p in placeholders if all([k not in p for k in ['address', 'phone', 'number', 'postcode']])]
+            placeholders = [p.replace('street', '') for p in placeholders]
             return placeholders
 
-
+        domain_detections = []
         all_turns_scores = []
         successes = []
         turn_successes = []
         slot_results = defaultdict(lambda: {'tp': 0, 'fp': 0, 'fn': 0})
         total_results = {'tp': 0, 'fp': 0, 'fn': 0}
         for dialog_id in input_data:
-            all_turns_correct = True
             all_provided_gold = set()
             all_provided = set()
+            all_informed_gold = set()
+            all_informed = set()
             for i, turn in enumerate(input_data[dialog_id]):
+                domain_detections.append(turn['domain'] == self.data[dialog_id][i]['domain'])
                 response_hyp = turn['response']
                 gold_response = self.data[dialog_id][i]['response']
                 gold_placeholders = set(extract_placeholders(gold_response))
-                all_provided_gold.update(gold_placeholders)
+                all_provided_gold.update(self.data[dialog_id][i]['requested_slots'])
                 hyp_placeholders = set(extract_placeholders(response_hyp))
                 all_provided.update(hyp_placeholders)
                 gold_state = self.data[dialog_id][i]['state']
@@ -217,8 +222,9 @@ class SGDEvaluator:
                             total_results['fn'] += 1
                             slot_results[slot]['fn'] += 1
                         turn_correct = False
-                        break
+                        continue
                     for slot, value in gold_domain_state.items():
+                        all_informed_gold.add(value.lower())
                         if slot not in turn["state"][domain]:
                             turn_correct = False
                             total_results['fn'] += 1
@@ -234,14 +240,14 @@ class SGDEvaluator:
                             slot_results[slot]['tp'] += 1
                 for domain, ds in turn["state"].items():
                     for slot, val in ds.items():
+                        all_informed.add(val.lower())
                         if domain not in gold_state or slot not in gold_state[domain]:
                             total_results['fp'] += 1
                             slot_results[slot]['fp'] += 1
                 all_turns_scores.append(int(turn_correct))
                 placeholders_correct = gold_placeholders == hyp_placeholders
-                all_turns_correct = all_turns_correct and turn_correct
                 turn_successes.append(turn_correct and placeholders_correct)
-            if all_turns_correct and all_provided == all_provided_gold:
+            if all_informed_gold.issubset(all_informed) and all_provided_gold.issubset(all_provided):
                 successes.append(1)
             else:
                 successes.append(0)
@@ -249,5 +255,5 @@ class SGDEvaluator:
         prec, recall, micro_f1 = f1(total_results)
         macros = {sl: f1(sl_results)[2] for sl, sl_results in slot_results.items()}
         macro_f1 = numpy.mean([val for val in macros.values()])
-        return {'jga': jga, 'micro-F1': micro_f1, 'macro-F1': macro_f1, 'success': numpy.mean(successes), 'turn-success': numpy.mean(turn_successes)}
+        return {'jga': jga, 'micro-F1': micro_f1, 'macro-F1': macro_f1, 'success': numpy.mean(successes), 'turn-success': numpy.mean(turn_successes), 'domain': numpy.mean(domain_detections)}
 

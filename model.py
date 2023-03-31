@@ -89,6 +89,7 @@ class ZeroShotOpenAIChatLLM(ZeroShotOpenAILLM):
         completion = openai.ChatCompletion.create(
             model=self.model_name,
             messages=[
+                {"role": "system", "content": "You are a knowledgebale and very polite assistant. Help the users to fulfill the goals quickly. Track only the slots that are mentioned."},
                 {"role": "user", "content": text}
             ],
             temperature=0,

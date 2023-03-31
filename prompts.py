@@ -21,18 +21,18 @@ class FewShotPrompt(SimpleTemplatePrompt):
         return self.template.format(positive_examples, negative_examples, *args)
     
     def _process_positive_examples(self, positive_examples: list) -> Text:
-        output = ""
+        output = "\n"
         for n, example in enumerate(positive_examples):
             output += f"Positive example {n}:\n" + \
                       f"input: {example['input']}\n" + \
                       f"output: {example['output']}\n"
-        return output
+        return output + "\n"
     
     def _process_negative_examples(self, negative_examples: list) -> Text:
-        output = ""
+        output = "\n"
         for n, example in enumerate(negative_examples):
             output += f"Negative example {n}:\n" + \
                       f"input: {example['input']}\n" + \
                       f"output: {example['output']}\n"
-        return output
+        return output + "\n"
 

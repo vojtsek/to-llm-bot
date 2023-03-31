@@ -154,9 +154,8 @@ def get_success(input_data, database, goals, booked_domains):
             for i, turn in enumerate(input_data[dialog_id]):
                 turn["state"] = states[dialog_id][i]
     
-    if not has_domain_predictions(input_data):
         #sys.stderr.write('warning: Missing domain predictions, estimating active domains from dialog states!\n')
-        get_domain_estimates_from_state(input_data)    
+    domain_accuracy = get_domain_estimates_from_state(input_data)    
 
     total = Counter()
     match_rate = {}
@@ -184,7 +183,7 @@ def get_success(input_data, database, goals, booked_domains):
     match_rate   = {k : round(100 * match_rate[k]   / total[k], 1) for k in match_rate}
     success_rate = {k : round(100 * success_rate[k] / total[k], 1) for k in success_rate}
 
-    return ({"inform" : match_rate, "success" : success_rate})
+    return ({"inform" : match_rate, "success" : success_rate, "domain": domain_accuracy})
 
 
 def get_dialog_success(goal, booked_domains, utterances, states, domain_estimates, database):

@@ -1,4 +1,5 @@
 import os
+import numpy as np
 import json
 import urllib.request
 
@@ -21,6 +22,7 @@ def count_depth_of_dictionary(dictionary):
 
 def get_domain_estimates_from_state(data):
 
+    domain_detections = []
     for dialog in data.values():
 
         # Use an approximation of the current domain because the slot names used for delexicalization do not contain any
@@ -67,7 +69,9 @@ def get_domain_estimates_from_state(data):
             old_state = turn["state"]
             old_changed_domains = changed_domains
             
+            domain_detections.append(turn["active_domains"] == [current_domain])
             turn["active_domains"] = [current_domain]
+    return np.mean(domain_detections)
 
 
 def has_state_predictions(data):

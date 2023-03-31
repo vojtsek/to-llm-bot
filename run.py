@@ -124,7 +124,7 @@ if __name__ == "__main__":
     example_formatter = ExampleFormatter(ontology=ontology)
 
     history = []
-    n = 1
+    n = 0
     results = {}
     results_wo_state = {}
     last_dial_id = None
@@ -132,7 +132,7 @@ if __name__ == "__main__":
     if args.dataset == 'multiwoz':
         data_gen = load_mwoz(args.database_path, args.context_size, split=args.split, total=total, shuffle=False)
     else:
-        data_gen = load_sgd(args.context_size, split=args.split, total=total, shuffle=False)
+        data_gen = load_sgd(args.context_size, split=args.split, total=total, shuffle=True)
     tn = 0
     progress_bar = tqdm.tqdm(total=total)
     for it, turn in enumerate(data_gen):
@@ -206,6 +206,8 @@ if __name__ == "__main__":
                     kwargs["positive_examples"] = positive_state_examples
                     kwargs["negative_examples"] = negative_state_examples
                 state, filled_state_prompt = model(state_prompt, predict=True, **kwargs)
+                if n < 5:
+                    print("Filled prompt:", filled_state_prompt)
             except:
                 state = "{}"
 
@@ -268,6 +270,8 @@ if __name__ == "__main__":
                 kwargs["negative_examples"] = []
 
             response, filled_prompt = model(response_prompt, predict=True, **kwargs)
+            if n < 5:
+                print("Filled response prompt:", filled_prompt)
         except:
             response = ''
 
@@ -284,10 +288,14 @@ if __name__ == "__main__":
         history.append("Assistant: " + gold_response)
         
         results[dialogue_id].append({
+            "domain": selected_domain,
+            "active_domains": [selected_domain],
             "response": response,
             "state": final_state,
         })
         results_wo_state[dialogue_id].append({
+            "domain": selected_domain,
+            "active_domains": [selected_domain],
             "response": response,
         })
     wandb.log({"examples": report_table})

@@ -12,7 +12,7 @@ def load_mwoz(database_path, context_size, split='train', total=500, shuffle=Tru
     else:
         data = dataset[split]
     for dialog in data:
-        if n > 500:
+        if n > total:
             break
         if len(dialog['services']) != 1:
             continue
@@ -67,7 +67,7 @@ def load_sgd(context_size, split='train', total=500, shuffle=True):
         data = dataset[split]
     all_domain_slots = {}
     for dialog in data:
-        if n > 500:
+        if n > total:
             break
         if len(dialog['services']) != 1:
             continue
@@ -80,6 +80,7 @@ def load_sgd(context_size, split='train', total=500, shuffle=True):
             context = [f"Customer: {t}" if n % 2 == 0 else f"Assistant: {t}"
              for n, t in enumerate(dialog['turns']['utterance'][:tn+1])]
             state = dialog['turns']['frames'][tn]['state']
+            requested_slots = state[0]['requested_slots']
             if len(state) == 0:
                 state = {}
             else:
@@ -101,6 +102,7 @@ def load_sgd(context_size, split='train', total=500, shuffle=True):
                    'question': dialog['turns']['utterance'][tn],
                    'gt_state': last_state,
                    'dialogue_id': dialog['dialogue_id'],
+                   'requested_slots': requested_slots,
                    'metadata': {'domain': domain_gt,
                                 'state': state_update,
                                 'context': '\n'.join(context),
