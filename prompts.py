@@ -25,7 +25,7 @@ class FewShotPrompt(SimpleTemplatePrompt):
         for n, example in enumerate(positive_examples):
             output += f"Positive example {n}:\n" + \
                       f"input: {example['input']}\n" + \
-                      f"output: {example['output']}\n"
+                      f"output: \n{example['output']}\n"
         return output + "\n"
     
     def _process_negative_examples(self, negative_examples: list) -> Text:
@@ -33,6 +33,6 @@ class FewShotPrompt(SimpleTemplatePrompt):
         for n, example in enumerate(negative_examples):
             output += f"Negative example {n}:\n" + \
                       f"input: {example['input']}\n" + \
-                      f"output: {example['output']}\n"
+                      f"output: \n{example['output']}\n"
         return output + "\n"
 

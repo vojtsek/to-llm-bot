@@ -8,6 +8,7 @@ from pynvml import *
 from datasets import load_dataset
 import wandb
 import logging
+import transformers
 
 from model import (
     FewShotPromptedLLM,
@@ -31,6 +32,7 @@ from mwzeval.metrics import Evaluator as MWEvaluator
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
+transformers.set_seed(42)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()

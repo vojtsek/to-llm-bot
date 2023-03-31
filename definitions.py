@@ -19,10 +19,12 @@ Values that should be captured are:
  - "name" that specifies the name of the restaurant
 Do not capture ay other values!
 If not specified, leave the value empty.
-""{}{}""Now complete the following example:
+""{}{}""
+Now complete the following example:
 input: {}
 Customer: {}
-output: state:""",
+output:
+state:""",
                                     args_order=["history", "utterance"])
     response_prompt = FewShotPrompt(template="""
 Definition: You are an assistant that helps people to book a restaurant.
@@ -30,7 +32,8 @@ You can search for a restaurant by area, food, or price.
 There is also a number of restaurants in the database currently corresponding to the user's request.
 If you find a restaurant, provide [restaurant_name], [restaurant_address], [restaurant_phone] or [restaurant_postcode] if asked.
 If booking, provide [reference] in the answer.
-""{}{}""Now complete the following example:
+""{}{}""
+Now complete the following example:
 input:{}
 Customer: {}
 state: {}
@@ -53,10 +56,12 @@ Values that should be captured are:
  - "pricerange" that specifies the price range of the hotel (cheap/expensive)
 Do not capture ay other values!
 If not specified, leave the value empty.
-""{}{}""Now complete the following example:
+""{}{}""
+Now complete the following example:
 input: {}
 Customer: {}
-output: state:""",
+output:
+state:""",
                                     args_order=["history", "utterance"])
     response_prompt = FewShotPrompt(template="""
     Definition: You are an assistant that helps people to book a hotel.
@@ -64,7 +69,8 @@ The customer can ask for a hotel by name, area, parking, internet availability, 
 There is also a number of hotel in the database currently corresponding to the user's request.
 If you find a hotel, provide [hotel_name], [hotel_address], [hotel_phone] or [hotel_postcode] if asked.
 If booking, provide [reference] in the answer.
-""{}{}""Now complete the following example:
+""{}{}""
+Now complete the following example:
 input:{}
 Customer: {}
 state: {}
@@ -86,10 +92,12 @@ Values that should be captured are:
  - "destination" that specifies the destination station
 Do not capture ay other values!
 If not specified, leave the value empty.
-""{}{}""Now complete the following example:
+""{}{}""
+Now complete the following example:
 input: {}
 Customer: {}
-output: state:""",
+output:
+state:""",
                                     args_order=["history", "utterance"])
     response_prompt = FewShotPrompt(template="""
 Definition: You are an assistant that helps people to find a train connection.
@@ -97,7 +105,8 @@ The customer needs to specify the departure and destination station, and the tim
 There is also a number of trains in the database currently corresponding to the user's request.
 If you find a train, provide [arriveby], [leaveat] or [departure] if asked.
 If booking, provide [reference] in the answer.
-""{}{}""Now complete the following example:
+""{}{}""
+Now complete the following example:
 input:{}
 Customer: {}
 state: {}
@@ -118,14 +127,17 @@ Values that should be captured are:
  - "departure" that specifies the departure station
  - "destination" that specifies the destination station
  - "day" that specifies what day the train should leave (monday/tuesday/wednesday/thursday/friday/saturday/sunday)
-""{}{}""Now complete the following example:
+""{}{}""
+Now complete the following example:
 input: {}
 Customer: {}
-output: state:""",
+output:
+state:""",
                                     args_order=["history", "utterance"])
     response_prompt = FewShotPrompt(template="""
 Definition: You are an assistant that helps people to book a taxi.
-""{}{}""Now complete the following example:
+""{}{}""
+Now complete the following example:
 input:{}
 Customer: {}
 state: {}
@@ -141,14 +153,17 @@ class FewShotHospitalDefinition:
     state_prompt = FewShotPrompt(template="""
 Definition: Capture values from converstation in JSON according to examples.
 If not specified, leave the value empty.
-""{}{}""Now complete the following example:
+""{}{}""
+Now complete the following example:
 input: {}
 Customer: {}
-output: state:""",
+output:
+state:""",
                                     args_order=["history", "utterance"])
     response_prompt = FewShotPrompt(template="""
 Definition: You are an assistant that helps people to find a hospital.
-""{}{}""Now complete the following example:
+""{}{}""
+Now complete the following example:
 input:{}
 Customer: {}
 state: {}
@@ -164,14 +179,17 @@ class FewShotBusDefinition:
     state_prompt = FewShotPrompt(template="""
 Definition: Capture values from converstation in JSON according to examples.
 If not specified, leave the value empty.
-""{}{}""Now complete the following example:
+""{}{}""
+Now complete the following example:
 input: {}
 Customer: {}
-output: state:""",
+output:
+state:""",
                                     args_order=["history", "utterance"])
     response_prompt = FewShotPrompt(template="""
 Definition: You are an assistant that helps people to find a bus.
-""{}{}""Now complete the following example:
+""{}{}""
+Now complete the following example:
 input:{}
 Customer: {}
 state: {}
@@ -190,17 +208,20 @@ Values that should be captured are:
  - "area" that specifies the area where the attraction is located (north/east/west/south/centre)
 Do not capture ay other values!
 If not specified, leave the value empty.
-""{}{}""Now complete the following example:
+""{}{}""
+Now complete the following example:
 input: {}
 Customer: {}
-output: state:""",
+output:
+state:""",
                                     args_order=["history", "utterance"])
     response_prompt = FewShotPrompt(template="""
     Definition: You are an assistant that helps people to find an attraction.
 The customer can ask for an attraction by name, area, or type.
 There is also a number of restaurants provided in the database.
 If you find a hotel, provide [attraction_name], [attraction_address], [attraction_phone] or [attraction_postcode] if asked.
-""{}{}""Now complete the following example:
+""{}{}""
+Now complete the following example:
 input:{}
 Customer: {}
 state: {}
@@ -348,7 +369,8 @@ Definition: Capture values from converstation in JSON according to examples.
 If not specified, leave the value empty.
 input: {}
 Customer: {}
-output: state:""",
+output:
+state:""",
                                     args_order=["history", "utterance"])
     response_prompt = SimpleTemplatePrompt(template="""
 Definition: You are an assistant that helps people to find a hospital.
@@ -369,7 +391,8 @@ Definition: Capture values from converstation in JSON according to examples.
 If not specified, leave the value empty.
 input: {}
 Customer: {}
-output: state:""",
+output:
+state:""",
                                     args_order=["history", "utterance"])
     response_prompt = SimpleTemplatePrompt(template="""
 Definition: You are an assistant that helps people to find a bus.
@@ -447,10 +470,12 @@ Values that should be captured are:
  - appointment_time; time of the appointment
 Do not capture ay other values!
 If not specified, leave the value empty.
-""{}{}""Now complete the following example:
+""{}{}""
+Now complete the following example:
 input: {}
 Customer: {}
-output: state:""",
+output:
+state:""",
                                 args_order=["history", "utterance"])
     response_prompt = FewShotPrompt(template="""
 Complete a conversation between a polite and knowledgeable personal assistant and a customer.
@@ -458,6 +483,7 @@ The customer is interested in various services (doctor, dentist, cosmetic, ...).
 Do not provide real entities in the response! Just provide entity name in brackets, like [name] or [time].
 Use similiar approach as in the following examples.
 ""{}{}""
+
 input:{}
 Customer: {}
 state: {}
@@ -483,16 +509,19 @@ number_of_seats; number of seats required
 city_of_event; city where the event is taking place
 Do not capture any other values!
 If not specified, leave the value empty.
-""{}{}""Now complete the following example:
+""{}{}""
+Now complete the following example:
 input: {}
 Customer: {}
-output: state:""", args_order=["history", "utterance"])
+output:
+state:""", args_order=["history", "utterance"])
     response_prompt = FewShotPrompt(template="""
 Complete a conversation between a polite and knowledgeable personal assistant and a customer.
 The customer is interested in various events (concerts, shows, sports events, etc.).
 Do not provide real entities in the response! Just provide entity name in brackets, like [name] or [time].
 Use similar approach as in the following examples.
 ""{}{}""
+
 input:{}
 Customer: {}
 state: {}
@@ -522,10 +551,12 @@ show_time; time of the show
 show_date; date of the show
 Do not capture any other values!
 If not specified, leave the value empty.
-""{}{}""Now complete the following example:
+""{}{}""
+Now complete the following example:
 input: {}
 Customer: {}
-output: state:""", args_order=["history", "utterance"])
+output:
+state:""", args_order=["history", "utterance"])
 
     response_prompt = FewShotPrompt(template="""
 Complete a conversation between a polite and knowledgeable personal assistant and a customer.
@@ -533,6 +564,7 @@ The customer is interested in movies and their show timings.
 Do not provide real entities in the response! Just provide entity name in brackets, like [name] or [time].
 Use a similar approach as in the following examples.
 ""{}{}""
+
 input:{}
 Customer: {}
 state: {}
@@ -575,10 +607,12 @@ hotel_name; name of the hotel
 location; location of the hotel
 Do not capture any other values!
 If not specified, leave the value empty.
-""{}{}""Now complete the following example:
+""{}{}""
+Now complete the following example:
 input: {}
 Customer: {}
-output: state:""", args_order=["history", "utterance"])
+output:
+state:""", args_order=["history", "utterance"])
 
     response_prompt = FewShotPrompt(template="""
 Complete a conversation between a polite and knowledgeable personal assistant and a customer.
@@ -586,6 +620,7 @@ The customer is interested in booking a hotel and needs assistance with the book
 Do not provide real entities in the response! Just provide entity name in brackets, like [name] or [date].
 Use similar approach as in the following examples.
 ""{}{}""
+
 input:{}
 Customer: {}
 state: {}
@@ -613,10 +648,12 @@ Values that should be captured are:
  - inbound_departure_time; departure time of the inbound flight (if any)
 Do not capture any other values!
 If not specified, leave the value empty.
-""{}{}""Now complete the following example:
+""{}{}""
+Now complete the following example:
 input: {}
 Customer: {}
-output: state:""", args_order=["history", "utterance"])
+output:
+state:""", args_order=["history", "utterance"])
 
     response_prompt = FewShotPrompt(template="""
 Complete a conversation between a polite and knowledgeable personal assistant and a customer.
@@ -624,6 +661,7 @@ The customer is interested in booking a flight with specific details (seating cl
 Do not provide real entities in the response! Just provide entity name in brackets, like [name] or [time].
 Use a similar approach as in the following examples.
 ""{}{}""
+
 input:{}
 Customer: {}
 state: {}
@@ -646,10 +684,12 @@ Values that should be captured are:
  - artist; name fo the artist
 Do not capture any other values!
 If not specified, leave the value empty.
-""{}{}""Now complete the following example:
+""{}{}""
+Now complete the following example:
 input: {}
 Customer: {}
-output: state:""", args_order=["history", "utterance"])
+output:
+state:""", args_order=["history", "utterance"])
 
     response_prompt = FewShotPrompt(template="""
 Complete a conversation between a polite and knowledgeable personal assistant and a customer.
@@ -657,6 +697,7 @@ The customer is interested in finding music to listen to.
 Do not provide real entities in the response! Just provide entity name in brackets, like [name] or [time].
 Use a similar approach as in the following examples.
 ""{}{}""
+
 input:{}
 Customer: {}
 state: {}
@@ -689,10 +730,12 @@ date; the date of the reservation
 price_range; the price range of the restaurant
 Do not capture any other values!
 If not specified, leave the value empty.
-""{}{}""Now complete the following example:
+""{}{}""
+Now complete the following example:
 input: {}
 Customer: {}
-output: state:""", args_order=["history", "utterance"])
+output:
+state:""", args_order=["history", "utterance"])
 
     response_prompt = FewShotPrompt(template="""
 Complete a conversation between a customer and a restaurant booking assistant.
@@ -700,6 +743,7 @@ The customer is interested in making a reservation at a restaurant.
 Do not provide real entities in the response! Just provide entity name in brackets, like [name] or [time].
 Use similar approach as in the following examples.
 ""{}{}""
+
 input:{}
 Customer: {}
 state: {}
@@ -725,10 +769,12 @@ Values that should be captured are:
  - travelers; the number of travelers
 Do not capture any other values!
 If not specified, leave the value empty.
-""{}{}""Now complete the following example:
+""{}{}""
+Now complete the following example:
 input: {}
 Customer: {}
-output: state:""", args_order=["history", "utterance"])
+output:
+state:""", args_order=["history", "utterance"])
 
     response_prompt = FewShotPrompt(template="""
 Complete a conversation between a polite and knowledgeable personal assistant and a customer.
@@ -736,6 +782,7 @@ The customer is interested in bus services.
 Do not provide real entities in the response! Just provide entity name in brackets, like [location] or [time].
 Use a similar approach as in the following examples.
 ""{}{}""
+
 input:{}
 Customer: {}
 state: {}
@@ -756,10 +803,12 @@ Values that should be captured are:
  - title; the name or title of the movie
 Do not capture any other values!
 If not specified, leave the value empty.
-""{}{}""Now complete the following example:
+""{}{}""
+Now complete the following example:
 input: {}
 Customer: {}
-output: state:""", args_order=["history", "utterance"])
+output:
+state:""", args_order=["history", "utterance"])
 
     response_prompt = FewShotPrompt(template="""
 Complete a conversation between a polite and knowledgeable personal assistant and a customer.
@@ -767,6 +816,7 @@ The customer is interested in movies on medias.
 Do not provide real entities in the response! Just provide entity name in brackets, like [location] or [time].
 Use a similar approach as in the following examples.
 ""{}{}""
+
 input:{}
 Customer: {}
 state: {}
@@ -787,10 +837,12 @@ Values that should be captured are:
  - recipient_account_name; the name of the recipient's account
 Do not capture any other values!
 If not specified, leave the value empty.
-""{}{}""Now complete the following example:
+""{}{}""
+Now complete the following example:
 input: {}
 Customer: {}
-output: state:""", args_order=["history", "utterance"])
+output:
+state:""", args_order=["history", "utterance"])
 
     response_prompt = FewShotPrompt(template="""
 Complete a conversation between a polite and knowledgeable personal assistant and a customer.
@@ -798,6 +850,7 @@ The customer wants to do a bnak transfer.
 Do not provide real entities in the response! Just provide entity name in brackets, like [location] or [time].
 Use a similar approach as in the following examples.
 ""{}{}""
+
 input:{}
 Customer: {}
 state: {}
@@ -819,10 +872,12 @@ Values that should be captured are:
  - shared_ride; whether the ride is shared
 Do not capture any other values!
 If not specified, leave the value empty.
-""{}{}""Now complete the following example:
+""{}{}""
+Now complete the following example:
 input: {}
 Customer: {}
-output: state:""", args_order=["history", "utterance"])
+output:
+state:""", args_order=["history", "utterance"])
 
     response_prompt = FewShotPrompt(template="""
 Complete a conversation between a polite and knowledgeable personal assistant and a customer.
@@ -830,6 +885,7 @@ The customer is interested in sharing a car ride.
 Do not provide real entities in the response! Just provide entity name in brackets, like [location] or [time].
 Use a similar approach as in the following examples.
 ""{}{}""
+
 input:{}
 Customer: {}
 state: {}
@@ -850,10 +906,12 @@ Values that should be captured are:
  - event_location; the location of the event.
 Do not capture any other values!
 If not specified, leave the value empty.
-""{}{}""Now complete the following example:
+""{}{}""
+Now complete the following example:
 input: {}
 Customer: {}
-output: state:""", args_order=["history", "utterance"])
+output:
+state:""", args_order=["history", "utterance"])
 
     response_prompt = FewShotPrompt(template="""
 Complete a conversation between a polite and knowledgeable personal assistant and a customer.
@@ -861,6 +919,7 @@ The customer wants the assistant to handle calendar events for him.
 Do not provide real entities in the response! Just provide entity name in brackets, like [location] or [time].
 Use a similar approach as in the following examples.
 ""{}{}""
+
 input:{}
 Customer: {}
 state: {}
@@ -885,16 +944,19 @@ car_type; the type of the rental car
 pickup_location; the location where the rental car will be picked up
 Do not capture any other values!
 If not specified, leave the value empty.
-""{}{}""Now complete the following example:
+""{}{}""
+Now complete the following example:
 input: {}
 Customer: {}
-output: state:""", args_order=["history", "utterance"])
+output:
+state:""", args_order=["history", "utterance"])
     response_prompt = FewShotPrompt(template="""
 Complete a conversation between a polite and knowledgeable personal assistant and a customer.
 The customer is interested in renting a car and needs information about available cars and pricing.
 Do not provide real entities in the response! Just provide entity name in brackets, like [pickup_date] or [car_type].
 Use a similar approach as in the following examples.
 ""{}{}""
+
 input:{}
 Customer: {}
 state: {}
@@ -924,10 +986,12 @@ area; area of the property
 visit_date; the date when the customer wants to visit the property
 Do not capture any other values!
 If not specified, leave the value empty.
-""{}{}""Now complete the following example:
+""{}{}""
+Now complete the following example:
 input: {}
 Customer: {}
-output: state:""", args_order=["history", "utterance"])
+output:
+state:""", args_order=["history", "utterance"])
 
     response_prompt = FewShotPrompt(template="""
 Complete a conversation between a polite and knowledgeable personal assistant and a customer.
@@ -935,6 +999,7 @@ The customer is interested in various properties.
 Do not provide real entities in the response! Just provide entity name in brackets, like [name] or [date].
 Use a similar approach as in the following examples.
 ""{}{}""
+
 input:{}
 Customer: {}
 state: {}

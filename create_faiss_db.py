@@ -7,6 +7,7 @@ from langchain.vectorstores import FAISS
 from langchain.embeddings import OpenAIEmbeddings, HuggingFaceEmbeddings
 from langchain.docstore.document import Document
 
+from definitions import MW_FEW_SHOT_DOMAIN_DEFINITIONS, SGD_FEW_SHOT_DOMAIN_DEFINITIONS
 from loaders import load_mwoz, load_sgd
 
 if __name__ == '__main__':
@@ -29,9 +30,11 @@ if __name__ == '__main__':
                                       openai_api_key=os.environ.get('OPENAI_API_KEY', ''))
 
     if args.dataset == 'multiwoz':
-        data_gen = load_mwoz(args.database_path, args.context_size, split=args.split, total=args.total, shuffle=True)
+        available_domains = [d for d in MW_FEW_SHOT_DOMAIN_DEFINITIONS.keys() if d != 'bus']
+        data_gen = load_mwoz(args.database_path, args.context_size, split=args.split, total=args.total, available_domains=available_domains, shuffle=True)
     else:
-        data_gen = load_sgd(args.context_size, split=args.split, total=args.total, shuffle=True)
+        available_domains = list(SGD_FEW_SHOT_DOMAIN_DEFINITIONS.keys())
+        data_gen = load_sgd(args.context_size, split=args.split, total=args.total, available_domains=available_domains, shuffle=True)
     docs = []
     for turn in data_gen:
         doc = Document(page_content=turn['page_content'],

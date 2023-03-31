@@ -1,24 +1,33 @@
 from datasets import load_dataset
+from collections import defaultdict
 from typing import Dict, List
 from database import MultiWOZDatabase
 
 
-def load_mwoz(database_path, context_size, split='train', total=500, shuffle=True):
+def load_mwoz(database_path, context_size, split='train', total=10, shuffle=True, available_domains=None, only_single_domain=False):
     database = MultiWOZDatabase(database_path)
     dataset = load_dataset('multi_woz_v22')
-    n = 1
+    if available_domains is not None:
+        domain_counts = {d: 0 for d in available_domains}
+    else:
+        domain_counts = defaultdict(int)
+        domain_counts['aux'] = -1
     if shuffle:
         data = dataset[split].shuffle()
     else:
         data = dataset[split]
+    n = 1
     for dialog in data:
-        if n > total:
-            break
-        if len(dialog['services']) != 1:
+        if only_single_domain and len(dialog['services']) != 1:
             continue
-        n += 1
+        if all((dc >= total for dc in domain_counts.values())) or (available_domains is None and n >= total):
+            break
         dialogue_id = dialog['dialogue_id'].split('.')[0].lower()
         domain_gt = dialog['services'][0]
+        if domain_counts[domain_gt] >= total:
+            continue
+        domain_counts[domain_gt] += 1
+        n + 1
         last_state = {}
         for tn in range(0, len(dialog['turns']['utterance']), 2):
             context = [f"Customer: {t}" if n % 2 == 0 else f"Assistant: {t}"
@@ -58,21 +67,31 @@ def load_mwoz(database_path, context_size, split='train', total=500, shuffle=Tru
             yield turn
 
 
-def load_sgd(context_size, split='train', total=500, shuffle=True):
+def load_sgd(context_size, split='train', total=10, shuffle=True, available_domains=None, only_single_domain=False):
     dataset = load_dataset('schema_guided_dstc8')
+    if available_domains is not None:
+        domain_counts = {d: 0 for d in available_domains}
+    else:
+        domain_counts = defaultdict(int)
+        domain_counts['aux'] = -1
     n = 1
     if shuffle:
+        import transformers
+        transformers.set_seed(42)
         data = dataset[split].shuffle()
     else:
         data = dataset[split]
     all_domain_slots = {}
     for dialog in data:
-        if n > total:
+        if only_single_domain and len(dialog['services']) != 1:
+            continue
+        if all((dc >= total for dc in domain_counts.values())) or (available_domains is None and n >= total):
             break
-        if len(dialog['services']) != 1:
+        domain_gt = dialog['services'][0].split('_')[0].lower()
+        if domain_counts[domain_gt] >= total:
             continue
         n += 1
-        domain_gt = dialog['services'][0].split('_')[0].lower()
+        domain_counts[domain_gt] += 1
         if domain_gt not in all_domain_slots:
             all_domain_slots[domain_gt] = set()
         last_state = {}

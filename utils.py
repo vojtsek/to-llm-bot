@@ -157,7 +157,6 @@ class SGDEvaluator:
         for turn in load_sgd(1, split, total=100000, shuffle=False):
             if turn['dialogue_id'] not in self.data:
                 self.data[turn['dialogue_id']] = []
-                print(turn['dialogue_id'])
             self.data[turn['dialogue_id']].append({
                 'question': turn['question'],
                 'state': turn['gt_state'],
