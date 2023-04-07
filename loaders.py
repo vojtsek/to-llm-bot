@@ -24,6 +24,8 @@ def load_mwoz(database_path, context_size, split='train', total=10, shuffle=True
             break
         dialogue_id = dialog['dialogue_id'].split('.')[0].lower()
         domain_gt = dialog['services'][0]
+        if domain_gt != 'restaurant':
+            continue
         if domain_counts[domain_gt] >= total:
             continue
         domain_counts[domain_gt] += 1

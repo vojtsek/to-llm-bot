@@ -39,6 +39,7 @@ def parse_state(state: str, default_domain: str) -> Dict[str, str]:
             return {default_domain: sanitize(state)}
 
     except:
+        state = str(state)
         if state.count('{') == 1:
             state = '{ ' + default_domain + ' ' + state
         state_tk = word_tokenize(state)
@@ -231,7 +232,7 @@ class SGDEvaluator:
                             total_results['fn'] += 1
                             slot_results[slot]['fn'] += 1
                         value = value.lower()
-                        pred_value = turn["state"][domain][slot].lower() if slot in turn["state"][domain] else ''
+                        pred_value = str(turn["state"][domain][slot]).lower() if slot in turn["state"][domain] else ''
                         if fuzz.partial_ratio(value.lower(), pred_value.lower()) <= 0.95:
                             total_results['fn'] += 1
                             slot_results[slot]['fn'] += 1
@@ -241,7 +242,7 @@ class SGDEvaluator:
                             slot_results[slot]['tp'] += 1
                 for domain, ds in turn["state"].items():
                     for slot, val in ds.items():
-                        all_informed.add(val.lower())
+                        all_informed.add(str(val).lower())
                         if domain not in gold_state or slot not in gold_state[domain]:
                             total_results['fp'] += 1
                             slot_results[slot]['fp'] += 1

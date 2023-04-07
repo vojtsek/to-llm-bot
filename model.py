@@ -40,6 +40,8 @@ class FewShotPromptedLLM(SimplePromptedLLM):
 
     def __call__(self, prompt: FewShotPrompt, positive_examples: list[Dict], negative_examples: list[Dict], predict=True, **kwargs: Any):
         filled_prompt = prompt(positive_examples, negative_examples, **kwargs)
+      #  if len(filled_prompt) > 500:
+       #     filled_prompt = prompt(positive_examples[:1], negative_examples[:1], **kwargs)
         prediction = self._predict(filled_prompt, **kwargs) if predict else None
         return prediction, filled_prompt
 
@@ -86,15 +88,18 @@ class ZeroShotOpenAILLM(SimplePromptedLLM):
 
 class ZeroShotOpenAIChatLLM(ZeroShotOpenAILLM):
     def _predict(self, text, **kwargs):
-        completion = openai.ChatCompletion.create(
-            model=self.model_name,
-            messages=[
-                {"role": "system", "content": "You are a knowledgebale and very polite assistant. Help the users to fulfill the goals quickly. Track only the slots that are mentioned."},
-                {"role": "user", "content": text}
-            ],
-            temperature=0,
-            )
-        return completion.choices[0].message["content"]
+        try:
+            completion = openai.ChatCompletion.create(
+                model=self.model_name,
+                messages=[
+                    {"role": "system", "content": "You are a knowledgebale and very polite assistant. Help the users to fulfill the goals quickly. Track only the slots that are mentioned."},
+                    {"role": "user", "content": text}
+                ],
+                temperature=0,
+                )
+            return completion.choices[0].message["content"]
+        except:
+            return ""
 
 
 class FewShotAlpaca(FewShotPromptedLLM):
