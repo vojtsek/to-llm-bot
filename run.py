@@ -9,6 +9,7 @@ from datasets import load_dataset
 import wandb
 import logging
 import transformers
+import random
 
 from model import (
     FewShotPromptedLLM,
@@ -22,7 +23,7 @@ from model import (
     )
 from loaders import load_mwoz, load_sgd
 from delex import prepareSlotValuesIndependent, delexicalise, delexicaliseReferenceNumber
-from definitions import MW_FEW_SHOT_DOMAIN_DEFINITIONS, MW_ZERO_SHOT_DOMAIN_DEFINITIONS, SGD_FEW_SHOT_DOMAIN_DEFINITIONS, SGD_ZERO_SHOT_DOMAIN_DEFINITIONS
+from definitions import MW_FEW_SHOT_DOMAIN_DEFINITIONS, MW_ZERO_SHOT_DOMAIN_DEFINITIONS, SGD_FEW_SHOT_DOMAIN_DEFINITIONS, SGD_ZERO_SHOT_DOMAIN_DEFINITIONS, domain_prompt
 
 from database import MultiWOZDatabase
 from utils import parse_state, ExampleRetriever, ExampleFormatter, print_gpu_utilization, SGDEvaluator
@@ -52,6 +53,8 @@ if __name__ == "__main__":
     parser.add_argument("--split", type=str, default='test')
     parser.add_argument("--use_zero_shot", action='store_true')
     parser.add_argument("--from_wandb_id", type=str)
+    parser.add_argument("--single_domain", action='store_true')
+    parser.add_argument("--restrict_domains", type=str)
     args = parser.parse_args()
     config = {
         "model_name": args.model_name,
@@ -90,30 +93,35 @@ if __name__ == "__main__":
         if args.model_name.startswith("text-"):
             model_factory = ZeroShotOpenAILLM if args.use_zero_shot else FewShotOpenAILLM
             model = model_factory(args.model_name)
+            domain_model = ZeroShotOpenAILLM(args.model_name)
         elif args.model_name.startswith("gpt-"):
             model_factory = ZeroShotOpenAIChatLLM if args.use_zero_shot else FewShotOpenAIChatLLM
             model = model_factory(args.model_name)
+            domain_model = ZeroShotOpenAIChatLLM(args.model_name)
         elif any([n in args.model_name for n in ['opt', 'NeoXT']]):
             tokenizer = AutoTokenizer.from_pretrained(args.model_name, cache_dir=args.cache_dir)
-            model = AutoModelForCausalLM.from_pretrained(args.model_name,
+            model_w = AutoModelForCausalLM.from_pretrained(args.model_name,
                                                         low_cpu_mem_usage=True,
                                                         cache_dir=args.cache_dir,
                                                         device_map="auto",
                                                         load_in_8bit=True)
             model_factory = SimplePromptedLLM if args.use_zero_shot else FewShotPromptedLLM
-            model = model_factory(model, tokenizer, type="causal")
+            model = model_factory(model_w, tokenizer, type="causal")
+            domain_model = SimplePromptedLLM(model_w, tokenizer, type="causal")
         elif 'alpaca' in args.model_name:
             model_factory = ZeroShotAlpaca if args.use_zero_shot else FewShotAlpaca
             model = model_factory(model_name="Alpaca-LoRA")
+            domain_model = ZeroShotAlpaca(model_name="Alpaca-LoRA")
         else:
             tokenizer = AutoTokenizer.from_pretrained(args.model_name, cache_dir=args.cache_dir)
-            model = AutoModelForSeq2SeqLM.from_pretrained(args.model_name,
+            model_w = AutoModelForSeq2SeqLM.from_pretrained(args.model_name,
                                                         low_cpu_mem_usage=True,
                                                         cache_dir=args.cache_dir,
                                                         device_map="auto",
                                                         load_in_8bit=True)
             model_factory = SimplePromptedLLM if args.use_zero_shot else FewShotPromptedLLM
-            model = model_factory(model, tokenizer, type="seq2seq")
+            model = model_factory(model_w, tokenizer, type="seq2seq")
+            domain_model = SimplePromptedLLM(model_w, tokenizer, type="seq2seq")
 
     else:
         wandb_run = wandb.init(project="llmbot", entity='hlava', id=args.from_wandb_id)
@@ -141,9 +149,10 @@ if __name__ == "__main__":
     last_dial_id = None
     total = args.dials_total
     if args.dataset == 'multiwoz':
-        data_gen = load_mwoz(args.database_path, args.context_size, split=args.split, total=total, shuffle=False, only_single_domain=True)
+        data_gen = \
+            load_mwoz(args.database_path, args.context_size, split=args.split, total=total, shuffle=False, only_single_domain=args.single_domain, restrict_domains=args.restrict_domains.split(",") if args.restrict_domains is not None else None)
     else:
-        data_gen = load_sgd(args.context_size, split=args.split, total=total, shuffle=True)
+        data_gen = load_sgd(args.context_size, split=args.split, total=total, shuffle=True, only_single_domain=args.single_domain, restrict_domains=args.restrict_domains.split(",") if args.restrict_domains is not None else None)
     tn = 0
     progress_bar = tqdm.tqdm(total=total)
     if wandb_run is not None:
@@ -152,8 +161,10 @@ if __name__ == "__main__":
         predictions_table = art.get("examples").data
         predictions_table = {dial_id: {"context": ctx,
                                        "raw_state": rs,
+                                       "domain": dom,
+                                       "predicted_domain": pred_dom,
                                        "parsed_state": json.loads(ps),
-                                       "response": resp} for dial_id, ctx, rs, ps, resp in predictions_table}
+                                       "response": resp} for dial_id, ctx, rs, ps, resp, pred_dom, dom  in predictions_table}
     else:
         predictions_table = None
 
@@ -175,15 +186,16 @@ if __name__ == "__main__":
         tn += 1
         if predictions_table is not None:
             example = predictions_table[f"{dialogue_id.lower()}-{tn}"]
+            domain_key = "domain"
             results[dialogue_id].append({
-                "domain": "restaurant",
-                "active_domains": ["restaurant"],
+                "domain": example[domain_key],
+                "active_domains": [example[domain_key]],
                 "response": example["response"],
                 "state": example["parsed_state"],
             })
             results_wo_state[dialogue_id].append({
-                "domain": "restaurant",
-                "active_domains": ["restaurant"],
+                "domain": example[domain_key],
+                "active_domains": [example[domain_key]],
                 "response": example["response"],
             })
         else:
@@ -201,17 +213,29 @@ if __name__ == "__main__":
                     else:
                         new_gt_state[domain][sl] = val
             retrieve_history = history + ["Customer: " + question]
-            retrieved_examples = example_retriever.retrieve("\n".join(retrieve_history[-args.context_size:]), k=10)
+            retrieved_examples = example_retriever.retrieve("\n".join(retrieve_history[-args.context_size:]), k=20)
             retrieved_domains = [example['domain'] for example in retrieved_examples]
-            selected_domain = Counter(retrieved_domains).most_common(1)[0][0]
+            selected_domain, dp = domain_model(domain_prompt, predict=True, history="\n".join(history[-2:]), utterance=F"Customer: {question.strip()}")
+            if args.dataset == 'multiwoz':
+                available_domains = list(MW_FEW_SHOT_DOMAIN_DEFINITIONS.keys())
+            else:
+                available_domains = list(SGD_FEW_SHOT_DOMAIN_DEFINITIONS.keys())
+            if selected_domain not in available_domains:
+                selected_domain = random.choice(available_domains)
+            if args.dataset == 'multiwoz':
+                domain_definition = MW_ZERO_SHOT_DOMAIN_DEFINITIONS[selected_domain] if args.use_zero_shot else MW_FEW_SHOT_DOMAIN_DEFINITIONS[selected_domain]
+            else:
+                domain_definition = SGD_ZERO_SHOT_DOMAIN_DEFINITIONS[selected_domain] if args.use_zero_shot else SGD_FEW_SHOT_DOMAIN_DEFINITIONS[selected_domain]
+            print(f"PREDICTED DOMAIN: {selected_domain}")
+            # selected_domain = Counter(retrieved_domains).most_common(1)[0][0]
             if args.use_gt_domain:
                 selected_domain = gt_domain
             if previous_domain != selected_domain:
                #  total_state = {}
                 previous_domain = selected_domain
             retrieved_examples = [example for example in retrieved_examples if example['domain'] == selected_domain]
-            state_examples = [example for example in state_retriever.retrieve("\n".join(retrieve_history[-args.context_size:]), k=7) if example['domain'] == selected_domain]
             num_examples = min(len(retrieved_examples), args.num_examples)
+            state_examples = [example for example in state_retriever.retrieve("\n".join(retrieve_history[-args.context_size:]), k=20) if example['domain'] == selected_domain][:num_examples]
             positive_state_examples = example_formatter.format(state_examples[:num_examples],
                                                                input_keys=["context"],
                                                                output_keys=["state"])
@@ -223,12 +247,6 @@ if __name__ == "__main__":
                                                          input_keys=["context", "state", "database"],
                                                          output_keys=["response"])
             
-            if args.dataset == 'multiwoz':
-                domain_definition = MW_ZERO_SHOT_DOMAIN_DEFINITIONS[selected_domain] if args.use_zero_shot else MW_FEW_SHOT_DOMAIN_DEFINITIONS[selected_domain]
-                available_domains = list(MW_FEW_SHOT_DOMAIN_DEFINITIONS.keys())
-            else:
-                domain_definition = SGD_ZERO_SHOT_DOMAIN_DEFINITIONS[selected_domain] if args.use_zero_shot else SGD_FEW_SHOT_DOMAIN_DEFINITIONS[selected_domain]
-                available_domains = list(SGD_FEW_SHOT_DOMAIN_DEFINITIONS.keys())
             state_prompt = domain_definition.state_prompt
             response_prompt = domain_definition.response_prompt
             
@@ -308,6 +326,7 @@ if __name__ == "__main__":
                     kwargs["positive_examples"] = response_examples
                     kwargs["negative_examples"] = []
 
+                # response, filled_prompt = "IDK", "-"
                 response, filled_prompt = model(response_prompt, predict=True, **kwargs)
                 if n < 5:
                     print("Filled response prompt:", filled_prompt)
@@ -337,6 +356,8 @@ if __name__ == "__main__":
                 "active_domains": [selected_domain],
                 "response": response,
             })
+        if predictions_table is None and n % 100 == 0:
+            wandb.log({"examples": report_table})
     progress_bar.close()
     if predictions_table is None:
         wandb.log({"examples": report_table})
@@ -344,6 +365,7 @@ if __name__ == "__main__":
     if args.dataset == 'multiwoz':
         evaluator = MWEvaluator(bleu=True, success=True, richness=True, jga=True, dst=True)
         eval_results = evaluator.evaluate(results)
+        print(eval_results)
         for metric, values in eval_results.items():
             if values is not None:
                 for k, v in values.items():

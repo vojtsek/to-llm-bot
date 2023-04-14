@@ -31,7 +31,7 @@ if __name__ == '__main__':
 
     if args.dataset == 'multiwoz':
         available_domains = [d for d in MW_FEW_SHOT_DOMAIN_DEFINITIONS.keys() if d != 'bus']
-        data_gen = load_mwoz(args.database_path, args.context_size, split=args.split, total=args.total, available_domains=available_domains, shuffle=True)
+        data_gen = load_mwoz(args.database_path, args.context_size, split=args.split, total=args.total, available_domains=available_domains, shuffle=True, only_single_domain=True)
     else:
         available_domains = list(SGD_FEW_SHOT_DOMAIN_DEFINITIONS.keys())
         data_gen = load_sgd(args.context_size, split=args.split, total=args.total, available_domains=available_domains, shuffle=True)

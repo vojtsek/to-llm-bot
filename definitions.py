@@ -1,6 +1,29 @@
 from dataclasses import dataclass
 from prompts import FewShotPrompt, SimpleTemplatePrompt
 
+domain_prompt = SimpleTemplatePrompt(template="""
+Determine which domain is considered in the following dialogue situation.
+Choose one domain from this list:
+ - restaurant
+ - hotel
+ - attraction
+ - taxi
+ - train
+Answer with only one word, the selected domain from the list.
+You have to always select the closest possible domain.
+""
+Example:
+Customer: I need a cheap place to eat
+Assistant: We have several not expensive places available. What foor are you interested in?
+Customer: Chinese food.
+
+Domain: restaurant
+""
+
+Now complete the following example:
+{}
+{}
+Domain:""", args_order=["history", "utterance"])
 
 """
 ######################
@@ -11,12 +34,15 @@ FEW SHOT
 @dataclass
 class FewShotRestaurantDefinition:
     state_prompt = FewShotPrompt(template="""
-Definition: Capture values from converstation in JSON according to examples.
+Capture entity values from converstation in JSON according to examples.
 Values that should be captured are:
  - "pricerange" that specifies the price range of the restaurant (cheap/moderate/expensive)
  - "area" that specifies the area where the restaurant is located (north/east/west/south/centre)
  - "food" that specifies the type of food the restaurant serves
  - "name" that specifies the name of the restaurant
+ - "bookday" that specifies the day of the booking
+ - "booktime" that specifies the time of the booking
+ - "bookpeople" that specifies for how many people is the booking made
 Do not capture ay other values!
 If not specified, leave the value empty.
 ""{}{}""
@@ -32,6 +58,7 @@ You can search for a restaurant by area, food, or price.
 There is also a number of restaurants in the database currently corresponding to the user's request.
 If you find a restaurant, provide [restaurant_name], [restaurant_address], [restaurant_phone] or [restaurant_postcode] if asked.
 If booking, provide [reference] in the answer.
+Always act as if the booking is successfully done.
 ""{}{}""
 Now complete the following example:
 input:{}
@@ -40,7 +67,7 @@ state: {}
 database: {}
 output:response:""",
                                 args_order=["history", "utterance", "state", "database"])
-    expected_slots = ["pricerange", "area", "food", "name"]
+    expected_slots = ["pricerange", "area", "food", "name", "bookday", "bookpeople", "booktime"]
 
 
 @dataclass
@@ -54,6 +81,10 @@ Values that should be captured are:
  - "stars" that specifies the number of stars the hotel has (1/2/3/4/5)
  - "type" that specifies the type of the hotel (hotel/bed and breakfast/guest house)
  - "pricerange" that specifies the price range of the hotel (cheap/expensive)
+ - "name" that specifies name of the hotel
+ - "bookstay" specifies length of the stay
+ - "bookday" specifies the day of the booking
+ - "bookpeople" specifies how many people should be booked for.
 Do not capture ay other values!
 If not specified, leave the value empty.
 ""{}{}""
@@ -66,9 +97,10 @@ state:""",
     response_prompt = FewShotPrompt(template="""
     Definition: You are an assistant that helps people to book a hotel.
 The customer can ask for a hotel by name, area, parking, internet availability, or price.
-There is also a number of hotel in the database currently corresponding to the user's request.
-If you find a hotel, provide [hotel_name], [hotel_address], [hotel_phone] or [hotel_postcode] if asked.
+There is also a number of hotels in the database currently corresponding to the user's request.
+If you find a hotel, provide [hotel_name], [hotel_address], [hotel_phone] or [hotel_postcode] if asked. Use brackets like that.
 If booking, provide [reference] in the answer.
+Always act as if the booking is successfully done.
 ""{}{}""
 Now complete the following example:
 input:{}
@@ -77,7 +109,7 @@ state: {}
 database: {}
 output:response:""",
                                 args_order=["history", "utterance", "state", "database"])
-    expected_slots = ["area", "internet", "parking", "stars", "type", "pricerange"]
+    expected_slots = ["area", "internet", "parking", "stars", "type", "pricerange", "name", "booktime", "bookpeople", "bookstay"]
 
 
 @dataclass
@@ -85,11 +117,12 @@ class FewShotTrainDefinition:
     state_prompt = FewShotPrompt(template="""
 Definition: Capture values from converstation in JSON according to examples.
 Values that should be captured are:
- - "arriveBy" that specifies what time the train should arrive
- - "leaveAt" that specifies what time the train should leave
+ - "arriveby" that specifies what time the train should arrive
+ - "leaveat" that specifies what time the train should leave
  - "day" that specifies what day the train should leave (monday/tuesday/wednesday/thursday/friday/saturday/sunday)
  - "departure" that specifies the departure station
  - "destination" that specifies the destination station
+ - "bookpeople" that specifies how many people the booking is for
 Do not capture ay other values!
 If not specified, leave the value empty.
 ""{}{}""
@@ -113,7 +146,7 @@ state: {}
 database: {}
 output:response:""",
                                 args_order=["history", "utterance", "state", "database"])
-    expected_slots = ["arriveBy", "leaveAt", "day", "departure", "destination"]
+    expected_slots = ["arriveby", "leaveat", "bookpeople", "day", "departure", "destination"]
 
 
 @dataclass
@@ -122,11 +155,10 @@ class FewShotTaxiDefinition:
 Definition: Capture values from converstation in JSON according to examples.
 If not specified, leave the value empty.
 Values that should be captured are:
- - "arriveBy" that specifies what time the train should arrive
- - "leaveAt" that specifies what time the train should leave
+ - "arriveby" that specifies what time the train should arrive
+ - "leaveat" that specifies what time the train should leave
  - "departure" that specifies the departure station
  - "destination" that specifies the destination station
- - "day" that specifies what day the train should leave (monday/tuesday/wednesday/thursday/friday/saturday/sunday)
 ""{}{}""
 Now complete the following example:
 input: {}
@@ -136,6 +168,7 @@ state:""",
                                     args_order=["history", "utterance"])
     response_prompt = FewShotPrompt(template="""
 Definition: You are an assistant that helps people to book a taxi.
+If you find a taxi, provide the type of the car as [type] and [phone] as the phone number in the answer.
 ""{}{}""
 Now complete the following example:
 input:{}
@@ -144,7 +177,7 @@ state: {}
 database: {}
 output:response:""",
                                 args_order=["history", "utterance", "state", "database"])
-    expected_slots = ['departure', 'destination', 'leaveAt', 'arriveBy']
+    expected_slots = ['departure', 'destination', 'leaveat', 'arriveby']
 
 
 
@@ -152,6 +185,7 @@ output:response:""",
 class FewShotHospitalDefinition:
     state_prompt = FewShotPrompt(template="""
 Definition: Capture values from converstation in JSON according to examples.
+ - "department" that specifies the department of interest
 If not specified, leave the value empty.
 ""{}{}""
 Now complete the following example:
@@ -170,7 +204,7 @@ state: {}
 database: {}
 output:response:""",
                                 args_order=["history", "utterance", "state", "database"])
-    expected_slots = []
+    expected_slots = ['department']
 
 
 
@@ -206,6 +240,7 @@ Definition: Capture values from converstation in JSON according to examples.
 Values that should be captured are:
  - "type" that specifies the type of attraction (museum/gallery/theatre/concert/stadium)
  - "area" that specifies the area where the attraction is located (north/east/west/south/centre)
+ - "name" that specigies the name of the attraction
 Do not capture ay other values!
 If not specified, leave the value empty.
 ""{}{}""
@@ -228,7 +263,7 @@ state: {}
 database: {}
 output:response:""",
                                 args_order=["history", "utterance", "state", "database"])
-    expected_slots = ["type", "area"]
+    expected_slots = ["type", "area", "name"]
 
 
 """

@@ -123,6 +123,10 @@ def get_jga(input_data):
                     turn_correct = False
                     break
                 for slot, value in gold_domain_state.items():
+                    #if slot.startswith('book'):
+                    #    continue
+                    if value in ['', '?', 'dontcare']:
+                        continue
                     if slot not in turn["state"][domain]:
                         turn_correct = False
                         break
@@ -322,6 +326,10 @@ def get_dst(input_data, reference_states, fuzzy_ratio=95):
                 fp += 1
         for slot, value in ref.items():
             if slot not in hyp or fuzz.partial_ratio(hyp[slot], value) <= fuzzy_ratio:
+                #if slot[1].startswith('book'):
+                #    continue
+                if value in ['', '?', 'dontcare']:
+                    continue
                 fn += 1
         return tp, fp, fn
 

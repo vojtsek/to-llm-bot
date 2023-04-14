@@ -24,8 +24,11 @@ def parse_state(state: str, default_domain: str) -> Dict[str, str]:
                 dct[key] = str(dct[key])
         return dct
 
-
-    state = str(state) + '}'
+    state = str(state)
+    if not state.startswith("{"):
+        state = "{" + state
+    if not state.endswith("}"):
+        state = state + '}'
     state = state.replace('<', '{').replace('>', '}')
     try:
         state = dirtyjson.loads(state)
@@ -137,7 +140,7 @@ class ExampleFormatter:
     def _example_to_str(self, example: Dict) -> Dict:
         for key, val in example.items():
             if isinstance(val, dict):
-                example[key] = json.dumps(val).replace("{", '<').replace("}", '>')
+                example[key] = json.dumps(val) # .replace("{", '<').replace("}", '>')
             else:
                 example[key] = str(val)
         return example
