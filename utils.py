@@ -25,6 +25,14 @@ def parse_state(state: str, default_domain: str) -> Dict[str, str]:
         return dct
 
     state = str(state)
+    slotvals = re.findall("([a-z]+:('(([a-z]| |[A-Z])+')|[A-Za-z]+))", state)
+    out_state = {}
+    for sv in slotvals:
+        sv = sv[0].strip().split(':')
+        if len(sv) != 2:
+            continue
+        out_state[sv[0]] = sv[1].strip("'")
+    return {default_domain: sanitize(out_state)}
     if not state.startswith("{"):
         state = "{" + state
     if not state.endswith("}"):
@@ -140,7 +148,8 @@ class ExampleFormatter:
     def _example_to_str(self, example: Dict) -> Dict:
         for key, val in example.items():
             if isinstance(val, dict):
-                example[key] = json.dumps(val) # .replace("{", '<').replace("}", '>')
+                #example[key] = json.dumps(val) # .replace("{", '<').replace("}", '>')
+                example[key] = "-".join((f"{slot}:'{value}'" for slot, value in val.items()))
             else:
                 example[key] = str(val)
         return example

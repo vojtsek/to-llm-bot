@@ -39,5 +39,5 @@ shift
 if [[ "${dataset}" == "sgd" ]]; then
     python run.py --model_name $MODEL --faiss_db sgd-context-2-10perdomain.vec --num_examples 2 --database_path multiwoz_database --context_size 2 --output results.txt --dataset sgd $@
 else
-    python run.py --model_name $MODEL --faiss_db mw-context-2-10perdomain.vec --num_examples 5 --database_path multiwoz_database --context_size 2 --output results.txt --dataset multiwoz $@
+    python run.py --model_name $MODEL --faiss_db mw-context-2-10perdomain.vec --num_examples 2 --database_path multiwoz_database --context_size 2 --output results.txt --dataset multiwoz $@
 fi

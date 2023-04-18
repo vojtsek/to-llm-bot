@@ -34,7 +34,9 @@ FEW SHOT
 @dataclass
 class FewShotRestaurantDefinition:
     state_prompt = FewShotPrompt(template="""
-Capture entity values from converstation in JSON according to examples.
+Capture entity values from converstation according to examples.
+Capture pair "entity:value" separated by colon and no spaces in between.
+Separate entity:value pairs by hyphens.
 Values that should be captured are:
  - "pricerange" that specifies the price range of the restaurant (cheap/moderate/expensive)
  - "area" that specifies the area where the restaurant is located (north/east/west/south/centre)
@@ -73,7 +75,10 @@ output:response:""",
 @dataclass
 class FewShotHotelDefinition:
     state_prompt = FewShotPrompt(template="""
-Definition: Capture values from converstation in JSON according to examples.
+Capture entity values from converstation according to examples.
+Capture pair "entity:value" separated by colon and no spaces in between.
+Separate entity:value pairs by hyphens.
+
 Values that should be captured are:
  - "area" that specifies the area where the hotel is located (north/east/west/south/centre)
  - "internet" that specifies if the hotel has internet (yes/no)
@@ -115,7 +120,10 @@ output:response:""",
 @dataclass
 class FewShotTrainDefinition:
     state_prompt = FewShotPrompt(template="""
-Definition: Capture values from converstation in JSON according to examples.
+Capture entity values from converstation according to examples.
+Capture pair "entity:value" separated by colon and no spaces in between.
+Separate entity:value pairs by hyphens.
+
 Values that should be captured are:
  - "arriveby" that specifies what time the train should arrive
  - "leaveat" that specifies what time the train should leave
@@ -152,7 +160,10 @@ output:response:""",
 @dataclass
 class FewShotTaxiDefinition:
     state_prompt = FewShotPrompt(template="""
-Definition: Capture values from converstation in JSON according to examples.
+Capture entity values from converstation according to examples.
+Capture pair "entity:value" separated by colon and no spaces in between.
+Separate entity:value pairs by hyphens.
+
 If not specified, leave the value empty.
 Values that should be captured are:
  - "arriveby" that specifies what time the train should arrive
@@ -184,7 +195,10 @@ output:response:""",
 @dataclass
 class FewShotHospitalDefinition:
     state_prompt = FewShotPrompt(template="""
-Definition: Capture values from converstation in JSON according to examples.
+Capture entity values from converstation according to examples.
+Capture pair "entity:value" separated by colon and no spaces in between.
+Separate entity:value pairs by hyphens.
+
  - "department" that specifies the department of interest
 If not specified, leave the value empty.
 ""{}{}""
@@ -211,7 +225,10 @@ output:response:""",
 @dataclass
 class FewShotBusDefinition:
     state_prompt = FewShotPrompt(template="""
-Definition: Capture values from converstation in JSON according to examples.
+Capture entity values from converstation according to examples.
+Capture pair "entity:value" separated by colon and no spaces in between.
+Separate entity:value pairs by hyphens.
+
 If not specified, leave the value empty.
 ""{}{}""
 Now complete the following example:
@@ -236,7 +253,10 @@ output:response:""",
 @dataclass
 class FewShotAttractionDefinition:
     state_prompt = FewShotPrompt(template="""
-Definition: Capture values from converstation in JSON according to examples.
+Capture entity values from converstation according to examples.
+Capture pair "entity:value" separated by colon and no spaces in between.
+Separate entity:value pairs by hyphens.
+
 Values that should be captured are:
  - "type" that specifies the type of attraction (museum/gallery/theatre/concert/stadium)
  - "area" that specifies the area where the attraction is located (north/east/west/south/centre)
@@ -276,7 +296,9 @@ ZERO SHOT
 @dataclass
 class ZeroShotRestaurantDefinition:
     state_prompt = SimpleTemplatePrompt(template="""
-Definition: Capture values from converstation in JSON.
+Capture entity values from converstation according to examples.
+Capture pair "entity:value" separated by colon and no spaces in between.
+Separate entity:value pairs by hyphens.
 Values that should be captured are:
  - "pricerange" that specifies the price range of the restaurant (cheap/moderate/expensive)
  - "area" that specifies the area where the restaurant is located (north/east/west/south/centre)
@@ -307,7 +329,9 @@ output:""",
 @dataclass
 class ZeroShotHotelDefinition:
     state_prompt = SimpleTemplatePrompt(template="""
-Definition: Capture values from converstation in JSON.
+Capture entity values from converstation according to examples.
+Capture pair "entity:value" separated by colon and no spaces in between.
+Separate entity:value pairs by hyphens.
 Values that should be captured are:
  - "area" that specifies the area where the hotel is located (north/east/west/south/centre)
  - "internet" that specifies if the hotel has internet (yes/no)
@@ -340,7 +364,9 @@ output:""",
 @dataclass
 class ZeroShotTrainDefinition:
     state_prompt = SimpleTemplatePrompt(template="""
-Definition: Capture values from converstation in JSON.
+Capture entity values from converstation according to examples.
+Capture pair "entity:value" separated by colon and no spaces in between.
+Separate entity:value pairs by hyphens.
 Values that should be captured are:
  - "arriveBy" that specifies what time the train should arrive
  - "leaveAt" that specifies what time the train should leave
@@ -372,7 +398,9 @@ output:""",
 @dataclass
 class ZeroShotTaxiDefinition:
     state_prompt = SimpleTemplatePrompt(template="""
-Definition: Capture values from converstation in JSON.
+Capture entity values from converstation according to examples.
+Capture pair "entity:value" separated by colon and no spaces in between.
+Separate entity:value pairs by hyphens.
 If not specified, leave the value empty.
 Values that should be captured are:
  - "arriveBy" that specifies what time the train should arrive
@@ -400,7 +428,9 @@ output:""",
 @dataclass
 class ZeroShotHospitalDefinition:
     state_prompt = SimpleTemplatePrompt(template="""
-Definition: Capture values from converstation in JSON according to examples.
+Capture entity values from converstation according to examples.
+Capture pair "entity:value" separated by colon and no spaces in between.
+Separate entity:value pairs by hyphens.
 If not specified, leave the value empty.
 input: {}
 Customer: {}
@@ -422,7 +452,9 @@ output:response:""",
 @dataclass
 class ZeroShotBusDefinition:
     state_prompt = SimpleTemplatePrompt(template="""
-Definition: Capture values from converstation in JSON according to examples.
+Capture entity values from converstation according to examples.
+Capture pair "entity:value" separated by colon and no spaces in between.
+Separate entity:value pairs by hyphens.
 If not specified, leave the value empty.
 input: {}
 Customer: {}
@@ -443,7 +475,9 @@ output:response:""",
 @dataclass
 class ZeroShotAttractionDefinition:
     state_prompt = SimpleTemplatePrompt(template="""
-Definition: Capture values from converstation in JSON.
+Capture entity values from converstation according to examples.
+Capture pair "entity:value" separated by colon and no spaces in between.
+Separate entity:value pairs by hyphens.
 Values that should be captured are:
  - "type" that specifies the type of attraction (museum/gallery/theatre/concert/stadium)
  - "area" that specifies the area where the attraction is located (north/east/west/south/centre)
@@ -493,7 +527,9 @@ MW_ZERO_SHOT_DOMAIN_DEFINITIONS = {
 @dataclass
 class FewShotSGD_ServicesDefinition:
     state_prompt = FewShotPrompt(template="""
-Definition: Capture values from converstation in JSON according to examples.
+Capture entity values from converstation according to examples.
+Capture pair "entity:value" separated by colon and no spaces in between.
+Separate entity:value pairs by hyphens.
 Values that should be captured are:
  - type; type of the service
  - offers_cosmetic_services;
@@ -530,7 +566,9 @@ output:""", args_order=["history", "utterance", "state", "database"])
 @dataclass
 class FewShotSGD_EventsDefinition:
     state_prompt = FewShotPrompt(template="""
-Definition: Capture values from conversation in JSON according to examples.
+Capture entity values from converstation according to examples.
+Capture pair "entity:value" separated by colon and no spaces in between.
+Separate entity:value pairs by hyphens.
 Values that should be captured are:
 
 event_type; type of the event
@@ -568,7 +606,9 @@ output:""", args_order=["history", "utterance", "state", "database"])
 @dataclass
 class FewShotSGD_MoviesDefinition:
     state_prompt = FewShotPrompt(template="""
-Definition: Capture values from conversation in JSON according to examples.
+Capture entity values from converstation according to examples.
+Capture pair "entity:value" separated by colon and no spaces in between.
+Separate entity:value pairs by hyphens.
 Values that should be captured are:
 
 theater_name; name of the theater where the movie is being screened
@@ -612,7 +652,9 @@ output:""", args_order=["history", "utterance", "state", "database"])
 @dataclass
 class FewShotSGD_HotelsDefinition:
     state_prompt = FewShotPrompt(template="""
-Definition: Capture values from conversation in JSON according to examples.
+Capture entity values from converstation according to examples.
+Capture pair "entity:value" separated by colon and no spaces in between.
+Separate entity:value pairs by hyphens.
 Values that should be captured are:
 
 where_to; destination of the hotel
@@ -668,7 +710,9 @@ output:""", args_order=["history", "utterance", "state", "database"])
 @dataclass
 class FewShotSGD_FlightsDefinition:
     state_prompt = FewShotPrompt(template="""
-Definition: Capture values from conversation in JSON according to examples.
+Capture entity values from converstation according to examples.
+Capture pair "entity:value" separated by colon and no spaces in between.
+Separate entity:value pairs by hyphens.
 Values that should be captured are:
  - seating_class; the seating class of the flight
  - passengers; number of passengers travelling
@@ -709,7 +753,9 @@ output:""", args_order=["history", "utterance", "state", "database"])
 @dataclass
 class FewShotSGD_MusicDefinition:
     state_prompt = FewShotPrompt(template="""
-Definition: Capture values from conversation in JSON according to examples.
+Capture entity values from converstation according to examples.
+Capture pair "entity:value" separated by colon and no spaces in between.
+Separate entity:value pairs by hyphens.
 Values that should be captured are:
  - genre; genre of the songs
  - year; year the song or ablum was released
@@ -745,7 +791,9 @@ output:""", args_order=["history", "utterance", "state", "database"])
 @dataclass
 class FewShotSGD_RestaurantsDefinition:
     state_prompt = FewShotPrompt(template="""
-Definition: Capture values from conversation in JSON according to examples.
+Capture entity values from converstation according to examples.
+Capture pair "entity:value" separated by colon and no spaces in between.
+Separate entity:value pairs by hyphens.
 Values that should be captured are:
 
 serves_alcohol;
@@ -790,7 +838,9 @@ output:""", args_order=["history", "utterance", "state", "database"])
 @dataclass
 class FewShotSGD_BusesDefinition:
     state_prompt = FewShotPrompt(template="""
-Definition: Capture values from conversation in JSON according to examples.
+Capture entity values from converstation according to examples.
+Capture pair "entity:value" separated by colon and no spaces in between.
+Separate entity:value pairs by hyphens.
 Values that should be captured are:
  - group_size; the size of the group traveling
  - fare_type; type of the fare chosen
@@ -830,7 +880,9 @@ output:""", args_order=["history", "utterance", "state", "database"])
 @dataclass
 class FewShotSGD_MediaDefinition:
     state_prompt = FewShotPrompt(template="""
-Definition: Capture values from conversation in JSON according to examples.
+Capture entity values from converstation according to examples.
+Capture pair "entity:value" separated by colon and no spaces in between.
+Separate entity:value pairs by hyphens.
 Values that should be captured are:
  - directed_by; Name of the movie director
  - genre; genre of the movie
@@ -864,7 +916,9 @@ output:""", args_order=["history", "utterance", "state", "database"])
 @dataclass
 class FewShotSGD_BanksDefinition:
     state_prompt = FewShotPrompt(template="""
-Definition: Capture values from conversation in JSON according to examples.
+Capture entity values from converstation according to examples.
+Capture pair "entity:value" separated by colon and no spaces in between.
+Separate entity:value pairs by hyphens.
 Values that should be captured are:
  - account_type; the type of the account - checkings or savings
  - recipient_account_type; the account type of the recipient, checkings or savings
@@ -898,7 +952,9 @@ output:""", args_order=["history", "utterance", "state", "database"])
 @dataclass
 class FewShotSGD_RidesharingDefinition:
     state_prompt = FewShotPrompt(template="""
-Definition: Capture values from conversation in JSON according to examples.
+Capture entity values from converstation according to examples.
+Capture pair "entity:value" separated by colon and no spaces in between.
+Separate entity:value pairs by hyphens.
 Values that should be captured are:
  - ride_type; the type of the shared ride
  - destination; to where the customer wants to go
@@ -933,7 +989,9 @@ output:""", args_order=["history", "utterance", "state", "database"])
 @dataclass
 class FewShotSGD_CalendarDefinition:
     state_prompt = FewShotPrompt(template="""
-Definition: Capture values from conversation in JSON according to examples.
+Capture entity values from converstation according to examples.
+Capture pair "entity:value" separated by colon and no spaces in between.
+Separate entity:value pairs by hyphens.
 Values that should be captured are:
  - event_time; the time of the event
  - event_name; the name of the event
@@ -967,7 +1025,9 @@ output:""", args_order=["history", "utterance", "state", "database"])
 @dataclass
 class FewShotSGD_RentalDefinition:
     state_prompt = FewShotPrompt(template="""
-Definition: Capture values from conversation in JSON according to examples.
+Capture entity values from converstation according to examples.
+Capture pair "entity:value" separated by colon and no spaces in between.
+Separate entity:value pairs by hyphens.
 Values that should be captured are:
 
 type; type of the rental car
@@ -1003,7 +1063,9 @@ output:""", args_order=["history", "utterance", "state", "database"])
 @dataclass
 class FewShotSGD_HomesDefinition:
     state_prompt = FewShotPrompt(template="""
-Definition: Capture values from conversation in JSON according to examples.
+Capture entity values from converstation according to examples.
+Capture pair "entity:value" separated by colon and no spaces in between.
+Separate entity:value pairs by hyphens.
 Values that should be captured are:
 
 pets_allowed; whether pets are allowed in the property or not
@@ -1047,7 +1109,9 @@ output:""", args_order=["history", "utterance", "state", "database"])
 @dataclass
 class ZeroShotSGD_ServicesDefinition:
     state_prompt = SimpleTemplatePrompt(template="""
-Definition: Capture values from converstation in JSON according to examples.
+Capture entity values from converstation according to examples.
+Capture pair "entity:value" separated by colon and no spaces in between.
+Separate entity:value pairs by hyphens.
 Values that should be captured are:
  - type; type of the service
  - offers_cosmetic_services;
@@ -1080,7 +1144,9 @@ output:""", args_order=["history", "utterance", "state", "database"])
 @dataclass
 class ZeroShotSGD_EventsDefinition:
     state_prompt = SimpleTemplatePrompt(template="""
-Definition: Capture values from conversation in JSON according to examples.
+Capture entity values from converstation according to examples.
+Capture pair "entity:value" separated by colon and no spaces in between.
+Separate entity:value pairs by hyphens.
 Values that should be captured are:
 
 event_type; type of the event
@@ -1114,7 +1180,9 @@ output:""", args_order=["history", "utterance", "state", "database"])
 @dataclass
 class ZeroShotSGD_MoviesDefinition:
     state_prompt = SimpleTemplatePrompt(template="""
-Definition: Capture values from conversation in JSON according to examples.
+Capture entity values from converstation according to examples.
+Capture pair "entity:value" separated by colon and no spaces in between.
+Separate entity:value pairs by hyphens.
 Values that should be captured are:
 
 theater_name; name of the theater where the movie is being screened
@@ -1154,7 +1222,9 @@ output:""", args_order=["history", "utterance", "state", "database"])
 @dataclass
 class ZeroShotSGD_HotelsDefinition:
     state_prompt = SimpleTemplatePrompt(template="""
-Definition: Capture values from conversation in JSON according to examples.
+Capture entity values from converstation according to examples.
+Capture pair "entity:value" separated by colon and no spaces in between.
+Separate entity:value pairs by hyphens.
 Values that should be captured are:
 
 where_to; destination of the hotel
@@ -1206,7 +1276,9 @@ output:""", args_order=["history", "utterance", "state", "database"])
 @dataclass
 class ZeroShotSGD_FlightsDefinition:
     state_prompt = SimpleTemplatePrompt(template="""
-Definition: Capture values from conversation in JSON according to examples.
+Capture entity values from converstation according to examples.
+Capture pair "entity:value" separated by colon and no spaces in between.
+Separate entity:value pairs by hyphens.
 Values that should be captured are:
  - seating_class; the seating class of the flight
  - passengers; number of passengers travelling
@@ -1243,7 +1315,9 @@ output:""", args_order=["history", "utterance", "state", "database"])
 @dataclass
 class ZeroShotSGD_MusicDefinition:
     state_prompt = SimpleTemplatePrompt(template="""
-Definition: Capture values from conversation in JSON according to examples.
+Capture entity values from converstation according to examples.
+Capture pair "entity:value" separated by colon and no spaces in between.
+Separate entity:value pairs by hyphens.
 Values that should be captured are:
  - genre; genre of the songs
  - year; year the song or ablum was released
@@ -1275,7 +1349,9 @@ output:""", args_order=["history", "utterance", "state", "database"])
 @dataclass
 class ZeroShotSGD_RestaurantsDefinition:
     state_prompt = SimpleTemplatePrompt(template="""
-Definition: Capture values from conversation in JSON according to examples.
+Capture entity values from converstation according to examples.
+Capture pair "entity:value" separated by colon and no spaces in between.
+Separate entity:value pairs by hyphens.
 Values that should be captured are:
 
 serves_alcohol;
@@ -1316,7 +1392,9 @@ output:""", args_order=["history", "utterance", "state", "database"])
 @dataclass
 class ZeroShotSGD_BusesDefinition:
     state_prompt = SimpleTemplatePrompt(template="""
-Definition: Capture values from conversation in JSON according to examples.
+Capture entity values from converstation according to examples.
+Capture pair "entity:value" separated by colon and no spaces in between.
+Separate entity:value pairs by hyphens.
 Values that should be captured are:
  - group_size; the size of the group traveling
  - fare_type; type of the fare chosen
@@ -1352,7 +1430,9 @@ output:""", args_order=["history", "utterance", "state", "database"])
 @dataclass
 class ZeroShotSGD_MediaDefinition:
     state_prompt = SimpleTemplatePrompt(template="""
-Definition: Capture values from conversation in JSON according to examples.
+Capture entity values from converstation according to examples.
+Capture pair "entity:value" separated by colon and no spaces in between.
+Separate entity:value pairs by hyphens.
 Values that should be captured are:
  - directed_by; Name of the movie director
  - genre; genre of the movie
@@ -1382,7 +1462,9 @@ output:""", args_order=["history", "utterance", "state", "database"])
 @dataclass
 class ZeroShotSGD_BanksDefinition:
     state_prompt = SimpleTemplatePrompt(template="""
-Definition: Capture values from conversation in JSON according to examples.
+Capture entity values from converstation according to examples.
+Capture pair "entity:value" separated by colon and no spaces in between.
+Separate entity:value pairs by hyphens.
 Values that should be captured are:
  - account_type; the type of the account - checkings or savings
  - recipient_account_type; the account type of the recipient, checkings or savings
@@ -1412,7 +1494,9 @@ output:""", args_order=["history", "utterance", "state", "database"])
 @dataclass
 class ZeroShotSGD_RidesharingDefinition:
     state_prompt = SimpleTemplatePrompt(template="""
-Definition: Capture values from conversation in JSON according to examples.
+Capture entity values from converstation according to examples.
+Capture pair "entity:value" separated by colon and no spaces in between.
+Separate entity:value pairs by hyphens.
 Values that should be captured are:
  - ride_type; the type of the shared ride
  - destination; to where the customer wants to go
@@ -1443,7 +1527,9 @@ output:""", args_order=["history", "utterance", "state", "database"])
 @dataclass
 class ZeroShotSGD_CalendarDefinition:
     state_prompt = SimpleTemplatePrompt(template="""
-Definition: Capture values from conversation in JSON according to examples.
+Capture entity values from converstation according to examples.
+Capture pair "entity:value" separated by colon and no spaces in between.
+Separate entity:value pairs by hyphens.
 Values that should be captured are:
  - event_time; the time of the event
  - event_name; the name of the event
@@ -1473,7 +1559,9 @@ output:""", args_order=["history", "utterance", "state", "database"])
 @dataclass
 class ZeroShotSGD_RentalDefinition:
     state_prompt = SimpleTemplatePrompt(template="""
-Definition: Capture values from conversation in JSON according to examples.
+Capture entity values from converstation according to examples.
+Capture pair "entity:value" separated by colon and no spaces in between.
+Separate entity:value pairs by hyphens.
 Values that should be captured are:
 
 type; type of the rental car
@@ -1505,7 +1593,9 @@ output:""", args_order=["history", "utterance", "state", "database"])
 @dataclass
 class ZeroShotSGD_HomesDefinition:
     state_prompt = SimpleTemplatePrompt(template="""
-Definition: Capture values from conversation in JSON according to examples.
+Capture entity values from converstation according to examples.
+Capture pair "entity:value" separated by colon and no spaces in between.
+Separate entity:value pairs by hyphens.
 Values that should be captured are:
 
 pets_allowed; whether pets are allowed in the property or not

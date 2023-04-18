@@ -85,7 +85,7 @@ if __name__ == "__main__":
     else:
         model_name = 'GPT3.5'
     if args.from_wandb_id is None:
-        wandb.init(project='llmbot', entity='hlava', config=config)
+        wandb.init(project='llmbot', entity='hlava', config=config, settings=wandb.Settings(start_method="fork"))
         wandb.run.name = f'{args.run_name}-{args.dataset}-{model_name}-examples-{args.num_examples}-ctx-{args.context_size}'
         report_table = wandb.Table(columns=['id', 'context', 'raw_state', 'parsed_state', 'response', 'predicted_domain', 'domain'])
         wandb_run = None
@@ -235,11 +235,12 @@ if __name__ == "__main__":
                 previous_domain = selected_domain
             retrieved_examples = [example for example in retrieved_examples if example['domain'] == selected_domain]
             num_examples = min(len(retrieved_examples), args.num_examples)
-            state_examples = [example for example in state_retriever.retrieve("\n".join(retrieve_history[-args.context_size:]), k=20) if example['domain'] == selected_domain][:num_examples]
-            positive_state_examples = example_formatter.format(state_examples[:num_examples],
+            num_state_examples = 5
+            state_examples = [example for example in state_retriever.retrieve("\n".join(retrieve_history[-args.context_size:]), k=20) if example['domain'] == selected_domain][:num_state_examples]
+            positive_state_examples = example_formatter.format(state_examples[:num_state_examples],
                                                                input_keys=["context"],
                                                                output_keys=["state"])
-            negative_state_examples = example_formatter.format(state_examples[:num_examples],
+            negative_state_examples = example_formatter.format(state_examples[:num_state_examples],
                                                                input_keys=["context"],
                                                                output_keys=["state"],
                                                                corrupt_state=True)
@@ -261,7 +262,7 @@ if __name__ == "__main__":
                     }
                     if not args.use_zero_shot:
                         kwargs["positive_examples"] = positive_state_examples
-                        kwargs["negative_examples"] = negative_state_examples
+                        kwargs["negative_examples"] = [] # negative_state_examples
                     state, filled_state_prompt = model(state_prompt, predict=True, **kwargs)
                     if n < 5:
                         print("Filled prompt:", filled_state_prompt)
@@ -281,7 +282,7 @@ if __name__ == "__main__":
                         for slot, value in ds.items():
                             pass
                 except:
-                    parsed_state = {domain: {}}
+                    parsed_state = {selected_domain: {}}
                 
                 final_state = {}
                 for domain, ds in parsed_state.items():
