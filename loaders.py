@@ -72,6 +72,7 @@ def load_mwoz(database_path, context_size, split='train', total=10, shuffle=True
                     'dialogue_id': dialogue_id,
                     'metadata': {'domain': f'{domain_gt}',
                                  'state': state_update,
+                                 'full_state': last_state,
                                  'context': '\n'.join(context[-6:]),
                                  'response': delexicalize_mwoz(dialog['turns']['utterance'][tn+1],
                                                                dialog['turns']['dialogue_acts'][tn+1]['span_info']),
@@ -102,6 +103,8 @@ def load_sgd(context_size, split='train', total=10, shuffle=True, available_doma
         if all((dc >= total for dc in domain_counts.values())) or (available_domains is None and n >= total):
             break
         domain_gt = dialog['services'][0].split('_')[0].lower()
+        if available_domains is not None and domain_gt not in available_domains:
+            continue
         if domain_counts[domain_gt] >= total:
             continue
         n += 1
@@ -140,6 +143,7 @@ def load_sgd(context_size, split='train', total=10, shuffle=True, available_doma
                    'requested_slots': requested_slots,
                    'metadata': {'domain': domain_gt,
                                 'state': state_update,
+                                'full_state': last_state,
                                 'context': '\n'.join(context),
                                 'response': delexicalize_sgd(dialog['turns']['utterance'][tn+1], dialog['turns']['frames'][tn+1]),
                                 'database': {domain_gt: len(database_results['service_results_list'])}}}

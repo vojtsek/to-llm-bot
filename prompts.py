@@ -23,7 +23,8 @@ class FewShotPrompt(SimpleTemplatePrompt):
     def _process_positive_examples(self, positive_examples: list) -> Text:
         output = "\n"
         for n, example in enumerate(positive_examples):
-            output += f"Positive example {n}:\n" + \
+            output += "---------------------" + \
+                      f"Example {n}:\n" + \
                       f"input: {example['input']}\n" + \
                       f"output: \n{example['output']}\n"
         return output + "\n"

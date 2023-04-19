@@ -15,7 +15,7 @@ conda activate $conda_env
 
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/cuda/11.7/lib64/;
 #export OPENAI_API_KEY=`cat ~/.openai-hudecek`
-export OPENAI_API_KEY=`cat ~/.openai`
+export OPENAI_API_KEY=`cat ~/.openai-agnostix`
 export HUGGINGFACEHUB_API_TOKEN=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
 
 if [ -d "$CUDA_DIR_OPT" ] ; then

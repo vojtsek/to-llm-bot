@@ -101,10 +101,10 @@ if __name__ == "__main__":
         elif any([n in args.model_name for n in ['opt', 'NeoXT']]):
             tokenizer = AutoTokenizer.from_pretrained(args.model_name, cache_dir=args.cache_dir)
             model_w = AutoModelForCausalLM.from_pretrained(args.model_name,
-                                                        low_cpu_mem_usage=True,
-                                                        cache_dir=args.cache_dir,
-                                                        device_map="auto",
-                                                        load_in_8bit=True)
+                                                           low_cpu_mem_usage=True,
+                                                           cache_dir=args.cache_dir,
+                                                           device_map="auto",
+                                                           load_in_8bit=True)
             model_factory = SimplePromptedLLM if args.use_zero_shot else FewShotPromptedLLM
             model = model_factory(model_w, tokenizer, type="causal")
             domain_model = SimplePromptedLLM(model_w, tokenizer, type="causal")
@@ -220,33 +220,39 @@ if __name__ == "__main__":
                 available_domains = list(MW_FEW_SHOT_DOMAIN_DEFINITIONS.keys())
             else:
                 available_domains = list(SGD_FEW_SHOT_DOMAIN_DEFINITIONS.keys())
+            print(f"PREDICTED DOMAIN: {selected_domain}")
             if selected_domain not in available_domains:
                 selected_domain = random.choice(available_domains)
             if args.dataset == 'multiwoz':
                 domain_definition = MW_ZERO_SHOT_DOMAIN_DEFINITIONS[selected_domain] if args.use_zero_shot else MW_FEW_SHOT_DOMAIN_DEFINITIONS[selected_domain]
             else:
                 domain_definition = SGD_ZERO_SHOT_DOMAIN_DEFINITIONS[selected_domain] if args.use_zero_shot else SGD_FEW_SHOT_DOMAIN_DEFINITIONS[selected_domain]
-            print(f"PREDICTED DOMAIN: {selected_domain}")
-            # selected_domain = Counter(retrieved_domains).most_common(1)[0][0]
+            most_common_domain = Counter(retrieved_domains).most_common(1)[0][0]
             if args.use_gt_domain:
                 selected_domain = gt_domain
             if previous_domain != selected_domain:
                #  total_state = {}
                 previous_domain = selected_domain
+            if not args.use_zero_shot and selected_domain != most_common_domain:
+            #    selected_domain = most_common_domain
+                pass
             retrieved_examples = [example for example in retrieved_examples if example['domain'] == selected_domain]
             num_examples = min(len(retrieved_examples), args.num_examples)
             num_state_examples = 5
             state_examples = [example for example in state_retriever.retrieve("\n".join(retrieve_history[-args.context_size:]), k=20) if example['domain'] == selected_domain][:num_state_examples]
             positive_state_examples = example_formatter.format(state_examples[:num_state_examples],
                                                                input_keys=["context"],
-                                                               output_keys=["state"])
+                                                               output_keys=["state"],
+                                                               )
+                                                               #use_json=True)
             negative_state_examples = example_formatter.format(state_examples[:num_state_examples],
                                                                input_keys=["context"],
                                                                output_keys=["state"],
                                                                corrupt_state=True)
             response_examples = example_formatter.format(retrieved_examples[:num_examples],
-                                                         input_keys=["context", "state", "database"],
-                                                         output_keys=["response"])
+                                                         input_keys=["context", "full_state", "database"],
+                                                         output_keys=["response"],
+                                                         use_json=True)
             
             state_prompt = domain_definition.state_prompt
             response_prompt = domain_definition.response_prompt
@@ -264,7 +270,7 @@ if __name__ == "__main__":
                         kwargs["positive_examples"] = positive_state_examples
                         kwargs["negative_examples"] = [] # negative_state_examples
                     state, filled_state_prompt = model(state_prompt, predict=True, **kwargs)
-                    if n < 5:
+                    if n < 2:
                         print("Filled prompt:", filled_state_prompt)
                 except:
                     state = "{}"
@@ -320,7 +326,7 @@ if __name__ == "__main__":
                 kwargs = {
                     "history": "\n".join(history),
                     "utterance": question.strip(),
-                    "state": json.dumps(total_state).replace("{", '<').replace("}", '>'),
+                    "state": json.dumps(total_state), #.replace("{", '<').replace("}", '>'),
                     "database": str(database_results)
                 }
                 if not args.use_zero_shot:

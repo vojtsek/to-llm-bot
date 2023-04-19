@@ -25,14 +25,13 @@ def parse_state(state: str, default_domain: str) -> Dict[str, str]:
         return dct
 
     state = str(state)
-    slotvals = re.findall("([a-z]+:('(([a-z]| |[A-Z])+')|[A-Za-z]+))", state)
+    slotvals = re.findall("([a-z]+:('(([a-z]| |[A-Z]|:|[0-9])+')|[A-Za-z0-9:]+))", state)
     out_state = {}
     for sv in slotvals:
         sv = sv[0].strip().split(':')
-        if len(sv) != 2:
-            continue
-        out_state[sv[0]] = sv[1].strip("'")
+        out_state[sv[0]] = ":".join(sv[1:]).strip("'\" ")
     return {default_domain: sanitize(out_state)}
+
     if not state.startswith("{"):
         state = "{" + state
     if not state.endswith("}"):
@@ -97,6 +96,7 @@ class ExampleRetriever:
         result = self.vector_store.similarity_search(text, k=k)
         examples = [{'context': doc.metadata['context'],
                      'state': doc.metadata['state'],
+                     'full_state': doc.metadata['full_state'],
                      'response': doc.metadata['response'],
                      'database': doc.metadata['database'],
                      'domain': doc.metadata['domain']}
@@ -113,6 +113,7 @@ class ExampleFormatter:
                examples: list[Dict[str, Any]],
                input_keys: list[str],
                output_keys: list[str],
+               use_json: bool = False,
                corrupt_state: bool = False) -> list[Dict[str, str]]:
 
         examples = deepcopy(examples)
@@ -124,7 +125,7 @@ class ExampleFormatter:
                 example['state'] = example['state'][state_domains[0]] # flatten the state
             else:
                 example['state'] = {}
-        examples = [self._example_to_str(example) for example in examples]
+        examples = [self._example_to_str(example, use_json) for example in examples]
 
         def _prepare_example(example: Dict) -> Dict:
             example['input'] = '\n'.join((f"{key}: {example[key]}" for key in input_keys))
@@ -145,11 +146,13 @@ class ExampleFormatter:
                     example['state'][domain][slot] = random.choice(self.ontology[otgy_key])
         return example
     
-    def _example_to_str(self, example: Dict) -> Dict:
+    def _example_to_str(self, example: Dict, use_json=False) -> Dict:
         for key, val in example.items():
             if isinstance(val, dict):
-                #example[key] = json.dumps(val) # .replace("{", '<').replace("}", '>')
-                example[key] = "-".join((f"{slot}:'{value}'" for slot, value in val.items()))
+                if use_json:
+                    example[key] = json.dumps(val) # .replace("{", '<').replace("}", '>')
+                else:
+                    example[key] = "-".join((f"{slot}:'{value}'" for slot, value in val.items()))
             else:
                 example[key] = str(val)
         return example
