@@ -128,7 +128,7 @@ class ExampleFormatter:
         examples = [self._example_to_str(example, use_json) for example in examples]
 
         def _prepare_example(example: Dict) -> Dict:
-            example['input'] = '\n'.join((f"{key}: {example[key]}" for key in input_keys))
+            example['input'] = '\n'.join((f"{key if key != 'full_state' else 'state'}: {example[key]}" for key in input_keys))
             example['output'] = '\n'.join((f"{key}: {example[key]}" for key in output_keys))
             return example
         examples = [_prepare_example(example) for example in examples]

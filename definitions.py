@@ -15,7 +15,7 @@ Consider the last domain mentioned, so focus mainly on the last utterance.
 ""
 Example1:
 Customer: I need a cheap place to eat
-Assistant: We have several not expensive places available. What foor are you interested in?
+Assistant: We have several not expensive places available. What food are you interested in?
 Customer: Chinese food.
 
 Domain: restaurant
@@ -53,7 +53,8 @@ FEW SHOT
 @dataclass
 class FewShotRestaurantDefinition:
     state_prompt = FewShotPrompt(template="""
-Capture entity values from converstation according to examples.
+Capture entity values from last utterance of the converstation according to examples.
+Focus only on the values mentioned in the last utterance.
 Capture pair "entity:value" separated by colon and no spaces in between.
 Separate entity:value pairs by hyphens.
 Values that should be captured are:
@@ -74,7 +75,7 @@ input: {}
 Customer: {}
 output:
 state:""",
-                                    args_order=["history", "utterance"])
+                                    args_order=["history", "utterane"])
     response_prompt = FewShotPrompt(template="""
 Definition: You are an assistant that helps people to book a restaurant.
 You can search for a restaurant by area, food, or price.
@@ -98,7 +99,8 @@ output:response:""",
 @dataclass
 class FewShotHotelDefinition:
     state_prompt = FewShotPrompt(template="""
-Capture entity values from converstation according to examples.
+Capture entity values from last utterance of the converstation according to examples.
+Focus only on the values mentioned in the last utterance.
 Capture pair "entity:value" separated by colon and no spaces in between.
 Separate entity:value pairs by hyphens.
 
@@ -147,7 +149,8 @@ output:response:""",
 @dataclass
 class FewShotTrainDefinition:
     state_prompt = FewShotPrompt(template="""
-Capture entity values from converstation according to examples.
+Capture entity values from last utterance of the converstation according to examples.
+Focus only on the values mentioned in the last utterance.
 Capture pair "entity:value" separated by colon and no spaces in between.
 Separate entity:value pairs by hyphens.
 
@@ -191,7 +194,8 @@ output:response:""",
 @dataclass
 class FewShotTaxiDefinition:
     state_prompt = FewShotPrompt(template="""
-Capture entity values from converstation according to examples.
+Capture entity values from last utterance of the converstation according to examples.
+Focus only on the values mentioned in the last utterance.
 Capture pair "entity:value" separated by colon and no spaces in between.
 Separate entity:value pairs by hyphens.
 
@@ -230,7 +234,8 @@ output:response:""",
 @dataclass
 class FewShotHospitalDefinition:
     state_prompt = FewShotPrompt(template="""
-Capture entity values from converstation according to examples.
+Capture entity values from last utterance of the converstation according to examples.
+Focus only on the values mentioned in the last utterance.
 Capture pair "entity:value" separated by colon and no spaces in between.
 Separate entity:value pairs by hyphens.
 
@@ -264,7 +269,8 @@ output:response:""",
 @dataclass
 class FewShotBusDefinition:
     state_prompt = FewShotPrompt(template="""
-Capture entity values from converstation according to examples.
+Capture entity values from last utterance of the converstation according to examples.
+Focus only on the values mentioned in the last utterance.
 Capture pair "entity:value" separated by colon and no spaces in between.
 Separate entity:value pairs by hyphens.
 
@@ -296,7 +302,8 @@ output:response:""",
 @dataclass
 class FewShotAttractionDefinition:
     state_prompt = FewShotPrompt(template="""
-Capture entity values from converstation according to examples.
+Capture entity values from last utterance of the converstation according to examples.
+Focus only on the values mentioned in the last utterance.
 Capture pair "entity:value" separated by colon and no spaces in between.
 Separate entity:value pairs by hyphens.
 
@@ -343,7 +350,8 @@ ZERO SHOT
 @dataclass
 class ZeroShotRestaurantDefinition:
     state_prompt = SimpleTemplatePrompt(template="""
-Capture entity values from converstation according to examples.
+Capture entity values from last utterance of the converstation according to examples.
+Focus only on the values mentioned in the last utterance.
 Capture pair "entity:value" separated by colon and no spaces in between.
 Separate entity:value pairs by hyphens.
 Values that should be captured are:
@@ -376,7 +384,8 @@ output:""",
 @dataclass
 class ZeroShotHotelDefinition:
     state_prompt = SimpleTemplatePrompt(template="""
-Capture entity values from converstation according to examples.
+Capture entity values from last utterance of the converstation according to examples.
+Focus only on the values mentioned in the last utterance.
 Capture pair "entity:value" separated by colon and no spaces in between.
 Separate entity:value pairs by hyphens.
 Values that should be captured are:
@@ -411,7 +420,8 @@ output:""",
 @dataclass
 class ZeroShotTrainDefinition:
     state_prompt = SimpleTemplatePrompt(template="""
-Capture entity values from converstation according to examples.
+Capture entity values from last utterance of the converstation according to examples.
+Focus only on the values mentioned in the last utterance.
 Capture pair "entity:value" separated by colon and no spaces in between.
 Separate entity:value pairs by hyphens.
 Values that should be captured are:
@@ -445,7 +455,8 @@ output:""",
 @dataclass
 class ZeroShotTaxiDefinition:
     state_prompt = SimpleTemplatePrompt(template="""
-Capture entity values from converstation according to examples.
+Capture entity values from last utterance of the converstation according to examples.
+Focus only on the values mentioned in the last utterance.
 Capture pair "entity:value" separated by colon and no spaces in between.
 Separate entity:value pairs by hyphens.
 If not specified, leave the value empty.
@@ -475,7 +486,8 @@ output:""",
 @dataclass
 class ZeroShotHospitalDefinition:
     state_prompt = SimpleTemplatePrompt(template="""
-Capture entity values from converstation according to examples.
+Capture entity values from last utterance of the converstation according to examples.
+Focus only on the values mentioned in the last utterance.
 Capture pair "entity:value" separated by colon and no spaces in between.
 Separate entity:value pairs by hyphens.
 If not specified, leave the value empty.
@@ -499,7 +511,8 @@ output:response:""",
 @dataclass
 class ZeroShotBusDefinition:
     state_prompt = SimpleTemplatePrompt(template="""
-Capture entity values from converstation according to examples.
+Capture entity values from last utterance of the converstation according to examples.
+Focus only on the values mentioned in the last utterance.
 Capture pair "entity:value" separated by colon and no spaces in between.
 Separate entity:value pairs by hyphens.
 If not specified, leave the value empty.
@@ -522,7 +535,8 @@ output:response:""",
 @dataclass
 class ZeroShotAttractionDefinition:
     state_prompt = SimpleTemplatePrompt(template="""
-Capture entity values from converstation according to examples.
+Capture entity values from last utterance of the converstation according to examples.
+Focus only on the values mentioned in the last utterance.
 Capture pair "entity:value" separated by colon and no spaces in between.
 Separate entity:value pairs by hyphens.
 Values that should be captured are:
@@ -574,7 +588,8 @@ MW_ZERO_SHOT_DOMAIN_DEFINITIONS = {
 @dataclass
 class FewShotSGD_ServicesDefinition:
     state_prompt = FewShotPrompt(template="""
-Capture entity values from converstation according to examples.
+Capture entity values from last utterance of the converstation according to examples.
+Focus only on the values mentioned in the last utterance.
 Capture pair "entity:value" separated by colon and no spaces in between.
 Separate entity:value pairs by hyphens.
 Values that should be captured are:
@@ -617,7 +632,8 @@ output:""", args_order=["history", "utterance", "state", "database"])
 @dataclass
 class FewShotSGD_EventsDefinition:
     state_prompt = FewShotPrompt(template="""
-Capture entity values from converstation according to examples.
+Capture entity values from last utterance of the converstation according to examples.
+Focus only on the values mentioned in the last utterance.
 Capture pair "entity:value" separated by colon and no spaces in between.
 Separate entity:value pairs by hyphens.
 Values that should be captured are:
@@ -661,7 +677,8 @@ output:""", args_order=["history", "utterance", "state", "database"])
 @dataclass
 class FewShotSGD_MoviesDefinition:
     state_prompt = FewShotPrompt(template="""
-Capture entity values from converstation according to examples.
+Capture entity values from last utterance of the converstation according to examples.
+Focus only on the values mentioned in the last utterance.
 Capture pair "entity:value" separated by colon and no spaces in between.
 Separate entity:value pairs by hyphens.
 Values that should be captured are:
@@ -711,7 +728,8 @@ output:""", args_order=["history", "utterance", "state", "database"])
 @dataclass
 class FewShotSGD_HotelsDefinition:
     state_prompt = FewShotPrompt(template="""
-Capture entity values from converstation according to examples.
+Capture entity values from last utterance of the converstation according to examples.
+Focus only on the values mentioned in the last utterance.
 Capture pair "entity:value" separated by colon and no spaces in between.
 Separate entity:value pairs by hyphens.
 Values that should be captured are:
@@ -773,7 +791,8 @@ output:""", args_order=["history", "utterance", "state", "database"])
 @dataclass
 class FewShotSGD_FlightsDefinition:
     state_prompt = FewShotPrompt(template="""
-Capture entity values from converstation according to examples.
+Capture entity values from last utterance of the converstation according to examples.
+Focus only on the values mentioned in the last utterance.
 Capture pair "entity:value" separated by colon and no spaces in between.
 Separate entity:value pairs by hyphens.
 Values that should be captured are:
@@ -820,7 +839,8 @@ output:""", args_order=["history", "utterance", "state", "database"])
 @dataclass
 class FewShotSGD_MusicDefinition:
     state_prompt = FewShotPrompt(template="""
-Capture entity values from converstation according to examples.
+Capture entity values from last utterance of the converstation according to examples.
+Focus only on the values mentioned in the last utterance.
 Capture pair "entity:value" separated by colon and no spaces in between.
 Separate entity:value pairs by hyphens.
 Values that should be captured are:
@@ -862,7 +882,8 @@ output:""", args_order=["history", "utterance", "state", "database"])
 @dataclass
 class FewShotSGD_RestaurantsDefinition:
     state_prompt = FewShotPrompt(template="""
-Capture entity values from converstation according to examples.
+Capture entity values from last utterance of the converstation according to examples.
+Focus only on the values mentioned in the last utterance.
 Capture pair "entity:value" separated by colon and no spaces in between.
 Separate entity:value pairs by hyphens.
 Values that should be captured are:
@@ -913,7 +934,8 @@ output:""", args_order=["history", "utterance", "state", "database"])
 @dataclass
 class FewShotSGD_BusesDefinition:
     state_prompt = FewShotPrompt(template="""
-Capture entity values from converstation according to examples.
+Capture entity values from last utterance of the converstation according to examples.
+Focus only on the values mentioned in the last utterance.
 Capture pair "entity:value" separated by colon and no spaces in between.
 Separate entity:value pairs by hyphens.
 Values that should be captured are:
@@ -959,7 +981,8 @@ output:""", args_order=["history", "utterance", "state", "database"])
 @dataclass
 class FewShotSGD_MediaDefinition:
     state_prompt = FewShotPrompt(template="""
-Capture entity values from converstation according to examples.
+Capture entity values from last utterance of the converstation according to examples.
+Focus only on the values mentioned in the last utterance.
 Capture pair "entity:value" separated by colon and no spaces in between.
 Separate entity:value pairs by hyphens.
 Values that should be captured are:
@@ -999,7 +1022,8 @@ output:""", args_order=["history", "utterance", "state", "database"])
 @dataclass
 class FewShotSGD_BanksDefinition:
     state_prompt = FewShotPrompt(template="""
-Capture entity values from converstation according to examples.
+Capture entity values from last utterance of the converstation according to examples.
+Focus only on the values mentioned in the last utterance.
 Capture pair "entity:value" separated by colon and no spaces in between.
 Separate entity:value pairs by hyphens.
 Values that should be captured are:
@@ -1039,7 +1063,8 @@ output:""", args_order=["history", "utterance", "state", "database"])
 @dataclass
 class FewShotSGD_RidesharingDefinition:
     state_prompt = FewShotPrompt(template="""
-Capture entity values from converstation according to examples.
+Capture entity values from last utterance of the converstation according to examples.
+Focus only on the values mentioned in the last utterance.
 Capture pair "entity:value" separated by colon and no spaces in between.
 Separate entity:value pairs by hyphens.
 Values that should be captured are:
@@ -1080,7 +1105,8 @@ output:""", args_order=["history", "utterance", "state", "database"])
 @dataclass
 class FewShotSGD_CalendarDefinition:
     state_prompt = FewShotPrompt(template="""
-Capture entity values from converstation according to examples.
+Capture entity values from last utterance of the converstation according to examples.
+Focus only on the values mentioned in the last utterance.
 Capture pair "entity:value" separated by colon and no spaces in between.
 Separate entity:value pairs by hyphens.
 Values that should be captured are:
@@ -1120,7 +1146,8 @@ output:""", args_order=["history", "utterance", "state", "database"])
 @dataclass
 class FewShotSGD_RentalDefinition:
     state_prompt = FewShotPrompt(template="""
-Capture entity values from converstation according to examples.
+Capture entity values from last utterance of the converstation according to examples.
+Focus only on the values mentioned in the last utterance.
 Capture pair "entity:value" separated by colon and no spaces in between.
 Separate entity:value pairs by hyphens.
 Values that should be captured are:
@@ -1162,7 +1189,8 @@ output:""", args_order=["history", "utterance", "state", "database"])
 @dataclass
 class FewShotSGD_HomesDefinition:
     state_prompt = FewShotPrompt(template="""
-Capture entity values from converstation according to examples.
+Capture entity values from last utterance of the converstation according to examples.
+Focus only on the values mentioned in the last utterance.
 Capture pair "entity:value" separated by colon and no spaces in between.
 Separate entity:value pairs by hyphens.
 Values that should be captured are:
@@ -1212,7 +1240,8 @@ output:""", args_order=["history", "utterance", "state", "database"])
 @dataclass
 class ZeroShotSGD_ServicesDefinition:
     state_prompt = SimpleTemplatePrompt(template="""
-Capture entity values from converstation according to examples.
+Capture entity values from last utterance of the converstation according to examples.
+Focus only on the values mentioned in the last utterance.
 Capture pair "entity:value" separated by colon and no spaces in between.
 Separate entity:value pairs by hyphens.
 Values that should be captured are:
@@ -1247,7 +1276,8 @@ output:""", args_order=["history", "utterance", "state", "database"])
 @dataclass
 class ZeroShotSGD_EventsDefinition:
     state_prompt = SimpleTemplatePrompt(template="""
-Capture entity values from converstation according to examples.
+Capture entity values from last utterance of the converstation according to examples.
+Focus only on the values mentioned in the last utterance.
 Capture pair "entity:value" separated by colon and no spaces in between.
 Separate entity:value pairs by hyphens.
 Values that should be captured are:
@@ -1283,7 +1313,8 @@ output:""", args_order=["history", "utterance", "state", "database"])
 @dataclass
 class ZeroShotSGD_MoviesDefinition:
     state_prompt = SimpleTemplatePrompt(template="""
-Capture entity values from converstation according to examples.
+Capture entity values from last utterance of the converstation according to examples.
+Focus only on the values mentioned in the last utterance.
 Capture pair "entity:value" separated by colon and no spaces in between.
 Separate entity:value pairs by hyphens.
 Values that should be captured are:
@@ -1325,7 +1356,8 @@ output:""", args_order=["history", "utterance", "state", "database"])
 @dataclass
 class ZeroShotSGD_HotelsDefinition:
     state_prompt = SimpleTemplatePrompt(template="""
-Capture entity values from converstation according to examples.
+Capture entity values from last utterance of the converstation according to examples.
+Focus only on the values mentioned in the last utterance.
 Capture pair "entity:value" separated by colon and no spaces in between.
 Separate entity:value pairs by hyphens.
 Values that should be captured are:
@@ -1379,7 +1411,8 @@ output:""", args_order=["history", "utterance", "state", "database"])
 @dataclass
 class ZeroShotSGD_FlightsDefinition:
     state_prompt = SimpleTemplatePrompt(template="""
-Capture entity values from converstation according to examples.
+Capture entity values from last utterance of the converstation according to examples.
+Focus only on the values mentioned in the last utterance.
 Capture pair "entity:value" separated by colon and no spaces in between.
 Separate entity:value pairs by hyphens.
 Values that should be captured are:
@@ -1418,7 +1451,8 @@ output:""", args_order=["history", "utterance", "state", "database"])
 @dataclass
 class ZeroShotSGD_MusicDefinition:
     state_prompt = SimpleTemplatePrompt(template="""
-Capture entity values from converstation according to examples.
+Capture entity values from last utterance of the converstation according to examples.
+Focus only on the values mentioned in the last utterance.
 Capture pair "entity:value" separated by colon and no spaces in between.
 Separate entity:value pairs by hyphens.
 Values that should be captured are:
@@ -1452,7 +1486,8 @@ output:""", args_order=["history", "utterance", "state", "database"])
 @dataclass
 class ZeroShotSGD_RestaurantsDefinition:
     state_prompt = SimpleTemplatePrompt(template="""
-Capture entity values from converstation according to examples.
+Capture entity values from last utterance of the converstation according to examples.
+Focus only on the values mentioned in the last utterance.
 Capture pair "entity:value" separated by colon and no spaces in between.
 Separate entity:value pairs by hyphens.
 Values that should be captured are:
@@ -1495,7 +1530,8 @@ output:""", args_order=["history", "utterance", "state", "database"])
 @dataclass
 class ZeroShotSGD_BusesDefinition:
     state_prompt = SimpleTemplatePrompt(template="""
-Capture entity values from converstation according to examples.
+Capture entity values from last utterance of the converstation according to examples.
+Focus only on the values mentioned in the last utterance.
 Capture pair "entity:value" separated by colon and no spaces in between.
 Separate entity:value pairs by hyphens.
 Values that should be captured are:
@@ -1533,7 +1569,8 @@ output:""", args_order=["history", "utterance", "state", "database"])
 @dataclass
 class ZeroShotSGD_MediaDefinition:
     state_prompt = SimpleTemplatePrompt(template="""
-Capture entity values from converstation according to examples.
+Capture entity values from last utterance of the converstation according to examples.
+Focus only on the values mentioned in the last utterance.
 Capture pair "entity:value" separated by colon and no spaces in between.
 Separate entity:value pairs by hyphens.
 Values that should be captured are:
@@ -1565,7 +1602,8 @@ output:""", args_order=["history", "utterance", "state", "database"])
 @dataclass
 class ZeroShotSGD_BanksDefinition:
     state_prompt = SimpleTemplatePrompt(template="""
-Capture entity values from converstation according to examples.
+Capture entity values from last utterance of the converstation according to examples.
+Focus only on the values mentioned in the last utterance.
 Capture pair "entity:value" separated by colon and no spaces in between.
 Separate entity:value pairs by hyphens.
 Values that should be captured are:
@@ -1597,7 +1635,8 @@ output:""", args_order=["history", "utterance", "state", "database"])
 @dataclass
 class ZeroShotSGD_RidesharingDefinition:
     state_prompt = SimpleTemplatePrompt(template="""
-Capture entity values from converstation according to examples.
+Capture entity values from last utterance of the converstation according to examples.
+Focus only on the values mentioned in the last utterance.
 Capture pair "entity:value" separated by colon and no spaces in between.
 Separate entity:value pairs by hyphens.
 Values that should be captured are:
@@ -1630,7 +1669,8 @@ output:""", args_order=["history", "utterance", "state", "database"])
 @dataclass
 class ZeroShotSGD_CalendarDefinition:
     state_prompt = SimpleTemplatePrompt(template="""
-Capture entity values from converstation according to examples.
+Capture entity values from last utterance of the converstation according to examples.
+Focus only on the values mentioned in the last utterance.
 Capture pair "entity:value" separated by colon and no spaces in between.
 Separate entity:value pairs by hyphens.
 Values that should be captured are:
@@ -1662,7 +1702,8 @@ output:""", args_order=["history", "utterance", "state", "database"])
 @dataclass
 class ZeroShotSGD_RentalDefinition:
     state_prompt = SimpleTemplatePrompt(template="""
-Capture entity values from converstation according to examples.
+Capture entity values from last utterance of the converstation according to examples.
+Focus only on the values mentioned in the last utterance.
 Capture pair "entity:value" separated by colon and no spaces in between.
 Separate entity:value pairs by hyphens.
 Values that should be captured are:
@@ -1696,7 +1737,8 @@ output:""", args_order=["history", "utterance", "state", "database"])
 @dataclass
 class ZeroShotSGD_HomesDefinition:
     state_prompt = SimpleTemplatePrompt(template="""
-Capture entity values from converstation according to examples.
+Capture entity values from last utterance of the converstation according to examples.
+Focus only on the values mentioned in the last utterance.
 Capture pair "entity:value" separated by colon and no spaces in between.
 Separate entity:value pairs by hyphens.
 Values that should be captured are:
