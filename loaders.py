@@ -82,7 +82,7 @@ def load_mwoz(database_path, context_size, split='train', total=10, shuffle=True
     print(domain_counter)
 
 
-def load_sgd(context_size, split='train', total=10, shuffle=True, available_domains=None, only_single_domain=False):
+def load_sgd(context_size, split='train', total=10, shuffle=True, available_domains=None, only_single_domain=False, restrict_domains=None):
     dataset = load_dataset('schema_guided_dstc8')
     if available_domains is not None:
         domain_counts = {d: 0 for d in available_domains}

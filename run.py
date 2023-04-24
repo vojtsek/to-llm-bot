@@ -23,7 +23,7 @@ from model import (
     )
 from loaders import load_mwoz, load_sgd
 from delex import prepareSlotValuesIndependent, delexicalise, delexicaliseReferenceNumber
-from definitions import MW_FEW_SHOT_DOMAIN_DEFINITIONS, MW_ZERO_SHOT_DOMAIN_DEFINITIONS, SGD_FEW_SHOT_DOMAIN_DEFINITIONS, SGD_ZERO_SHOT_DOMAIN_DEFINITIONS, domain_prompt
+from definitions import MW_FEW_SHOT_DOMAIN_DEFINITIONS, MW_ZERO_SHOT_DOMAIN_DEFINITIONS, SGD_FEW_SHOT_DOMAIN_DEFINITIONS, SGD_ZERO_SHOT_DOMAIN_DEFINITIONS, domain_prompt, multiwoz_domain_prompt, sgd_domain_prompt
 
 from database import MultiWOZDatabase
 from utils import parse_state, ExampleRetriever, ExampleFormatter, print_gpu_utilization, SGDEvaluator
@@ -130,12 +130,14 @@ if __name__ == "__main__":
     with open(args.ontology, 'r') as f:
         ontology = json.load(f)
     if args.dataset == 'multiwoz':
+        domain_model = multiwoz_domain_prompt
         database = MultiWOZDatabase(args.database_path)
         state_vs = faiss_vs
         #with open('multiwoz-state-update-1turn-only-ctx2.vec', 'rb') as f:
          #   state_vs = pickle.load(f)
         delex_dic = prepareSlotValuesIndependent(args.database_path)
     else:
+        domain_prompt = sgd_domain_prompt
         state_vs = faiss_vs
         delex_dic = None
     example_retriever = ExampleRetriever(faiss_vs)

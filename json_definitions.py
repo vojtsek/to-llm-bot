@@ -1,7 +1,63 @@
 from dataclasses import dataclass
 from prompts import FewShotPrompt, SimpleTemplatePrompt
 
-domain_prompt = SimpleTemplatePrompt(template="""
+
+sgd_domain_prompt = SimpleTemplatePrompt(template="""
+Determine which domain is considered in the following dialogue situation.
+Choose one domain from this list:
+ - music
+ - hotels
+ - rentalcars
+ - buses
+ - restaurants
+ - homes
+ - ridesharing
+ - services
+ - events
+ - flights
+ - media
+ - calendar
+ - banks
+ - movies
+
+Answer with only one word, the selected domain from the list.
+You have to always select the closest possible domain.
+Consider the last domain mentioned, so focus mainly on the last utterance.
+
+----------------
+Example1:
+Customer: I need a cheap place to eat
+Assistant: We have several not expensive places available. What foor are you interested in?
+Customer: Chinese food.
+
+Domain: restaurant
+
+-------
+
+Example 2:
+Customer: I also need a hotel in the north.
+Assistant: Ok, can I offer you the Molly's place?
+Customer: What is the address?
+
+Domain: hotel
+
+---------
+
+Example 3:
+Customer: What is the address?
+Assistant: It's 123 Northfolk Road.
+Customer: That's all. I also need a train from London.
+
+Domain: train
+""
+
+Now complete the following example:
+{}
+{}
+Domain:""", args_order=["history", "utterance"])
+
+
+multiwoz_domain_prompt = SimpleTemplatePrompt(template="""
 Determine which domain is considered in the following dialogue situation.
 Choose one domain from this list:
  - restaurant
@@ -11,19 +67,40 @@ Choose one domain from this list:
  - train
 Answer with only one word, the selected domain from the list.
 You have to always select the closest possible domain.
-""
-Example:
+Consider the last domain mentioned, so focus mainly on the last utterance.
+
+-------------------
+Example1:
 Customer: I need a cheap place to eat
 Assistant: We have several not expensive places available. What foor are you interested in?
 Customer: Chinese food.
 
 Domain: restaurant
+
+-------
+
+Example 2:
+Customer: I also need a hotel in the north.
+Assistant: Ok, can I offer you the Molly's place?
+Customer: What is the address?
+
+Domain: hotel
+
+---------
+
+Example 3:
+Customer: What is the address?
+Assistant: It's 123 Northfolk Road.
+Customer: That's all. I also need a train from London.
+
+Domain: train
 ""
 
 Now complete the following example:
 {}
 {}
 Domain:""", args_order=["history", "utterance"])
+
 
 """
 ######################
