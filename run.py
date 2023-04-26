@@ -187,7 +187,10 @@ if __name__ == "__main__":
             previous_domain = None
         tn += 1
         if predictions_table is not None:
-            example = predictions_table[f"{dialogue_id.lower()}-{tn}"]
+            try:
+                example = predictions_table[f"{dialogue_id.lower()}-{tn}"]
+            except:
+                continue
             domain_key = "domain"
             results[dialogue_id].append({
                 "domain": example[domain_key],

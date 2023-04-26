@@ -287,4 +287,7 @@ def normalize_state_slot_value(slot_name, value):
 def time_str_to_minutes(time_string):
     if not re.match(r"[0-9][0-9]:[0-9][0-9]", time_string):
         return 0
-    return int(time_string.split(':')[0]) * 60 + int(time_string.split(':')[1])
+    try:
+        return int(time_string.split(':')[0]) * 60 + int(time_string.split(':')[1])
+    except:
+        return 0
