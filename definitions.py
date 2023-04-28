@@ -132,7 +132,7 @@ input: {}
 Customer: {}
 output:
 state:""",
-                                    args_order=["history", "utterane"])
+                                    args_order=["history", "utterance"])
     response_prompt = FewShotPrompt(template="""
 Definition: You are an assistant that helps people to book a restaurant.
 You can search for a restaurant by area, food, or price.
