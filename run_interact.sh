@@ -8,7 +8,8 @@ conda_env="llm-env"
 printf "Activating conda environment $conda_env\n\n"
 conda activate $conda_env
 
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/cuda/11.7/lib64/;
+export LD_LIBRARY_PATH=/opt/cuda/11.7/lib64/;
+export CUDA_HOME=
 export OPENAI_API_KEY=`cat /home/hudecek/.openai-ufal`
 ROOT_DIR="/lnet/troja/work/people/hudecek/test-llm"
 
@@ -23,6 +24,7 @@ fi
 
 # gpt-3.5-turbo
 # allenai/tk-instruct-11b-def-pos-neg-expl
+env
 MODEL=${1}
 shift
-python interact.py --model_name $MODEL --faiss_db ${ROOT_DIR}/mw-context-2-20perdomain.vec --num_examples 2 --database_path ${ROOT_DIR}/multiwoz_database --context_size 2 --dataset multiwoz --ontology ${ROOT_DIR}/ontology.json --run_name `whoami` $@
+python3 ${ROOT_DIR}/interact.py --model_name $MODEL --faiss_db ${ROOT_DIR}/mw-context-2-20perdomain.vec --num_examples 2 --database_path ${ROOT_DIR}/multiwoz_database --context_size 2 --dataset multiwoz --ontology ${ROOT_DIR}/ontology.json --run_name `whoami` --goal_data /home/hudecek/datasets/multiwoz2/test.json $@

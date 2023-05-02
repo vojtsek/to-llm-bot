@@ -35,6 +35,24 @@ logger.setLevel(logging.INFO)
 
 transformers.set_seed(42)
 
+
+def lexicalize(results, domain, response):
+    if domain not in results:
+        return response
+    elif len(results[domain]) == 0:
+        return response
+    item = results[domain][0]
+    extend_dct = {f"{domain}_{key}": val for key, val in item.items()}
+    item.update(extend_dct)
+    item.update({f"value_{key}": val for key, val in item.items()})
+    item["choice"] = str(len(results[domain]))
+    for key, val in item.items():
+        x = f"[{key}]"
+        if x in response:
+            response = response.replace(x, val)
+    return response
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--cache_dir", type=str, default="/home/hudecek/hudecek/hf_cache")
@@ -52,6 +70,7 @@ if __name__ == "__main__":
     parser.add_argument("--use_gt_domain", action='store_true')
     parser.add_argument("--use_zero_shot", action='store_true')
     parser.add_argument("--verbose", action='store_true')
+    parser.add_argument("--goal_data", type=str)
     args = parser.parse_args()
     config = {
         "model_name": args.model_name,
@@ -83,6 +102,10 @@ if __name__ == "__main__":
     wandb.run.name = f'{args.run_name}-{args.dataset}-{model_name}-examples-{args.num_examples}-ctx-{args.context_size}'
     report_table = wandb.Table(columns=['id', 'context', 'raw_state', 'parsed_state', 'response', 'predicted_domain'])
 
+    mw_dial_goals = []
+    with open(args.goal_data, "rt") as fd:
+        data = json.load(fd)
+        mw_dial_goals = [dial['goal']['message'] for did, dial in data.items()]
     if args.model_name.startswith("text-"):
         model_factory = ZeroShotOpenAILLM if args.use_zero_shot else FewShotOpenAILLM
         model = model_factory(args.model_name)
@@ -139,6 +162,9 @@ if __name__ == "__main__":
     dialogue_id = 1
     tn = 0
     total_state = {}
+    goal = random.choice(mw_dial_goals)
+    for msg in goal:
+        print(msg)
     while True:
         user_input = input('User> ').lower()
         if '/end' in user_input:
@@ -149,6 +175,9 @@ if __name__ == "__main__":
             history = []
             total_state = {}
             print('=' * 100)
+            goal = random.choice(mw_dial_goals)
+            for msg in goal:
+                print(msg)
             previous_domain = None
             continue
         tn += 1
@@ -234,19 +263,19 @@ if __name__ == "__main__":
         print(f"Belief State: {total_state}", flush=True)
 
         if args.dataset == 'multiwoz':
-            database_results = {domain: len(database.query(domain=domain, constraints=ds))
+            database_results = {domain: database.query(domain=domain, constraints=ds)
                                 for domain, ds in total_state.items() if len(ds) > 0}
         else:
             database_results = turn['metadata']['database']
         logger.info(f"Database Results: {database_results}")
-        print(f"Database Results: {database_results}", flush=True)
+        print(f"Database Results: {database_results[selected_domain][0] if selected_domain in database_results and len(database_results[selected_domain]) > 0 else 'EMPTY'}", flush=True)
         
         try:
             kwargs = {
                 "history": "\n".join(history),
                 "utterance": question.strip(),
                 "state": json.dumps(total_state), #.replace("{", '<').replace("}", '>'),
-                "database": str(database_results)
+                "database": str({domain: len(results) for domain, results in database_results.items()})
             }
             if not args.use_zero_shot:
                 kwargs["positive_examples"] = response_examples
@@ -262,6 +291,7 @@ if __name__ == "__main__":
             response = delexicaliseReferenceNumber(response)
         
         print(f"Response: {response}", flush=True)
+        print(f"Lexicalized response: {lexicalize(database_results, selected_domain, response)}", flush=True)
 
         history.append("Customer: " + question)
         report_table.add_data(f"dial_{dialogue_id}-turn_{tn}", " ".join(history), state, json.dumps(final_state), response, selected_domain)
