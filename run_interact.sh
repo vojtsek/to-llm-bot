@@ -27,4 +27,7 @@ fi
 env
 MODEL=${1}
 shift
+which python3
+echo $PYTHONPATH
+python3 -c 'import sys; print(sys.path)'
 python3 ${ROOT_DIR}/interact.py --model_name $MODEL --faiss_db ${ROOT_DIR}/mw-context-2-20perdomain.vec --num_examples 2 --database_path ${ROOT_DIR}/multiwoz_database --context_size 2 --dataset multiwoz --ontology ${ROOT_DIR}/ontology.json --run_name `whoami` --goal_data /home/hudecek/datasets/multiwoz2/test.json $@

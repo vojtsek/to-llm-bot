@@ -15,7 +15,7 @@ from langchain.vectorstores import VectorStore
 from loaders import load_sgd
 
 
-def parse_state(state: str, default_domain: str) -> Dict[str, str]:
+def parse_state(state: str, default_domain: str = None) -> Dict[str, str]:
     def sanitize(dct):
         for key in dct:
             if isinstance(dct[key], dict):
@@ -25,12 +25,13 @@ def parse_state(state: str, default_domain: str) -> Dict[str, str]:
         return dct
 
     state = str(state)
-    slotvals = re.findall("([a-z]+:('(([a-z]| |[A-Z]|:|[0-9])+')|[A-Za-z0-9:]+))", state)
+    slotvals = re.findall("('[a-z]+': ?('(([a-z]| |[A-Z]|:|[0-9])+')|[A-Za-z0-9:]+))", state)
+    # slotvals = re.findall("([a-z]+:('(([a-z]| |[A-Z]|:|[0-9])+')|[A-Za-z0-9:]+))", state)
     out_state = {}
     for sv in slotvals:
-        sv = sv[0].strip().split(':')
-        out_state[sv[0]] = ":".join(sv[1:]).strip("'\" ")
-    return {default_domain: sanitize(out_state)}
+        sv = sv[0].strip("'\"").split(':')
+        out_state[sv[0].strip("'\"")] = ":".join(sv[1:]).strip("'\" ")
+    return sanitize(out_state)
 
     if not state.startswith("{"):
         state = "{" + state

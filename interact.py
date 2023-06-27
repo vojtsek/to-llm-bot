@@ -1,3 +1,6 @@
+import sys
+sys.path = [p for p in sys.path if 'schmidtova' not in p and 'mukherjee' not in p]
+print(sys.path)
 import argparse
 import pickle
 import json
@@ -98,9 +101,12 @@ if __name__ == "__main__":
         model_name = 'Alpaca-LoRA'
     else:
         model_name = 'GPT3.5'
-    wandb.init(project='llmbot-interact', entity='metric', config=config, settings=wandb.Settings(start_method="fork"))
+    if 'mukherjee' not in args.run_name:
+        wandb.init(project='llmbot-interact', entity='metric', config=config, settings=wandb.Settings(start_method="fork"))
+    else:
+        wandb.init(project='llmbot-interact', entity='humaneai-diaser', config=config, settings=wandb.Settings(start_method="fork"))
     wandb.run.name = f'{args.run_name}-{args.dataset}-{model_name}-examples-{args.num_examples}-ctx-{args.context_size}'
-    report_table = wandb.Table(columns=['id', 'context', 'raw_state', 'parsed_state', 'response', 'predicted_domain'])
+    report_table = wandb.Table(columns=['id', 'goal', 'context', 'raw_state', 'parsed_state', 'response', 'predicted_domain'])
 
     mw_dial_goals = []
     with open(args.goal_data, "rt") as fd:
@@ -165,9 +171,11 @@ if __name__ == "__main__":
     goal = random.choice(mw_dial_goals)
     for msg in goal:
         print(msg)
+    print(f'>>>>> Please, use id {wandb.run.id}-{dialogue_id} <<<<<')
     while True:
         user_input = input('User> ').lower()
         if '/end' in user_input:
+            wandb.log({"examples": report_table})
             break
         if '/new' in user_input:
             dialogue_id += 1
@@ -178,6 +186,7 @@ if __name__ == "__main__":
             goal = random.choice(mw_dial_goals)
             for msg in goal:
                 print(msg)
+            print(f'>>>>> Please, use id {wandb.run.id}-{dialogue_id} <<<<<')
             previous_domain = None
             continue
         tn += 1
@@ -294,7 +303,6 @@ if __name__ == "__main__":
         print(f"Lexicalized response: {lexicalize(database_results, selected_domain, response)}", flush=True)
 
         history.append("Customer: " + question)
-        report_table.add_data(f"dial_{dialogue_id}-turn_{tn}", " ".join(history), state, json.dumps(final_state), response, selected_domain)
+        report_table.add_data(f"dial_{dialogue_id}-turn_{tn}", ' '.join(goal), " ".join(history), state, json.dumps(final_state), response, selected_domain)
         history.append("Assistant: " + response)
         
-        wandb.log({"examples": report_table})

@@ -145,11 +145,9 @@ class MultiWOZDatabase:
         if domain == 'taxi':
             c, t, p = None, None, None
 
-            c = str(constraints.get('color', []))
-            c = c[0] if len(c) > 0 else random.choice(self.data[domain]['taxi_colors'])
-            t = str(constraints.get('type', []))
-            t = t[0] if len(t) > 0 else random.choice(self.data[domain]['taxi_types'])
-            p = str(constraints.get('phone', []))
+            c = random.choice(self.data[domain]['taxi_colors'])
+            t = random.choice(self.data[domain]['taxi_types'])
+            p = constraints.get('phone', [])
             p = p[0] if len(p) > 0 else ''.join([str(random.randint(1, 9)) for _ in range(11)])
 
             return [{'color': c, 'type' : t, 'phone' : p}]
