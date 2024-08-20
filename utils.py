@@ -25,13 +25,13 @@ def parse_state(state: str, default_domain: str = None) -> Dict[str, str]:
         return dct
 
     state = str(state)
-    slotvals = re.findall("('[a-z]+': ?('(([a-z]| |[A-Z]|:|[0-9])+')|[A-Za-z0-9:]+))", state)
-    # slotvals = re.findall("([a-z]+:('(([a-z]| |[A-Z]|:|[0-9])+')|[A-Za-z0-9:]+))", state)
+    # slotvals = re.findall("('[a-z]+': ?('(([a-z]| |[A-Z]|:|[0-9])+')|[A-Za-z0-9:]+))", state)
+    slotvals = re.findall("([a-z]+:('(([a-z]| |[A-Z]|:|[0-9])+')|[A-Za-z0-9:]+))", state)
     out_state = {}
     for sv in slotvals:
         sv = sv[0].strip("'\"").split(':')
         out_state[sv[0].strip("'\"")] = ":".join(sv[1:]).strip("'\" ")
-    return sanitize(out_state)
+    return {default_domain: sanitize(out_state)}
 
     if not state.startswith("{"):
         state = "{" + state
@@ -58,7 +58,7 @@ def parse_state(state: str, default_domain: str = None) -> Dict[str, str]:
         state_tk = [tk for tk in state_tk if tk.isalpha() or tk in ['{', '}',',']]
         parsed_state = {default_domain: {}}
         level = 0
-        current_domain = default_domain 
+        current_domain = default_domain
         idx = 0
         while idx < len(state_tk):
             tk = state_tk[idx]
@@ -103,14 +103,14 @@ class ExampleRetriever:
                      'domain': doc.metadata['domain']}
                      for doc in result]
         return examples
-    
+
 
 
 class ExampleFormatter:
     def __init__(self, ontology: Dict):
         self.ontology = ontology
 
-    def format(self, 
+    def format(self,
                examples: list[Dict[str, Any]],
                input_keys: list[str],
                output_keys: list[str],
@@ -135,7 +135,7 @@ class ExampleFormatter:
         examples = [_prepare_example(example) for example in examples]
 
         return examples
-    
+
     def _corrupt_example(self, example: Dict) -> Dict:
         for domain, dbs in example['state'].items():
             for slot, value in dbs.items():
@@ -146,7 +146,7 @@ class ExampleFormatter:
                     otgy_key = random.choice(list(self.ontology.keys()))
                     example['state'][domain][slot] = random.choice(self.ontology[otgy_key])
         return example
-    
+
     def _example_to_str(self, example: Dict, use_json=False) -> Dict:
         for key, val in example.items():
             if isinstance(val, dict):

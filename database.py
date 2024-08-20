@@ -215,20 +215,16 @@ class MultiWOZDatabase:
                         # accept item[k] if it is earlier than times in the query
                         # if the database entry is not ok:
                         #     break
-                        for t in v:
-                            if item[k] != ":":
-                                if item[k] < t:
-                                    break
+                        if item[k] != ":" and item[k] > v[0]:
+                            break
 
                     elif k == 'leaveat':
 
                         # accept item[k] if it is later than times in the query
                         # if the database entry is not ok:
                         #     break
-                        for t in v:
-                            if item[k] != ":":
-                                if item[k] > v[0]:
-                                    break
+                        if item[k] != ":" and item[k] < v[0]:
+                            break
 
                     else:
 

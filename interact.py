@@ -1,6 +1,3 @@
-import sys
-sys.path = [p for p in sys.path if 'schmidtova' not in p and 'mukherjee' not in p]
-print(sys.path)
 import argparse
 import pickle
 import json
@@ -13,6 +10,7 @@ import wandb
 import logging
 import transformers
 import random
+from sty import fg
 
 from model import (
     FewShotPromptedLLM,
@@ -58,22 +56,21 @@ def lexicalize(results, domain, response):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--cache_dir", type=str, default="/home/hudecek/hudecek/hf_cache")
+    parser.add_argument("--cache_dir", type=str, default="~/.cache/huggingface/")
     parser.add_argument("--model_name", type=str, default="allenai/tk-instruct-11b-def-pos-neg-expl")
-    parser.add_argument("--faiss_db", type=str, default="multiwoz-context-db.vec")
+    parser.add_argument("--faiss_db", type=str, default="mwoz_db.pkl")
     parser.add_argument("--num_examples", type=int, default=2)
     parser.add_argument("--dials_total", type=int, default=100)
     parser.add_argument("--database_path", type=str, default="multiwoz_database")
     parser.add_argument("--dataset", type=str, default="multiwoz")
-    parser.add_argument("--context_size", type=int, default=3)
+    parser.add_argument("--context_size", type=int, default=2)
     parser.add_argument("--ontology", type=str, default="ontology.json")
     parser.add_argument("--output", type=str, default="results")
     parser.add_argument("--run_name", type=str, default="")
     parser.add_argument("--use_gt_state", action='store_true')
     parser.add_argument("--use_gt_domain", action='store_true')
     parser.add_argument("--use_zero_shot", action='store_true')
-    parser.add_argument("--verbose", action='store_true')
-    parser.add_argument("--goal_data", type=str)
+    parser.add_argument("--goal_data", type=str, default="goals_trial.json")
     args = parser.parse_args()
     config = {
         "model_name": args.model_name,
@@ -101,17 +98,17 @@ if __name__ == "__main__":
         model_name = 'Alpaca-LoRA'
     else:
         model_name = 'GPT3.5'
-    if 'mukherjee' not in args.run_name:
-        wandb.init(project='llmbot-interact', entity='metric', config=config, settings=wandb.Settings(start_method="fork"))
-    else:
-        wandb.init(project='llmbot-interact', entity='humaneai-diaser', config=config, settings=wandb.Settings(start_method="fork"))
+
+    wandb.init(project='llmbot-interact', entity='metric', config=config, settings=wandb.Settings(start_method="fork"))
     wandb.run.name = f'{args.run_name}-{args.dataset}-{model_name}-examples-{args.num_examples}-ctx-{args.context_size}'
+
     report_table = wandb.Table(columns=['id', 'goal', 'context', 'raw_state', 'parsed_state', 'response', 'predicted_domain'])
 
-    mw_dial_goals = []
-    with open(args.goal_data, "rt") as fd:
-        data = json.load(fd)
-        mw_dial_goals = [dial['goal']['message'] for did, dial in data.items()]
+    mw_dial_goals = [['']]
+    if args.goal_data is not None:
+        with open(args.goal_data, "rt") as fd:
+            data = json.load(fd)
+            mw_dial_goals = [dial['goal']['message'] for did, dial in data.items()]
     if args.model_name.startswith("text-"):
         model_factory = ZeroShotOpenAILLM if args.use_zero_shot else FewShotOpenAILLM
         model = model_factory(args.model_name)
@@ -169,11 +166,11 @@ if __name__ == "__main__":
     tn = 0
     total_state = {}
     goal = random.choice(mw_dial_goals)
-    for msg in goal:
-        print(msg)
+    print(fg.da_grey + '\n'.join(goal) + fg.rs)
     print(f'>>>>> Please, use id {wandb.run.id}-{dialogue_id} <<<<<')
     while True:
-        user_input = input('User> ').lower()
+        user_input = input(fg.white + 'User> ').lower()
+        print(fg.rs, end='')
         if '/end' in user_input:
             wandb.log({"examples": report_table})
             break
@@ -199,8 +196,7 @@ if __name__ == "__main__":
             available_domains = list(MW_FEW_SHOT_DOMAIN_DEFINITIONS.keys())
         else:
             available_domains = list(SGD_FEW_SHOT_DOMAIN_DEFINITIONS.keys())
-        if args.verbose:
-            print(f"PREDICTED DOMAIN: {selected_domain}")
+        print(fg.blue + f"\nPredicted domain: {selected_domain}" + fg.rs)
         if selected_domain not in available_domains:
             selected_domain = random.choice(available_domains)
         if args.dataset == 'multiwoz':
@@ -224,10 +220,10 @@ if __name__ == "__main__":
                                                      input_keys=["context", "full_state", "database"],
                                                      output_keys=["response"],
                                                      use_json=True)
-        
+
         state_prompt = domain_definition.state_prompt
         response_prompt = domain_definition.response_prompt
-        
+
         try:
             kwargs = {
                 "history": "\n".join(history),
@@ -254,12 +250,12 @@ if __name__ == "__main__":
                     pass
         except:
             parsed_state = {selected_domain: {}}
-        
+
         final_state = {}
         for domain, ds in parsed_state.items():
             if domain in available_domains:
                 final_state[domain] = ds
-        
+
         for domain, dbs in final_state.items():
             if domain not in total_state:
                 total_state[domain] = dbs
@@ -268,8 +264,8 @@ if __name__ == "__main__":
                     value = str(value)
                     if value not in ['dontcare', 'none', '?', ''] and len(value) > 0:
                         total_state[domain][slot] = value
-        
-        print(f"Belief State: {total_state}", flush=True)
+
+        print(fg.li_blue + f"Belief State: {total_state}" + fg.rs, flush=True)
 
         if args.dataset == 'multiwoz':
             database_results = {domain: database.query(domain=domain, constraints=ds)
@@ -277,8 +273,16 @@ if __name__ == "__main__":
         else:
             database_results = turn['metadata']['database']
         logger.info(f"Database Results: {database_results}")
-        print(f"Database Results: {database_results[selected_domain][0] if selected_domain in database_results and len(database_results[selected_domain]) > 0 else 'EMPTY'}", flush=True)
-        
+        print(fg.cyan + f"Database Results Counts: " + " ".join([f"{domain}: {len(vals)}" for domain, vals in database_results.items()]) + fg.rs)
+        print(fg.magenta + f"Database Results for {selected_domain}: ")
+        if selected_domain in database_results and database_results[selected_domain]:
+            print("\n".join([f"  {str(res)}" for res in database_results[selected_domain][:3]]))
+            if len(database_results[selected_domain]) > 3:
+                print("  ...")
+        else:
+            print("  EMPTY")
+        print(fg.rs, end='')
+
         try:
             kwargs = {
                 "history": "\n".join(history),
@@ -298,11 +302,11 @@ if __name__ == "__main__":
         if args.dataset == 'multiwoz':
             response = delexicalise(response, delex_dic)
             response = delexicaliseReferenceNumber(response)
-        
-        print(f"Response: {response}", flush=True)
-        print(f"Lexicalized response: {lexicalize(database_results, selected_domain, response)}", flush=True)
+
+        print(fg.red + f"Delexicalized response: {response}" + fg.rs, flush=True)
+        print(fg.li_yellow + f"\nSystem> {lexicalize(database_results, selected_domain, response)}" + fg.rs, flush=True)
 
         history.append("Customer: " + question)
         report_table.add_data(f"dial_{dialogue_id}-turn_{tn}", ' '.join(goal), " ".join(history), state, json.dumps(final_state), response, selected_domain)
         history.append("Assistant: " + response)
-        
+
